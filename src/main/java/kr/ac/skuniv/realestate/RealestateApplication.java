@@ -8,5 +8,6 @@ public class RealestateApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RealestateApplication.class, args);
+        System.out.println("hi");
     }
 }
