@@ -1,4 +1,4 @@
-package kr.ac.skuniv.realestate.model;
+package Json;
 
 public class RegionModel {
     private String name;
