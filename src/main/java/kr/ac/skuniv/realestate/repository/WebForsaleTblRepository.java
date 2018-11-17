@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Repository
-public interface ConditionRepository extends JpaRepository<WebForsaleTbl, Long> {
+public interface WebForsaleTblRepository extends JpaRepository<WebForsaleTbl, Long> {
 
     @Query("select f from WebForsaleTbl  f where f.code=:code")
     List<WebForsaleTbl> getCode(@Param("code") int code);
