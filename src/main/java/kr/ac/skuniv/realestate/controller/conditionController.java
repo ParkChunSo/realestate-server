@@ -18,10 +18,10 @@ public class conditionController {
     @Autowired
     private ConditionRepository conditionRepository;
 
-    @GetMapping("/{code}")
-    public List<WebForsaleTbl> onlyRegion(@PathVariable int code){
-        System.out.println(code);
-        return conditionRepository.findAllByCode(code);
+    @GetMapping("/{region}")
+    public List<WebForsaleTbl> onlyRegion(@PathVariable String region){
+        System.out.println(region);
+        return conditionRepository.getCode(1122333);
     }
 
     @GetMapping("/{region}/{term}")
