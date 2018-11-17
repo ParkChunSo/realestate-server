@@ -1,4 +1,4 @@
-package kr.ac.skuniv.realestate.model;
+package Json;
 
 import java.util.List;
 
