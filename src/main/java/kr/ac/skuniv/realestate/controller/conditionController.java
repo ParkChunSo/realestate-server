@@ -20,5 +20,4 @@ public class conditionController {
         System.out.println(region+term);
         return null;
     }
-
 }
