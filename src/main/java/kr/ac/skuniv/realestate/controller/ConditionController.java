@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "realestate/condition/*")
-public class conditionController {
+public class ConditionController {
 
     @Autowired
     private ForsaleRepository forsaleRepository;
