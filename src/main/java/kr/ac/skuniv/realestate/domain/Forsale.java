@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "web_forsale_tbl")
-public class WebForsaleTbl {
+public class Forsale {
     @Id
     private Long id;
 
