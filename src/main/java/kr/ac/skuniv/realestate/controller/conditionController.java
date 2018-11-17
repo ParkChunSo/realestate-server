@@ -1,13 +1,15 @@
 package kr.ac.skuniv.realestate.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController(value = "/realestate/condition/*")
+@RestController
 public class conditionController {
 
     @GetMapping("/timeRegion")
-    public void timeRegion(){
-
+    public String timeRegion(){
+        System.out.println("===============");
+        return "hello";
     }
 }
