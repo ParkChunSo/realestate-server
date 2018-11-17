@@ -1,7 +1,7 @@
 package kr.ac.skuniv.realestate.controller;
 
-import kr.ac.skuniv.realestate.domain.WebForsaleTbl;
-import kr.ac.skuniv.realestate.repository.ConditionRepository;
+import kr.ac.skuniv.realestate.domain.Forsale;
+import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +16,12 @@ import java.util.List;
 public class conditionController {
 
     @Autowired
-    private ConditionRepository conditionRepository;
+    private ForsaleRepository forsaleRepository;
 
     @GetMapping("/{region}")
-    public List<WebForsaleTbl> onlyRegion(@PathVariable String region){
+    public List<Forsale> onlyRegion(@PathVariable String region){
         System.out.println(region);
-        return conditionRepository.getCode(1122333);
+        return forsaleRepository.getCode(1122333);
     }
 
     @GetMapping("/{region}/{term}")
