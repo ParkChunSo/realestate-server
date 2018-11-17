@@ -12,12 +12,12 @@ public class conditionController {
     @GetMapping("/{region}")
     public String onlyRegion(@PathVariable String region){
         System.out.println(region);
-        return null;
+        return region;
     }
 
     @GetMapping("/{region}/{term}")
     public String termRegion(@PathVariable String region, @PathVariable String term){
         System.out.println(region+term);
-        return null;
+        return region + term;
     }
 }
