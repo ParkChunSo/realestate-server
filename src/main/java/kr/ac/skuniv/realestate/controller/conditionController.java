@@ -18,7 +18,7 @@ public class conditionController {
     @GetMapping("/{region}")
     public String onlyRegion(@PathVariable String region){
         System.out.println(region);
-        return conditionRepository.getPriceSum() + "";
+        return conditionRepository.getCode(1122333) + "";
     }
 
     @GetMapping("/{region}/{term}")
