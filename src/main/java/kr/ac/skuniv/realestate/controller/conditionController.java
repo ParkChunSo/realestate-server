@@ -1,11 +1,15 @@
 package kr.ac.skuniv.realestate.controller;
 
+import kr.ac.skuniv.realestate.domain.Forsale;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "realestate/condition/*")
@@ -15,9 +19,9 @@ public class conditionController {
     private ForsaleRepository forsaleRepository;
 
     @GetMapping("/{region}")
-    public String onlyRegion(@PathVariable String region){
+    public List<Forsale> onlyRegion(@PathVariable String region){
         System.out.println(region);
-        return forsaleRepository.getCode(1122333) + "";
+        return forsaleRepository.getCode(1122333);
     }
 
     @GetMapping("/{region}/{term}")

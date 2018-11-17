@@ -15,7 +15,11 @@ public class Forsale {
 
     private int code;
 
-    private String type;
+    private String housing_type;
+
+    private String deal_type;
+
+    private String name;
 
     private int price;
 
