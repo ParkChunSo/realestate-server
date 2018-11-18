@@ -1,6 +1,6 @@
-package Json;
+package kr.ac.skuniv.realestate.domain.dto;
 
-public class RegionModel {
+public class MapDto {
     private String name;
     private int population;
     private int volum;

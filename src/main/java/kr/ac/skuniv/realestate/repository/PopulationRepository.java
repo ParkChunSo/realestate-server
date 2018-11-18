@@ -1,6 +1,6 @@
 package kr.ac.skuniv.realestate.repository;
 
-import kr.ac.skuniv.realestate.domain.Population;
+import kr.ac.skuniv.realestate.domain.entity.Population;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,5 +1,7 @@
-package kr.ac.skuniv.realestate.domain;
+package kr.ac.skuniv.realestate.domain.entity;
 import lombok.*;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -15,9 +17,9 @@ public class Forsale {
 
     private int code;
 
-    private String housing_type;
+    private String housingType;
 
-    private String deal_type;
+    private String dealType;
 
     private String name;
 

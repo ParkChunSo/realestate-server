@@ -1,4 +1,4 @@
-package kr.ac.skuniv.realestate.domain;
+package kr.ac.skuniv.realestate.domain.entity;
 
 import lombok.Data;
 
