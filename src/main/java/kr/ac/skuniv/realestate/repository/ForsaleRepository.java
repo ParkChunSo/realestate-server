@@ -1,6 +1,6 @@
 package kr.ac.skuniv.realestate.repository;
 
-import kr.ac.skuniv.realestate.domain.Forsale;
+import kr.ac.skuniv.realestate.domain.entity.Forsale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +16,6 @@ public interface ForsaleRepository extends JpaRepository<Forsale, Long> {
 
     @Query("select f from Forsale  f where f.code=:code")
     List<Forsale> getCode(@Param("code") int code);
+
+    List<Forsale> findByCodeAndDate(@Param("code") int code);
 }
