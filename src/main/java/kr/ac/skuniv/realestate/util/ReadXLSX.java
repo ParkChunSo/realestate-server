@@ -7,12 +7,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class ReadXLSX {
@@ -20,18 +19,19 @@ public class ReadXLSX {
     final private int  START_ROW_INDEX = 3;
     final private String  CODE = "code";
     final private String  POPULATION = "population";
+    final private String NAME = "name";
 
-    public List<Map<String, String>> readXLSX() throws IOException {
+    public List<CodeModel> readXLSX() throws IOException {
         //파일을 읽기위해 엑셀파일을 가져온다
         FileInputStream fis = new FileInputStream("C:\\Users\\Kimyunsang\\Desktop\\project\\bigdata\\code_popular.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook(fis);
         int rowindex = 0;
         int columnindex = 0;
-        // 각 셀값을 넣기위한 맵
-        Map<String, String> map = null;
+        // 각 셀값을 넣기위한 객체
+        CodeModel codeModel;
 
         //셀값들의 리스트
-        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        List<CodeModel> result = new ArrayList<CodeModel>();
 
         XSSFSheet sheet = workbook.getSheetAt(0);
 
@@ -39,25 +39,40 @@ public class ReadXLSX {
         for (rowindex = START_ROW_INDEX; rowindex < rows; rowindex++) {
             //행을읽는다
             XSSFRow row = sheet.getRow(rowindex);
+            codeModel = new CodeModel();
             if (row != null) {
                 for (columnindex = 0; columnindex <= CELLS; columnindex++) {
                     //셀값을 읽는다
                     XSSFCell cell = row.getCell(columnindex);
                     String value = "";
-                    map = new HashMap<String, String>();
+
                     //셀이 빈값일경우를 위한 널체크
                     if (cell == null) {
                         continue;
                     } else {
                         value = cell.getStringCellValue() + "";
                         if (columnindex == 0) {
-                            map.put(CODE, value);
+                            codeModel.setName(value);
                         } else {
-                            map.put(POPULATION, value);
+                            codeModel.setPopulation(value);
                         }
                     }
+                    result.add(codeModel);
                 }
-                result.add(map);
+            }
+        }
+        return result;
+    }
+
+    public List<CodeModel> separateCode(List<CodeModel> result){
+        System.out.println(result.get(0).getName());
+        System.out.println(result.size());
+
+        for(int i =0; i < result.size(); i++) {
+            Pattern pattern = Pattern.compile("\\d{7}");
+            Matcher matcher = pattern.matcher(result.get(i).getName());
+            if (matcher.find()) {
+                result.get(i).setCode(Integer.parseInt(matcher.group(0)));
             }
         }
         return result;
