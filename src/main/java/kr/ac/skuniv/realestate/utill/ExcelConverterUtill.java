@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 @Component
 public class ExcelConverterUtill {
-    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\chunso\\IdeaProjects\\springBootInf\\realestate_server\\src\\main\\resources\\static\\RegionCode.xlsx";
+    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\Kimyunsang\\Desktop\\spring\\RegionCode.xlsx";
     private final String EXCEL_PATH_FOR_LINUX = "home/realEstate/RegionCode.xlsx";
 
     public HashMap<String, Integer> ReadRegionCode() throws FileNotFoundException, IOException {
