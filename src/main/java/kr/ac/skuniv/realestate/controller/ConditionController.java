@@ -45,5 +45,4 @@ public class ConditionController {
         }
         return null;
     }
-
 }
