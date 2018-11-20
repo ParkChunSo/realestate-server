@@ -16,6 +16,4 @@ public interface ForsaleRepository extends JpaRepository<Forsale, Long> {
 
     @Query("select f from Forsale  f where f.code=:code")
     List<Forsale> getCode(@Param("code") int code);
-
-    List<Forsale> findByCodeAndDate(@Param("code") int code);
 }
