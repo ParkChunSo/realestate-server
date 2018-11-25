@@ -25,11 +25,25 @@ public class ConditionController {
     @Autowired
     private ExcelConverterUtill excelConverterUtill;
 
+    @Autowired
+    ConditionService conditionService;
 
     @GetMapping("/{region}")
     public List<Forsale> onlyRegion(@PathVariable String region){
         System.out.println(region);
+//        conditionService.translateCode(region);
+
         return forsaleRepository.getCode(1122333);
+
+    }
+
+    @GetMapping("/code")
+    public HashMap<String, Integer> code() throws IOException {
+        //System.out.println(region);
+//        conditionService.translateCode(region);
+
+        return  excelConverterUtill.ReadRegionCode();
+
     }
 
     @GetMapping("/{region}/{term}")
@@ -49,7 +63,6 @@ public class ConditionController {
             System.out.println(e1.getMessage());
         }
         System.out.println(test.get("서울특별시 중구 회현동").toString());
-
         return "test1";
 
     }

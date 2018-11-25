@@ -38,12 +38,11 @@ public class ExcelConverterUtill {
                 int cells = row.getPhysicalNumberOfCells();
                 for(columnIndex=0; columnIndex< cells; columnIndex++){
                     cell=row.getCell(columnIndex);
-                    String value = "";
                     if(cell == null)
                         continue;
                     else{
                         if(columnIndex == 0)
-                            tmpRegion = cell.getStringCellValue()+"";
+                            tmpRegion = cell.getStringCellValue().toString();
                         else if(columnIndex == 1 && tmpRegion != null){
                             regionCodeMap.put(tmpRegion, (int)cell.getNumericCellValue());
                         }
@@ -51,7 +50,6 @@ public class ExcelConverterUtill {
                 }
             }
         }
-
         return regionCodeMap;
     }
 }
