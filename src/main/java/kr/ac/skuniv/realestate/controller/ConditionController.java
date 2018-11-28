@@ -1,6 +1,6 @@
 package kr.ac.skuniv.realestate.controller;
 
-import kr.ac.skuniv.realestate.domain.entity.Forsale;
+import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
@@ -10,60 +10,81 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-
 @RestController
 @RequestMapping(value = "realestate/condition/*")
 public class ConditionController {
-
-    @Autowired
-    private ForsaleRepository forsaleRepository;
-
     @Autowired
     private ExcelConverterUtill excelConverterUtill;
-
-    @Autowired
+    private ForsaleRepository forsaleRepository;
     ConditionService conditionService;
+    ConditionDto conditionDto;
 
-    @GetMapping("/{region}")
-    public List<Forsale> onlyRegion(@PathVariable String region){
-        System.out.println(region);
-//        conditionService.translateCode(region);
-
-        return forsaleRepository.getCode(1122333);
-
+    public ConditionController(ForsaleRepository forsaleRepository, ConditionService conditionService, ConditionDto conditionDto) {
+        this.forsaleRepository = forsaleRepository;
+        this.conditionService = conditionService;
+        this.conditionDto = conditionDto;
     }
 
-    @GetMapping("/code")
-    public HashMap<String, Integer> code() throws IOException {
-        //System.out.println(region);
-//        conditionService.translateCode(region);
+    @GetMapping("test/{city}")
+    public int test(@PathVariable String city){
 
-        return  excelConverterUtill.ReadRegionCode();
-
+        return conditionService.test(city);
     }
 
-    @GetMapping("/{region}/{term}")
-    public String termRegion(@PathVariable String region, @PathVariable String term){
-        System.out.println(region+term);
-        return region + term;
+    @GetMapping("/city/{city}/date/{date}")
+    public ConditionDto cityAndDate(@PathVariable String city, @PathVariable int date){
+
+
+        return conditionDto;
     }
 
-    @GetMapping("/start")
-    public String testExcel(){
-        HashMap<String, Integer> test = new HashMap<>();
-        try {
-            test = excelConverterUtill.ReadRegionCode();
-        }catch (FileNotFoundException e){
-            System.out.println(e.getMessage());
-        }catch (IOException e1){
-            System.out.println(e1.getMessage());
-        }
-        System.out.println(test.get("서울특별시 중구 회현동").toString());
-        return "test1";
+    @GetMapping("/city/{city}/date")
+    public ConditionDto onlyCity(@PathVariable String city, @PathVariable int date){
 
+
+        return conditionDto;
     }
+
+    @GetMapping("/city/{city}/district/{district}/date")
+    public ConditionDto cityAndDistrict(@PathVariable String city, @PathVariable String district){
+
+
+        return conditionDto;
+    }
+
+    @GetMapping("/city/{city}/district/{district}/date/{date}")
+    public ConditionDto cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable int date){
+
+
+        return conditionDto;
+    }
+
+    @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date")
+    public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
+
+
+        return conditionDto;
+    }
+
+
+    @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date/{date}")
+    public ConditionDto cityAndDistrictAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood, @PathVariable int date){
+
+
+        return conditionDto;
+    }
+//
+//    @GetMapping("/start")
+//    public String testExcel(){
+//        HashMap<String, Integer> test = new HashMap<>();
+//        try {
+//            test = excelConverterUtill.ReadRegionCode();
+//        }catch (FileNotFoundException e){
+//            System.out.println(e.getMessage());
+//        }catch (IOException e1){
+//            System.out.println(e1.getMessage());
+//        }
+//        System.out.println(test.get("서울특별시 중구 회현동").toString());
+//        return "test1";
+//    }
 }
