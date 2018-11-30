@@ -7,18 +7,22 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
 @Component
 public class ExcelConverterUtill {
-    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\Kimyunsang\\Desktop\\spring\\RegionCode.xlsx";
+    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\chunso\\IdeaProjects\\springBootInf\\realestate_server\\src\\main\\resources\\static\\RegionCode.xlsx";
     private final String EXCEL_PATH_FOR_LINUX = "home/realEstate/RegionCode.xlsx";
 
-    public HashMap<String, Integer> ReadRegionCode() throws FileNotFoundException, IOException {
+    private HashMap<String, Integer> regionCode = new HashMap<>();
 
-        HashMap<String, Integer> regionCodeMap = new HashMap<>();
+    public HashMap<String, Integer> getRegionCode() {
+        return regionCode;
+    }
+
+    public void ReadRegionCode() throws IOException {
+        //regionCode = new HashMap<>();
         XSSFWorkbook workbook;
         XSSFSheet sheet;
         XSSFRow row;
@@ -32,7 +36,7 @@ public class ExcelConverterUtill {
 
         sheet = workbook.getSheetAt(0);
         int rows = sheet.getPhysicalNumberOfRows();
-        for(rowIndex = 1; rowIndex< rows; rowIndex++){
+        for(rowIndex = 0; rowIndex< rows; rowIndex++){
             row = sheet.getRow(rowIndex);
             if(row != null){
                 int cells = row.getPhysicalNumberOfCells();
@@ -41,17 +45,14 @@ public class ExcelConverterUtill {
                     String value = "";
                     if(cell == null)
                         continue;
-                    else{
-                        if(columnIndex == 0)
-                            tmpRegion = cell.getStringCellValue()+"";
-                        else if(columnIndex == 1 && tmpRegion != null){
-                            regionCodeMap.put(tmpRegion, (int)cell.getNumericCellValue());
-                        }
+
+                    if(columnIndex == 0)
+                        tmpRegion = cell.getStringCellValue();
+                    else if(columnIndex == 1 && tmpRegion != null){
+                        regionCode.put(tmpRegion, (int)cell.getNumericCellValue());
                     }
                 }
             }
         }
-
-        return regionCodeMap;
     }
 }
