@@ -1,70 +1,85 @@
 package kr.ac.skuniv.realestate.controller;
 
-import kr.ac.skuniv.realestate.RealestateRunner;
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-import kr.ac.skuniv.realestate.domain.entity.Forsale;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
-import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.locks.Condition;
 
 @RestController
 @RequestMapping(value = "realestate/condition/*")
 public class ConditionController {
-    private final ConditionService conditionService;
-    private boolean isEmptyInHashmap = true;
-    /*
-        1. map에서 name 값을 서울특별시중구로 줄지. 아니면 city: 서울특별시, distinct: 중구로 줄까
-     */
+    private Logger logger = LoggerFactory.getLogger(ConditionController.class);
+    private ForsaleRepository forsaleRepository;
+    private ConditionService conditionService;
+    ConditionDto conditionDto;
 
-    @Autowired
-    public ConditionController(ConditionService conditionService){
+    public ConditionController(ForsaleRepository forsaleRepository, ConditionService conditionService) {
+        this.forsaleRepository = forsaleRepository;
         this.conditionService = conditionService;
     }
 
-    @GetMapping("/{region}")
-    public List<Forsale> onlyRegion(@PathVariable String region){
-        int code = conditionService.convertRegionToCode(region);
+    @GetMapping("/city/{city}/date/{date}")
+    public ConditionDto cityAndDate(@PathVariable String city, @PathVariable int date){
 
-        return conditionService.getTest(code);
+
+        return conditionDto;
     }
-    @GetMapping("/city/{city}")
-    public ConditionDto onlyCity(@PathVariable String city) {
-        int code = conditionService.convertRegionToCode(city);
-        ConditionDto conditionDto = new ConditionDto();
-        List<GraphDto> graphDto = new ArrayList<>();
+
+    @GetMapping("/city/{city}/date")
+    public List<GraphDto> onlyCity(@PathVariable String city){
+
+        List<GraphDto> graphDtos = conditionService.convertEntit2Dto(conditionService.convertRegionToCode(city));
+
+        return graphDtos;
+    }
+
+    @GetMapping("/city/{city}/district/{district}/date")
+    public ConditionDto cityAndDistrict(@PathVariable String city, @PathVariable String district){
 
 
+        return conditionDto;
+    }
 
-        conditionDto.setGraphDtos(graphDto);
+    @GetMapping("/city/{city}/district/{district}/date/{date}")
+    public ConditionDto cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable int date){
+
+        return conditionDto;
+    }
+
+    @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date")
+    public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
+
+
         return conditionDto;
     }
 
 
-    @GetMapping("/{region}/{term}")
-    public String termRegion(@PathVariable String region, @PathVariable String term){
-        System.out.println(region+term);
-        return region + term;
+    @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date/{date}")
+    public ConditionDto cityAndDistrictAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood, @PathVariable int date){
+
+
+        return conditionDto;
     }
-
-    @GetMapping("/test/{city}")
-    public List<GraphDto> testExcel(@PathVariable String city){
-        List<GraphDto> graphDtos = conditionService.convertEntit2Dto(conditionService.convertRegionToCode(city));
-
-        return graphDtos;
-
-    }
+//
+//    @GetMapping("/start")
+//    public String testExcel(){
+//        HashMap<String, Integer> test = new HashMap<>();
+//        try {
+//            test = excelConverterUtill.ReadRegionCode();
+//        }catch (FileNotFoundException e){
+//            System.out.println(e.getMessage());
+//        }catch (IOException e1){
+//            System.out.println(e1.getMessage());
+//        }
+//        System.out.println(test.get("서울특별시 중구 회현동").toString());
+//        return "test1";
+//    }
 }

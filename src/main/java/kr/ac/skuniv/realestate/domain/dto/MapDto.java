@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class MapDto {
-    private String name;
-    private int population;
-    private int volum;
+    private String name;  // 지역 이름
+    private int population;  // 인구수
+    private int volum;  // 거래량
 }
