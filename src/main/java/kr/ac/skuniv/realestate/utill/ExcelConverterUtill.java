@@ -33,7 +33,7 @@ public class ExcelConverterUtill {
 
         sheet = workbook.getSheetAt(0);
         int rows = sheet.getPhysicalNumberOfRows();
-        for (rowIndex = 1; rowIndex < rows; rowIndex++) {
+        for (rowIndex = 0; rowIndex < rows; rowIndex++) {
             row = sheet.getRow(rowIndex);
             if (row != null) {
                 int cells = row.getPhysicalNumberOfCells();
@@ -45,7 +45,7 @@ public class ExcelConverterUtill {
                         if (columnIndex == 0)
                             tmpRegion = cell.getStringCellValue().toString();
                         else if (columnIndex == 1 && tmpRegion != null) {
-                            regionCodeMap.put(tmpRegion, (int) cell.getNumericCellValue());
+                            regionCodeMap.put(tmpRegion, (int) (cell.getNumericCellValue() / 100));
                         }
                     }
                 }
@@ -55,9 +55,5 @@ public class ExcelConverterUtill {
 
     public HashMap<String, Integer> getRegionCodeMap() {
         return regionCodeMap;
-    }
-
-    public void setRegionCodeMap(HashMap<String, Integer> regionCodeMap) {
-        this.regionCodeMap = regionCodeMap;
     }
 }

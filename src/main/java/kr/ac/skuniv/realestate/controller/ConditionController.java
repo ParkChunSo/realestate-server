@@ -4,6 +4,8 @@ import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,22 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "realestate/condition/*")
 public class ConditionController {
-    @Autowired
-    private ExcelConverterUtill excelConverterUtill;
+    private Logger logger = LoggerFactory.getLogger(ConditionController.class);
     private ForsaleRepository forsaleRepository;
-    ConditionService conditionService;
+    private ConditionService conditionService;
     ConditionDto conditionDto;
 
-    public ConditionController(ForsaleRepository forsaleRepository, ConditionService conditionService, ConditionDto conditionDto) {
+    public ConditionController(ForsaleRepository forsaleRepository, ConditionService conditionService) {
         this.forsaleRepository = forsaleRepository;
         this.conditionService = conditionService;
-        this.conditionDto = conditionDto;
     }
 
     @GetMapping("test/{city}")
     public int test(@PathVariable String city){
-
-        return conditionService.test(city);
+        logger.info("/realestate/condition/test/{city}");
+        return conditionService.translateCode(city);
     }
 
     @GetMapping("/city/{city}/date/{date}")
@@ -40,7 +40,6 @@ public class ConditionController {
 
     @GetMapping("/city/{city}/date")
     public ConditionDto onlyCity(@PathVariable String city, @PathVariable int date){
-
 
         return conditionDto;
     }
