@@ -11,9 +11,10 @@ import java.util.List;
 @Repository
 public interface ForsaleRepository extends JpaRepository<Forsale, Long> {
 
-    @Query("select avg(f.price) from Forsale f where f.code=1122333")
-    int getPriceSum();
-
-    @Query("select f from Forsale  f where f.code=:code")
+    @Query("select f from Forsale  f where f.code like :code")
     List<Forsale> getCode(@Param("code") int code);
+
+    List<Forsale> findByCode(int code);
+
+//    @Query("select f from Forsale where ")
 }

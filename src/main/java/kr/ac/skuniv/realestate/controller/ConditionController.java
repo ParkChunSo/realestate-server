@@ -1,9 +1,14 @@
 package kr.ac.skuniv.realestate.controller;
 
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
+import kr.ac.skuniv.realestate.RealestateRunner;
+import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
+import kr.ac.skuniv.realestate.domain.dto.GraphDto;
+import kr.ac.skuniv.realestate.domain.entity.Forsale;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
+import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +16,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.locks.Condition;
 
 @RestController
 @RequestMapping(value = "realestate/condition/*")
@@ -37,6 +49,18 @@ public class ConditionController {
 
         return conditionDto;
     }
+    @GetMapping("/city/{city}")
+    public ConditionDto onlyCity(@PathVariable String city) {
+        int code = conditionService.convertRegionToCode(city);
+        ConditionDto conditionDto = new ConditionDto();
+        List<GraphDto> graphDto = new ArrayList<>();
+
+
+
+        conditionDto.setGraphDtos(graphDto);
+        return conditionDto;
+    }
+
 
     @GetMapping("/city/{city}/date")
     public ConditionDto onlyCity(@PathVariable String city, @PathVariable int date){
@@ -44,6 +68,9 @@ public class ConditionController {
         return conditionDto;
     }
 
+    @GetMapping("/test/{city}")
+    public List<GraphDto> testExcel(@PathVariable String city){
+        List<GraphDto> graphDtos = conditionService.convertEntit2Dto(conditionService.convertRegionToCode(city));
     @GetMapping("/city/{city}/district/{district}/date")
     public ConditionDto cityAndDistrict(@PathVariable String city, @PathVariable String district){
 
@@ -54,8 +81,7 @@ public class ConditionController {
     @GetMapping("/city/{city}/district/{district}/date/{date}")
     public ConditionDto cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable int date){
 
-
-        return conditionDto;
+        return graphDtos;
     }
 
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date")

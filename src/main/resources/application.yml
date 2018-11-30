@@ -6,7 +6,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
+    show-sql: true
   datasource:
     url: jdbc:mysql://117.17.142.207:3306/real_test?useSSL=false&serverTimezone=UTC
     username: root
