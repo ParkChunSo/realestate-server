@@ -1,17 +1,14 @@
 package kr.ac.skuniv.realestate.domain.entity;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Forsale {
-    @Id
+    @Id @GeneratedValue
     private Long id;
 
     private int code;
@@ -24,5 +21,6 @@ public class Forsale {
 
     private int price;
 
+    @Temporal(value = TemporalType.DATE)
     private Date date;
 }

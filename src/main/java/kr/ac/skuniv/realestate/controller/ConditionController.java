@@ -2,6 +2,7 @@ package kr.ac.skuniv.realestate.controller;
 
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
+import kr.ac.skuniv.realestate.domain.entity.Forsale;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import org.slf4j.Logger;
@@ -28,35 +29,35 @@ public class ConditionController {
 
     @GetMapping("/city/{city}/date/{date}")
     public ConditionDto cityAndDate(@PathVariable String city, @PathVariable int date){
-
+        logger.info("get === cityAndDate");
 
         return conditionDto;
     }
 
     @GetMapping("/city/{city}/date")
-    public List<GraphDto> onlyCity(@PathVariable String city){
+    public List<Forsale> onlyCity(@PathVariable String city){
+        logger.info("get === onlyCity");
+        List<Forsale> forsaleDtos = conditionService.convertEntityDto(conditionService.convertRegionToCode(city));
 
-        List<GraphDto> graphDtos = conditionService.convertEntit2Dto(conditionService.convertRegionToCode(city));
-
-        return graphDtos;
+        return forsaleDtos;
     }
 
     @GetMapping("/city/{city}/district/{district}/date")
     public ConditionDto cityAndDistrict(@PathVariable String city, @PathVariable String district){
-
+        logger.info("get === cityAndDistrict");
 
         return conditionDto;
     }
 
     @GetMapping("/city/{city}/district/{district}/date/{date}")
     public ConditionDto cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable int date){
-
+        logger.info("get === cityAndDistrictAndDate");
         return conditionDto;
     }
 
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date")
     public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
-
+        logger.info("get === cityAndDistrictAndNeighborhood");
 
         return conditionDto;
     }
@@ -65,7 +66,7 @@ public class ConditionController {
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date/{date}")
     public ConditionDto cityAndDistrictAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood, @PathVariable int date){
 
-
+        logger.info("get === cityAndDistrictAndNeighborhoodAndDate");
         return conditionDto;
     }
 //

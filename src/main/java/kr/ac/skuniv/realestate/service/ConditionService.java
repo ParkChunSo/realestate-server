@@ -33,17 +33,18 @@ public class ConditionService {
 
     public int convertRegionToCode(String regionName){
         regionCode = excelConverterUtill.getRegionCodeMap();
+        logger.info("region code = " + regionCode.get(regionName));
         return regionCode.get(regionName);
     }
 
-    public List<GraphDto> convertEntit2Dto(int code){
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(new ForsaleMap());
+    public List<Forsale> convertEntityDto(int code){
+//        ModelMapper modelMapper = new ModelMapper();
+//        modelMapper.addMappings(new ForsaleMap());
+        //List<Forsale> forsaleList = forsaleRepository.getCode(code);
+        List<Forsale> forsaleList = forsaleRepository.findByCode(code);
+//        List<GraphDto> graphDtos = modelMapper.map(forsaleList, new TypeToken<List<GraphDto>>(){}.getType());
 
-        List<Forsale> forsaleList = forsaleRepository.getCode(code);
-        List<GraphDto> graphDtos = modelMapper.map(forsaleList, new TypeToken<List<GraphDto>>(){}.getType());
-
-        logger.info(forsaleList.size()+"");
-        return graphDtos;
+        logger.info("forsaleList size = " + forsaleList.size());
+        return forsaleList;
     }
 }
