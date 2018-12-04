@@ -1,13 +1,8 @@
 package kr.ac.skuniv.realestate.service;
 
-import kr.ac.skuniv.realestate.controller.ConditionController;
-import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.entity.Forsale;
-import kr.ac.skuniv.realestate.mapper.ForsaleMap;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +18,11 @@ public class ConditionService {
 
     private final ForsaleRepository forsaleRepository;
     private final ExcelConverterUtill excelConverterUtill;
+    private final String dealTypes[] = {"월세" , "전세" , "매매"};
+    private final String housingTypes[] = {"아파트", "오피스텔", "주택"};
     private HashMap<String, Integer> regionCode;
     private Logger logger = LoggerFactory.getLogger(ConditionService.class);
+
     @Autowired
     public ConditionService(ForsaleRepository forsaleRepository, ExcelConverterUtill excelConverterUtill){
         this.forsaleRepository = forsaleRepository;
@@ -47,4 +45,15 @@ public class ConditionService {
         logger.info("forsaleList size = " + forsaleList.size());
         return forsaleList;
     }
+
+    public List<Forsale> selectByCode(int code){
+        List<Forsale> forsaleList = forsaleRepository.findByCode(code);
+
+        logger.info("forsaleList size = " + forsaleList.size());
+        return forsaleList;
+    }
+
+
+
+
 }

@@ -37,7 +37,7 @@ public class ConditionController {
     @GetMapping("/city/{city}/date")
     public List<Forsale> onlyCity(@PathVariable String city){
         logger.info("get === onlyCity");
-        List<Forsale> forsaleDtos = conditionService.convertEntityDto(conditionService.convertRegionToCode(city));
+        List<Forsale> forsaleDtos = conditionService.selectByCode(conditionService.convertRegionToCode(city));
 
         return forsaleDtos;
     }
