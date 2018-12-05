@@ -27,6 +27,11 @@ public class ConditionController {
         this.conditionService = conditionService;
     }
 
+    @GetMapping("/test")
+    public List<Object>  test(){
+        return conditionService.getAve();
+    }
+
     @GetMapping("/city/{city}/date/{date}")
     public ConditionDto cityAndDate(@PathVariable String city, @PathVariable int date){
         logger.info("get === cityAndDate");

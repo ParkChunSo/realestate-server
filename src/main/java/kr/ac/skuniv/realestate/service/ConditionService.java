@@ -53,7 +53,11 @@ public class ConditionService {
         return forsaleList;
     }
 
-
-
-
+    public List<Object> getAve(){
+        List<Object>  ave= forsaleRepository.getAve();
+        //logger.info("forsaleList size = " + forsaleList.size());
+        for (Object x : ave)
+            logger.info("==========" + x);
+        return ave;
+    }
 }

@@ -7,6 +7,7 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "web_forsale_tbl")
 public class Forsale {
     @Id @GeneratedValue
     private Long id;
