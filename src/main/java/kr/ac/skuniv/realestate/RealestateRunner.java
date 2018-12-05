@@ -1,5 +1,9 @@
 package kr.ac.skuniv.realestate;
 
+import kr.ac.skuniv.realestate.service.ConditionService;
+import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +18,23 @@ import java.util.HashMap;
 @Component
 public class RealestateRunner implements ApplicationRunner {
 
-    @Autowired
     DataSource dataSource;
-    private final ExcelConverterUtill excelConverterUtill;
+    ExcelConverterUtill excelConverterUtill;
+    private Logger logger = LoggerFactory.getLogger(RealestateRunner.class);
 
-    @Autowired
-    public RealestateRunner(ExcelConverterUtill excelConverterUtill){
+    public RealestateRunner( ExcelConverterUtill excelConverterUtill) {
+        this.dataSource = dataSource;
         this.excelConverterUtill = excelConverterUtill;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+
         try(Connection connection = dataSource.getConnection()){
-            System.out.println(connection.getMetaData().getURL());
-            System.out.println(connection.getMetaData().getUserName());
+            logger.info(connection.getMetaData().getURL());
+            logger.info(connection.getMetaData().getUserName());
         } catch (Exception e){
-            System.out.println(e);
+            logger.error(e.getMessage());
         }
 
         try{
