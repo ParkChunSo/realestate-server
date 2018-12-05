@@ -28,6 +28,7 @@ public class ConditionController {
     private boolean isEmptyInHashmap = true;
     /*
         1. map에서 name 값을 서울특별시중구로 줄지. 아니면 city: 서울특별시, distinct: 중구로 줄까
+        2. 파일 입출력.
      */
 
     @Autowired
