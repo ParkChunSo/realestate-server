@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,11 +54,14 @@ public class ConditionService {
         return forsaleList;
     }
 
-    public List<Object> getAve(){
-        List<Object>  ave= forsaleRepository.getAve();
+    public Object getAve(){
+        //Object ave= forsaleRepository.getAve();
+        //Object temp = new ArrayList<Integer>();
+        Object temp = forsaleRepository.getAve();
+        //List<Integer> result = cast(temp);
         //logger.info("forsaleList size = " + forsaleList.size());
-        for (Object x : ave)
-            logger.info("==========" + x);
-        return ave;
+       // for (int i = 0 ; i < ave.size(); i++)
+         //   logger.info("==========" + (int)i);
+        return temp;
     }
 }

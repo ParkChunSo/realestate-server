@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,10 @@ public class ConditionController {
     }
 
     @GetMapping("/test")
-    public List<Object>  test(){
+    public Object  test(){
+//        Object temp = new ArrayList<Integer>();
+//        temp = conditionService.getAve();
+//        List<Integer> result = cast(temp);
         return conditionService.getAve();
     }
 
