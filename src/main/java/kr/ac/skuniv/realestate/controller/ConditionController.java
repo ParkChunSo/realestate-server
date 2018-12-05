@@ -16,9 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "realestate/condition/*")
 public class ConditionController {
+
+
+    @Autowired
     private Logger logger = LoggerFactory.getLogger(ConditionController.class);
-    private ForsaleRepository forsaleRepository;
-    private ConditionService conditionService;
+    private final ForsaleRepository forsaleRepository;
+    private final ConditionService conditionService;
     ConditionDto conditionDto;
 
     public ConditionController(ForsaleRepository forsaleRepository, ConditionService conditionService) {
