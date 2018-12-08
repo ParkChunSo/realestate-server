@@ -3,6 +3,8 @@ package kr.ac.skuniv.realestate.service;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,11 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 public class ConditionService {
 
     private final ForsaleRepository forsaleRepository;
     private HashMap<String, String> regionCode;
+    private final Logger logger = LogManager.getLogger(ConditionService.class);
 
     public void setRegionCode(HashMap<String, String> regionCode) {
         this.regionCode = regionCode;
