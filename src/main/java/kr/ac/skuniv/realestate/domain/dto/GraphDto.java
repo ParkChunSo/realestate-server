@@ -8,5 +8,5 @@ import java.util.List;
 public class GraphDto {
     private String dealType;
     private String housingType;
-    private List<Integer> average;
+    private List<Double> average;
 }

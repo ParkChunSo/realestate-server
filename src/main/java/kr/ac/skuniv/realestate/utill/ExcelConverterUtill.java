@@ -15,7 +15,11 @@ import java.util.HashMap;
 public class ExcelConverterUtill {
     private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\Kimyunsang\\Desktop\\spring\\RegionCode.xlsx";
     private final String EXCEL_PATH_FOR_LINUX = "home/realEstate/RegionCode.xlsx";
-    HashMap<String, Integer> regionCodeMap;
+    HashMap<String, String> regionCodeMap;
+
+    public HashMap<String, String> getRegionCodeMap() {
+        return regionCodeMap;
+    }
 
     public void ReadRegionCode() throws FileNotFoundException, IOException {
 
@@ -33,7 +37,7 @@ public class ExcelConverterUtill {
 
         sheet = workbook.getSheetAt(0);
         int rows = sheet.getPhysicalNumberOfRows();
-        for(rowIndex = 1; rowIndex< rows; rowIndex++){
+        for(rowIndex = 0; rowIndex< rows; rowIndex++){
             row = sheet.getRow(rowIndex);
             if(row != null){
                 int cells = row.getPhysicalNumberOfCells();
@@ -46,15 +50,11 @@ public class ExcelConverterUtill {
                         if(columnIndex == 0)
                             tmpRegion = cell.getStringCellValue()+"";
                         else if(columnIndex == 1 && tmpRegion != null){
-                            regionCodeMap.put(tmpRegion, (int)cell.getNumericCellValue());
+                            regionCodeMap.put(tmpRegion, String.valueOf((int)cell.getNumericCellValue()));
                         }
                     }
                 }
             }
         }
-    }
-
-    public HashMap<String, Integer> getRegionCodeMap() {
-        return regionCodeMap;
     }
 }

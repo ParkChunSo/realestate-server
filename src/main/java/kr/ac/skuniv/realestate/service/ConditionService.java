@@ -1,20 +1,20 @@
 package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
+
 import kr.ac.skuniv.realestate.domain.dto.MapDto;
 import kr.ac.skuniv.realestate.domain.dto.MapTmpDto;
 import kr.ac.skuniv.realestate.domain.entity.Forsale;
 import kr.ac.skuniv.realestate.mapper.ForsaleMap;
+import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
+
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
-import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,30 +24,78 @@ import java.util.stream.Collectors;
 public class ConditionService {
 
     private final ForsaleRepository forsaleRepository;
-    private final ExcelConverterUtill excelConverterUtill;
-    private HashMap<String, Integer> regionCode;
-    private Logger logger = LoggerFactory.getLogger(ConditionService.class);
-    @Autowired
-    public ConditionService(ForsaleRepository forsaleRepository, ExcelConverterUtill excelConverterUtill){
+    private HashMap<String, String> regionCode;
+
+    public void setRegionCode(HashMap<String, String> regionCode) {
+        this.regionCode = regionCode;
+    }
+
+    public ConditionService(ForsaleRepository forsaleRepository){
         this.forsaleRepository = forsaleRepository;
-        this.excelConverterUtill = excelConverterUtill;
     }
 
-    public int convertRegionToCode(String regionName){
-        regionCode = excelConverterUtill.getRegionCodeMap();
-        return regionCode.get(regionName);//지역코드 가져옴
+    public String convertRegionToCode(String city){
+        return regionCode.get(city).substring(0, 2);
     }
 
-    public List<GraphDto> convertEntit2Dto(int code){
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(new ForsaleMap());
+    public String convertRegionToCode(String city, String distict){
+        return regionCode.get(city + distict).substring(0,5);
+    }
 
-        List<Forsale> forsaleList = forsaleRepository.getCode(code);
-        List<GraphDto> graphDtos = modelMapper.map(forsaleList, new TypeToken<List<GraphDto>>(){}.getType());
-        logger.info(forsaleList.size()+"");
+    public String convertRegionToCode(String city, String distict, String neighborhood){
+        return regionCode.get(city + distict + neighborhood);
+    }
+
+
+    public List<GraphTmpDto> convertEntity2Dto(List<Object[]> resultList){
+        return resultList.stream().map(graphTmpDto -> new GraphTmpDto(
+                (String)graphTmpDto[0], (String)graphTmpDto[1],
+                (Date)graphTmpDto[2],(Double) graphTmpDto[3]
+        )).collect(Collectors.toList());
+    }
+
+    public List<GraphDto> convertTmpDto2GraphDto(List<GraphTmpDto> dtos){
+        if(dtos.size() == 0)
+            return null;
+
+        List<GraphDto> graphDtos = new ArrayList<>();
+        String dealType = dtos.get(0).getDealType(), housingType = dtos.get(0).getHousingType();
+        ArrayList<Double> arrayList = new ArrayList<>();
+
+        for(GraphTmpDto dto : dtos){
+            if(dealType.equals(dto.getDealType()) && housingType.equals(dto.getHousingType())){
+                arrayList.add(dto.getAverage());
+            }else{
+                GraphDto graphDto = new GraphDto();
+                graphDto.setDealType(dealType); graphDto.setHousingType(housingType); graphDto.setAverage(arrayList);
+                graphDtos.add(graphDto);
+                arrayList = new ArrayList<>();
+                dealType = dto.getDealType(); housingType = dto.getHousingType();arrayList.add(dto.getAverage());
+            }
+        }
+
+        GraphDto graphDto = new GraphDto();
+        graphDto.setDealType(dealType);
+        graphDto.setHousingType(housingType);
+        graphDto.setAverage(arrayList);
+        graphDtos.add(graphDto);
+
         return graphDtos;
     }
 
+    public LocalDate convertString2LocalDate(String _date){
+        String[] tmp = _date.split("-");
+        LocalDate localDate = null;
+
+        if(tmp.length == 1)
+            return LocalDate.of(Integer.parseInt(tmp[0]),1,1);
+
+        else if(tmp.length == 2)
+            return LocalDate.of(Integer.parseInt(tmp[0]),Integer.parseInt(tmp[1]),1);
+
+        return null;
+    }
+  
     public List<MapTmpDto> getMapDtoByCode(String regionName, String regionUnit){
         int regionCode = convertRegionToCode(regionName);
         regionCode = convertRegionCodeToDbCode(String.valueOf(regionCode),regionUnit);
@@ -72,5 +120,19 @@ public class ConditionService {
         return resultList.stream().map(mapTmpDto -> new MapTmpDto(
                 (int)mapTmpDto[0], (int)mapTmpDto[1], (long)mapTmpDto[2]
         )).collect(Collectors.toList());
+    }
+
+
+    // DB 메소드
+    public List<Object[]> getByCodeAndDateOnYear(String code){
+        return forsaleRepository.getByCodeAndDateOnYear(Integer.parseInt(code));
+    }
+
+    public List<Object[]> getByCodeAndDateOnMonth(String code, LocalDate date){
+        return forsaleRepository.getByCodeAndDateOnMonth(Integer.parseInt(code), date);
+    }
+
+    public List<Object[]> getByCodeAndDateOnDay(String code, LocalDate date){
+        return forsaleRepository.getByCodeAndDateOnDay(Integer.parseInt(code), date);
     }
 }
