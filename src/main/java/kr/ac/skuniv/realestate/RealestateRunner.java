@@ -20,10 +20,8 @@ public class RealestateRunner implements ApplicationRunner {
     private final DataSource dataSource;
     private final ExcelConverterUtill excelConverterUtill;
     private final ConditionService conditionService;
-
-    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, ConditionService conditionService) {
     @Autowired
-    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill) {
+    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, ConditionService conditionService) {
         this.dataSource = dataSource;
         this.excelConverterUtill = excelConverterUtill;
         this.conditionService = conditionService;
