@@ -7,8 +7,8 @@ import org.modelmapper.PropertyMap;
 public class ForsaleMap extends PropertyMap<Forsale, GraphDto> {
     @Override
     protected void configure() {
-        map().setDealType(source.getDealType());
-        map().setHousingType(source.getHousingType());
-        skip().setAverage(null);
+//        map().setDealType(source.getDealType());
+////        map().setHousingType(source.getHousingType());
+////        skip().setAverage(null);
     }
 }
