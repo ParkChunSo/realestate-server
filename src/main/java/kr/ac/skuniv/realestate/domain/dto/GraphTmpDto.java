@@ -18,5 +18,4 @@ public class GraphTmpDto {
         this.date = date;
         this.average = average;
     }
-
 }
