@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 @Component
 public class ExcelConverterUtill {
-    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\chunso\\Desktop\\Documents\\RegionCode.xlsx";
+    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\Kimyunsang\\Desktop\\spring\\RegionCode.xlsx";
     private final String EXCEL_PATH_FOR_LINUX = "home/realEstate/RegionCode.xlsx";
     HashMap<String, String> regionCodeMap;
 
