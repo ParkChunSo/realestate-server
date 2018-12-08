@@ -4,27 +4,25 @@ import kr.ac.skuniv.realestate.service.ConditionService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
-import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.util.HashMap;
 
 @Component
 public class RealestateRunner implements ApplicationRunner {
 
-    DataSource dataSource;
-    ExcelConverterUtill excelConverterUtill;
+    private final DataSource dataSource;
+    private final ExcelConverterUtill excelConverterUtill;
+    private final ConditionService conditionService;
     private Logger logger = LoggerFactory.getLogger(RealestateRunner.class);
 
-    public RealestateRunner( ExcelConverterUtill excelConverterUtill) {
+    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, ConditionService conditionService) {
         this.dataSource = dataSource;
         this.excelConverterUtill = excelConverterUtill;
+        this.conditionService = conditionService;
     }
 
     @Override
@@ -39,6 +37,8 @@ public class RealestateRunner implements ApplicationRunner {
 
         try{
             excelConverterUtill.ReadRegionCode();
+            conditionService.setRegionCode(excelConverterUtill.getRegionCodeMap());
+            System.out.println(excelConverterUtill.getRegionCodeMap().size());
         }catch (Exception e){
             System.out.println(e);
         }
