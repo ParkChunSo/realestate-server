@@ -17,6 +17,10 @@ public class ExcelConverterUtill {
     private final String EXCEL_PATH_FOR_LINUX = "home/realEstate/RegionCode.xlsx";
     HashMap<String, String> regionCodeMap;
 
+    public HashMap<String, String> getRegionCodeMap() {
+        return regionCodeMap;
+    }
+
     public void ReadRegionCode() throws FileNotFoundException, IOException {
 
         regionCodeMap = new HashMap<>();
@@ -52,9 +56,5 @@ public class ExcelConverterUtill {
                 }
             }
         }
-    }
-
-    public HashMap<String, String> getRegionCodeMap() {
-        return regionCodeMap;
     }
 }

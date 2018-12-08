@@ -2,21 +2,14 @@ package kr.ac.skuniv.realestate.controller;
 
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.MapDto;
-import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.locks.Condition;
 
 @RestController
 @RequestMapping(value = "realestate/condition/*")
@@ -47,7 +40,7 @@ public class ConditionController {
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
-                                conditionService.convertRegionToCode(city), conditionService.convertString2Date(date)
+                                conditionService.convertRegionToCode(city), conditionService.convertString2LocalDate(date)
                         )
                 )
         );
@@ -77,7 +70,7 @@ public class ConditionController {
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
-                                conditionService.convertRegionToCode(city, district), conditionService.convertString2Date(date)
+                                conditionService.convertRegionToCode(city, district), conditionService.convertString2LocalDate(date)
                         )
                 )
         );
@@ -110,7 +103,7 @@ public class ConditionController {
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
-                                conditionService.convertRegionToCode(city, district, neighborhood), conditionService.convertString2Date(date)
+                                conditionService.convertRegionToCode(city, district, neighborhood), conditionService.convertString2LocalDate(date)
                         )
                 )
         );
@@ -127,7 +120,7 @@ public class ConditionController {
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
-                                conditionService.convertRegionToCode(city), conditionService.convertString2Date(date)
+                                conditionService.convertRegionToCode(city), conditionService.convertString2LocalDate(date)
                         )
                 )
         );
