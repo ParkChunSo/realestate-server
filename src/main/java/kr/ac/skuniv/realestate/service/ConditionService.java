@@ -3,8 +3,8 @@ package kr.ac.skuniv.realestate.service;
 import kr.ac.skuniv.realestate.domain.entity.Forsale;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class ConditionService {
     private final String dealTypes[] = {"월세" , "전세" , "매매"};
     private final String housingTypes[] = {"아파트", "오피스텔", "주택"};
     private HashMap<String, Integer> regionCode;
-    private Logger logger = LoggerFactory.getLogger(ConditionService.class);
+    private final Logger logger = LogManager.getLogger(ConditionService.class);
 
     @Autowired
     public ConditionService(ForsaleRepository forsaleRepository, ExcelConverterUtill excelConverterUtill){

@@ -5,8 +5,8 @@ import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.entity.Forsale;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "realestate/condition/*")
 public class ConditionController {
-    private Logger logger = LoggerFactory.getLogger(ConditionController.class);
+    private final Logger logger = LogManager.getLogger(ConditionController.class);
     private ForsaleRepository forsaleRepository;
     private ConditionService conditionService;
     ConditionDto conditionDto;
