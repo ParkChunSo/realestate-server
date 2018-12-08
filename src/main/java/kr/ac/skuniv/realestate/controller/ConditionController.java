@@ -40,7 +40,7 @@ public class ConditionController {
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
-                                conditionService.convertRegionToCode(city), conditionService.convertString2Date(date)
+                                conditionService.convertRegionToCode(city), conditionService.convertString2LocalDate(date)
                         )
                 )
         );
@@ -70,7 +70,7 @@ public class ConditionController {
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
-                                conditionService.convertRegionToCode(city, district), conditionService.convertString2Date(date)
+                                conditionService.convertRegionToCode(city, district), conditionService.convertString2LocalDate(date)
                         )
                 )
         );
@@ -103,7 +103,7 @@ public class ConditionController {
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
-                                conditionService.convertRegionToCode(city, district, neighborhood), conditionService.convertString2Date(date)
+                                conditionService.convertRegionToCode(city, district, neighborhood), conditionService.convertString2LocalDate(date)
                         )
                 )
         );
@@ -120,7 +120,7 @@ public class ConditionController {
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
-                                conditionService.convertRegionToCode(city), conditionService.convertString2Date(date)
+                                conditionService.convertRegionToCode(city), conditionService.convertString2LocalDate(date)
                         )
                 )
         );
