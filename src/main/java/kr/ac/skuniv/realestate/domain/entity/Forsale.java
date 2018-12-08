@@ -3,7 +3,17 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
-
+/*@SqlResultSetMapping(
+        name="ProductOrderedMemberMapping",
+        classes = @ConstructorResult(
+                targetClass = GraphTmpDto.class,
+                columns = {
+                        @ColumnResult(name="dealType", type = String.class),
+                        @ColumnResult(name="housingType", type = String.class),
+                        @ColumnResult(name="date", type = Date.class),
+                        @ColumnResult(name="average", type = Integer.class),
+                })
+)*/
 @Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -16,3 +16,8 @@ spring:
       maximum-pool-size: 30
       minimum-idle: 2
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  http:
+    converters:
+      preferred-json-mapper: jackson
+
+

@@ -2,94 +2,145 @@ package kr.ac.skuniv.realestate.controller;
 
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-import kr.ac.skuniv.realestate.domain.entity.Forsale;
+import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.MapDto;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
 
 @RestController
 @RequestMapping(value = "realestate/condition/*")
 public class ConditionController {
-    private final Logger logger = LogManager.getLogger(ConditionController.class);
-    private ForsaleRepository forsaleRepository;
-    private ConditionService conditionService;
-    ConditionDto conditionDto;
+    private final ConditionService conditionService;
 
-    public ConditionController(ForsaleRepository forsaleRepository, ConditionService conditionService) {
-        this.forsaleRepository = forsaleRepository;
+    public ConditionController(ConditionService conditionService) {
         this.conditionService = conditionService;
     }
 
-    @GetMapping("/test")
-    public Object  test(){
-//        Object temp = new ArrayList<Integer>();
-//        temp = conditionService.getAve();
-//        List<Integer> result = cast(temp);
-        return conditionService.getAve();
+    @GetMapping("/city/{city}/date")
+    public ConditionDto onlyCity(@PathVariable String city){
+        List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
+                conditionService.convertEntity2Dto(
+                        conditionService.getByCodeAndDateOnYear(
+                                conditionService.convertRegionToCode(city)
+                        )
+                )
+        );
+
+        List<MapDto> mapDtos = null;
+
+        return new ConditionDto(mapDtos, graphDtos);
     }
 
     @GetMapping("/city/{city}/date/{date}")
-    public ConditionDto cityAndDate(@PathVariable String city, @PathVariable int date){
-        logger.info("get === cityAndDate");
+    public ConditionDto cityAndDate(@PathVariable String city, @PathVariable String date){
+        List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
+                conditionService.convertEntity2Dto(
+                        conditionService.getByCodeAndDateOnMonth(
+                                conditionService.convertRegionToCode(city), conditionService.convertString2Date(date)
+                        )
+                )
+        );
+        List<MapDto> mapDtos = null;
 
-        return conditionDto;
-    }
 
-    @GetMapping("/city/{city}/date")
-    public List<Forsale> onlyCity(@PathVariable String city){
-        logger.info("get === onlyCity");
-        List<Forsale> forsaleDtos = conditionService.selectByCode(conditionService.convertRegionToCode(city));
-
-        return forsaleDtos;
+        return new ConditionDto(mapDtos, graphDtos);
     }
 
     @GetMapping("/city/{city}/district/{district}/date")
     public ConditionDto cityAndDistrict(@PathVariable String city, @PathVariable String district){
-        logger.info("get === cityAndDistrict");
+        List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
+                conditionService.convertEntity2Dto(
+                        conditionService.getByCodeAndDateOnYear(
+                                conditionService.convertRegionToCode(city, district)
+                        )
+                )
+        );
+        List<MapDto> mapDtos = null;
 
-        return conditionDto;
+
+        return new ConditionDto(mapDtos, graphDtos);
     }
 
     @GetMapping("/city/{city}/district/{district}/date/{date}")
-    public ConditionDto cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable int date){
-        logger.info("get === cityAndDistrictAndDate");
-        return conditionDto;
+    public ConditionDto cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable String date){
+        List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
+                conditionService.convertEntity2Dto(
+                        conditionService.getByCodeAndDateOnMonth(
+                                conditionService.convertRegionToCode(city, district), conditionService.convertString2Date(date)
+                        )
+                )
+        );
+
+        List<MapDto> mapDtos = null;
+
+
+        return new ConditionDto(mapDtos, graphDtos);
     }
 
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date")
     public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
-        logger.info("get === cityAndDistrictAndNeighborhood");
+        List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
+                conditionService.convertEntity2Dto(
+                        conditionService.getByCodeAndDateOnYear(
+                                conditionService.convertRegionToCode(city, district, neighborhood)
+                        )
+                )
+        );
 
-        return conditionDto;
+        List<MapDto> mapDtos = null;
+
+
+        return new ConditionDto(mapDtos, graphDtos);
     }
 
 
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date/{date}")
-    public ConditionDto cityAndDistrictAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood, @PathVariable int date){
+    public ConditionDto cityAndDistrictAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood, @PathVariable String date){
+        List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
+                conditionService.convertEntity2Dto(
+                        conditionService.getByCodeAndDateOnMonth(
+                                conditionService.convertRegionToCode(city, district, neighborhood), conditionService.convertString2Date(date)
+                        )
+                )
+        );
 
-        logger.info("get === cityAndDistrictAndNeighborhoodAndDate");
-        return conditionDto;
+        List<MapDto> mapDtos = null;
+
+
+        return new ConditionDto(mapDtos, graphDtos);
     }
-//
-//    @GetMapping("/start")
-//    public String testExcel(){
-//        HashMap<String, Integer> test = new HashMap<>();
-//        try {
-//            test = excelConverterUtill.ReadRegionCode();
-//        }catch (FileNotFoundException e){
-//            System.out.println(e.getMessage());
-//        }catch (IOException e1){
-//            System.out.println(e1.getMessage());
-//        }
-//        System.out.println(test.get("서울특별시 중구 회현동").toString());
-//        return "test1";
-//    }
+
+//    @GetMapping("/test/city/{city}/district/{district}/neighborhood/{neighborhood}/date/{date}")
+@GetMapping("/test/city/{city}/date/{date}")
+    public List<GraphDto> test(@PathVariable String city, @PathVariable String date){
+        List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
+                conditionService.convertEntity2Dto(
+                        conditionService.getByCodeAndDateOnMonth(
+                                conditionService.convertRegionToCode(city), conditionService.convertString2Date(date)
+                        )
+                )
+        );
+
+        return graphDtos;
+
+    }
+
+
+    @GetMapping("/test1/city/{city}/district/{district}/neighborhood/{neighborhood}/date")
+    public List<Object> test2(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
+        List<Object> objects = null;//forsaleRepository.getByCodeAndDateOnYear(Integer.parseInt(conditionService.convertRegionToCode(city, district,neighborhood)));
+
+        return objects;
+    }
 }
