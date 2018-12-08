@@ -5,8 +5,7 @@ import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,6 +48,9 @@ public class ConditionService {
     }
 
     public List<GraphDto> convertTmpDto2GraphDto(List<GraphTmpDto> dtos){
+        if(dtos.size() == 0)
+            return null;
+
         List<GraphDto> graphDtos = new ArrayList<>();
         String dealType = dtos.get(0).getDealType(), housingType = dtos.get(0).getHousingType();
         ArrayList<Double> arrayList = new ArrayList<>();
@@ -58,13 +60,11 @@ public class ConditionService {
                 arrayList.add(dto.getAverage());
             }else{
                 GraphDto graphDto = new GraphDto();
-                graphDto.setDealType(dealType);
-                graphDto.setHousingType(housingType);
-                graphDto.setAverage(arrayList);
+                graphDto.setDealType(dealType); graphDto.setHousingType(housingType); graphDto.setAverage(arrayList);
                 graphDtos.add(graphDto);
 
-                dealType = dto.getDealType(); housingType = dto.getHousingType();
                 arrayList = new ArrayList<>();
+                dealType = dto.getDealType(); housingType = dto.getHousingType();arrayList.add(dto.getAverage());
             }
         }
 
@@ -77,19 +77,17 @@ public class ConditionService {
         return graphDtos;
     }
 
-    public Date convertString2Date(String _date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-        Date date = new Date();
+    public LocalDate convertString2LocalDate(String _date){
+        String[] tmp = _date.split("-");
+        LocalDate localDate = null;
 
-        try{
-            date = simpleDateFormat.parse(_date);
-        }catch(ParseException e) {
-            System.out.println(e.toString());
-        }
+        if(tmp.length == 1)
+            return LocalDate.of(Integer.parseInt(tmp[0]),1,1);
 
-        System.out.println(date);
+        else if(tmp.length == 2)
+            return LocalDate.of(Integer.parseInt(tmp[0]),Integer.parseInt(tmp[1]),1);
 
-        return date;
+        return null;
     }
 
 
@@ -98,23 +96,11 @@ public class ConditionService {
         return forsaleRepository.getByCodeAndDateOnYear(Integer.parseInt(code));
     }
 
-    public List<Object[]> getByCodeAndDateOnMonth(String code, Date date){
+    public List<Object[]> getByCodeAndDateOnMonth(String code, LocalDate date){
         return forsaleRepository.getByCodeAndDateOnMonth(Integer.parseInt(code), date);
     }
 
-    public List<Object[]> getByCodeAndDateOnDay(String code, Date date){
+    public List<Object[]> getByCodeAndDateOnDay(String code, LocalDate date){
         return forsaleRepository.getByCodeAndDateOnDay(Integer.parseInt(code), date);
     }
-
-
-    /*public List<GraphDto> convertEntit2Dto(String code){
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(new ForsaleMap());
-
-        List<Forsale> forsaleList = forsaleRepository.getCode(code);
-        List<GraphDto> graphDtos = modelMapper.map(forsaleList, new TypeToken<List<GraphDto>>(){}.getType());
-
-        logger.info(forsaleList.size()+"");
-        return graphDtos;
-    }*/
 }
