@@ -4,6 +4,8 @@ import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.MapDto;
 import kr.ac.skuniv.realestate.service.ConditionService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +17,14 @@ import java.util.List;
 @RequestMapping(value = "realestate/condition/*")
 public class ConditionController {
     private final ConditionService conditionService;
-
+    private final Logger logger = LogManager.getLogger(ConditionController.class);
     public ConditionController(ConditionService conditionService) {
         this.conditionService = conditionService;
     }
 
     @GetMapping("/city/{city}/date")
     public ConditionDto onlyCity(@PathVariable String city){
+        logger.info("only city");
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnYear(
