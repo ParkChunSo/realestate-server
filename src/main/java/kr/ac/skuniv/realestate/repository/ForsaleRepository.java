@@ -16,5 +16,9 @@ public interface ForsaleRepository extends JpaRepository<Forsale, Long> {
 
     List<Forsale> findByCode(int code);
 
-//    @Query("select f from Forsale where ")
+    @Query(value = "select f.dealType, f.housingType, function('date_format', f.date, '%Y'), avg(f.price) from Forsale f  where f.code like concat(:code, '%') group by f.dealType, f.housingType, function('date_format', f.date, '%Y') order by f.dealType, f.housingType")
+    List<Object[]> getByCodeAndDateOnYear(@Param("code") int code);
+
+    @Query(value = "select f.code , p.population, count(f) \n from Forsale f, Population p where f.code = p.code and f.code like concat(:code, '%') group by f.code")
+    List<Object[]> getMapDtoByCode(@Param("code") int code);
 }

@@ -1,7 +1,7 @@
 package kr.ac.skuniv.realestate.controller;
 
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphDto;
+import kr.ac.skuniv.realestate.domain.dto.MapTmpDto;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import org.slf4j.Logger;
@@ -47,7 +47,6 @@ public class ConditionController {
     @GetMapping("/city/{city}/district/{district}/date")
     public ConditionDto cityAndDistrict(@PathVariable String city, @PathVariable String district){
 
-
         return conditionDto;
     }
 
@@ -58,10 +57,9 @@ public class ConditionController {
     }
 
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date")
-    public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
-
-
-        return conditionDto;
+    public List<MapTmpDto> cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district, @PathVariable String neighborhood){
+        String regionName = city + ' ' + district + ' ' + neighborhood;
+        return conditionService.getMapDtoByCode(regionName, "neighborhood");
     }
 
 
