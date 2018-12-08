@@ -1,6 +1,7 @@
 package kr.ac.skuniv.realestate.controller;
 
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
+
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.MapDto;
 import kr.ac.skuniv.realestate.service.ConditionService;
@@ -61,7 +62,6 @@ public class ConditionController {
         );
         List<MapDto> mapDtos = null;
 
-
         return new ConditionDto(mapDtos, graphDtos);
     }
 
@@ -82,7 +82,10 @@ public class ConditionController {
     }
 
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date")
-    public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
+    public List<MapTmpDto> cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district, @PathVariable String neighborhood){
+        String regionName = city + ' ' + district + ' ' + neighborhood;
+        return conditionService.getMapDtoByCode(regionName, "neighborhood");
+    /*public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnYear(
@@ -94,7 +97,7 @@ public class ConditionController {
         List<MapDto> mapDtos = null;
 
 
-        return new ConditionDto(mapDtos, graphDtos);
+        return new ConditionDto(mapDtos, graphDtos);*/
     }
 
 

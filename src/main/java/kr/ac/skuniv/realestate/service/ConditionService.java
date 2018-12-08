@@ -1,9 +1,16 @@
 package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
+
+import kr.ac.skuniv.realestate.domain.dto.MapDto;
+import kr.ac.skuniv.realestate.domain.dto.MapTmpDto;
+import kr.ac.skuniv.realestate.domain.entity.Forsale;
+import kr.ac.skuniv.realestate.mapper.ForsaleMap;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
+
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,6 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class ConditionService {
@@ -61,7 +69,6 @@ public class ConditionService {
                 GraphDto graphDto = new GraphDto();
                 graphDto.setDealType(dealType); graphDto.setHousingType(housingType); graphDto.setAverage(arrayList);
                 graphDtos.add(graphDto);
-
                 arrayList = new ArrayList<>();
                 dealType = dto.getDealType(); housingType = dto.getHousingType();arrayList.add(dto.getAverage());
             }
@@ -87,6 +94,32 @@ public class ConditionService {
             return LocalDate.of(Integer.parseInt(tmp[0]),Integer.parseInt(tmp[1]),1);
 
         return null;
+    }
+  
+    public List<MapTmpDto> getMapDtoByCode(String regionName, String regionUnit){
+        int regionCode = convertRegionToCode(regionName);
+        regionCode = convertRegionCodeToDbCode(String.valueOf(regionCode),regionUnit);
+
+        List<Object[]> objects = forsaleRepository.getMapDtoByCode(regionCode);
+        return converEntity2MapDto(objects);
+    }
+
+    public int convertRegionCodeToDbCode(String regionCode, String regionUnit) {
+        switch(regionUnit) {
+            case "district":
+                regionCode = regionCode.substring(0,2);
+                break;
+            case "neighborhood":
+                regionCode = regionCode.substring(0,5);
+                break;
+        }
+        return Integer.parseInt(regionCode);
+    }
+
+    public List<MapTmpDto> converEntity2MapDto(List<Object[]> resultList){
+        return resultList.stream().map(mapTmpDto -> new MapTmpDto(
+                (int)mapTmpDto[0], (int)mapTmpDto[1], (long)mapTmpDto[2]
+        )).collect(Collectors.toList());
     }
 
 
