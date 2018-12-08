@@ -15,3 +15,7 @@ spring:
       pool-name: hikari-cp
       maximum-pool-size: 30
       minimum-idle: 2
+
+  http:
+    converters:
+      preferred-json-mapper: jackson

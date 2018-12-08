@@ -1,12 +1,19 @@
 package kr.ac.skuniv.realestate.domain.entity;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
-
+/*@SqlResultSetMapping(
+        name="ProductOrderedMemberMapping",
+        classes = @ConstructorResult(
+                targetClass = GraphTmpDto.class,
+                columns = {
+                        @ColumnResult(name="dealType", type = String.class),
+                        @ColumnResult(name="housingType", type = String.class),
+                        @ColumnResult(name="date", type = Date.class),
+                        @ColumnResult(name="average", type = Integer.class),
+                })
+)*/
 @Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,4 +33,5 @@ public class Forsale {
     private int price;
 
     private Date date;
+
 }
