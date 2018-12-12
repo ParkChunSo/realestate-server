@@ -11,13 +11,12 @@ spring:
     url: jdbc:log4jdbc:mysql://117.17.142.207:3306/real_test?useSSL=false&serverTimezone=UTC
     username: root
     password: cs616
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     hikari:
       pool-name: hikari-cp
       maximum-pool-size: 30
       minimum-idle: 2
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
   http:
     converters:
       preferred-json-mapper: jackson
-
 
