@@ -1,16 +1,11 @@
 package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-
-import kr.ac.skuniv.realestate.domain.dto.MapDto;
-import kr.ac.skuniv.realestate.domain.dto.MapTmpDto;
-import kr.ac.skuniv.realestate.domain.entity.Forsale;
-import kr.ac.skuniv.realestate.mapper.ForsaleMap;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
-
+import kr.ac.skuniv.realestate.domain.dto.MapDto;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,6 +29,10 @@ public class ConditionService {
         this.forsaleRepository = forsaleRepository;
     }
 
+    public String convertRegionCityToCode(String city){
+        return regionCode.get(city);
+    }
+
     public String convertRegionToCode(String city){
         return regionCode.get(city).substring(0, 2);
     }
@@ -45,7 +44,6 @@ public class ConditionService {
     public String convertRegionToCode(String city, String distict, String neighborhood){
         return regionCode.get(city + distict + neighborhood);
     }
-
 
     public List<GraphTmpDto> convertEntity2Dto(List<Object[]> resultList){
         return resultList.stream().map(graphTmpDto -> new GraphTmpDto(
@@ -96,16 +94,27 @@ public class ConditionService {
         return null;
     }
   
-    public List<MapTmpDto> getMapDtoByCode(String regionName, String regionUnit){
-        int regionCode = convertRegionToCode(regionName);
-        regionCode = convertRegionCodeToDbCode(String.valueOf(regionCode),regionUnit);
+    public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit){
+        String regionCode = convertRegionCodeToDbCode(regionName,regionUnit);
 
-        List<Object[]> objects = forsaleRepository.getMapDtoByCode(regionCode);
-        return converEntity2MapDto(objects);
+        List<Object[]> objects = forsaleRepository.getMapDtoByRegion(regionCode);
+        return convertObjectToMapDto(objects);
     }
 
-    public int convertRegionCodeToDbCode(String regionCode, String regionUnit) {
+    public List<MapDto> getMapDtoByRegionCity(String regionName, String regionUnit){
+        String regionCode = convertRegionCodeToDbCode(regionName,regionUnit);
+        System.out.print("ttttttttt" + regionCode);
+
+        List<Object[]> objects = forsaleRepository.getMapDtoByRegionCity(regionCode);
+        return convertObjectToMapDto(objects);
+    }
+
+    private String convertRegionCodeToDbCode(String regionCode, String regionUnit) {
         switch(regionUnit) {
+            case "city":
+                regionCode = regionCode.substring(2);
+                System.out.print("ttttttttt" + regionCode);
+                break;
             case "district":
                 regionCode = regionCode.substring(0,2);
                 break;
@@ -113,15 +122,14 @@ public class ConditionService {
                 regionCode = regionCode.substring(0,5);
                 break;
         }
-        return Integer.parseInt(regionCode);
+        return regionCode;
     }
 
-    public List<MapTmpDto> converEntity2MapDto(List<Object[]> resultList){
-        return resultList.stream().map(mapTmpDto -> new MapTmpDto(
-                (int)mapTmpDto[0], (int)mapTmpDto[1], (long)mapTmpDto[2]
+    private List<MapDto> convertObjectToMapDto(List<Object[]> resultList){
+        return resultList.stream().map(mapDto -> new MapDto(
+                (String)mapDto[0], (int)mapDto[1], (long)mapDto[2]
         )).collect(Collectors.toList());
     }
-
 
     // DB 메소드
     public List<Object[]> getByCodeAndDateOnYear(String code){

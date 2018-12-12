@@ -1,10 +1,11 @@
 package kr.ac.skuniv.realestate.controller;
 
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
-
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.MapDto;
 import kr.ac.skuniv.realestate.service.ConditionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping(value = "realestate/condition/*")
 public class ConditionController {
     private final ConditionService conditionService;
+    Logger logger = LoggerFactory.getLogger(ConditionController.class);
 
     public ConditionController(ConditionService conditionService) {
         this.conditionService = conditionService;
@@ -23,6 +25,9 @@ public class ConditionController {
 
     @GetMapping("/city/{city}/date")
     public ConditionDto onlyCity(@PathVariable String city){
+        String regionName = conditionService.convertRegionCityToCode(city);
+        List<MapDto> mapDtos = conditionService.getMapDtoByRegionCity(regionName, "city");
+
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnYear(
@@ -30,14 +35,14 @@ public class ConditionController {
                         )
                 )
         );
-
-        List<MapDto> mapDtos = null;
-
         return new ConditionDto(mapDtos, graphDtos);
     }
 
     @GetMapping("/city/{city}/date/{date}")
     public ConditionDto cityAndDate(@PathVariable String city, @PathVariable String date){
+        String regionName = conditionService.convertRegionToCode(city);
+        List<MapDto> mapDtos = conditionService.getMapDtoByRegionCity(regionName, "city");
+
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
@@ -45,14 +50,14 @@ public class ConditionController {
                         )
                 )
         );
-        List<MapDto> mapDtos = null;
-
-
         return new ConditionDto(mapDtos, graphDtos);
     }
 
     @GetMapping("/city/{city}/district/{district}/date")
     public ConditionDto cityAndDistrict(@PathVariable String city, @PathVariable String district){
+        String regionName = conditionService.convertRegionToCode(city, district);
+        List<MapDto> mapDtos = conditionService.getMapDtoByRegion(regionName, "neighborhood");
+
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnYear(
@@ -60,13 +65,14 @@ public class ConditionController {
                         )
                 )
         );
-        List<MapDto> mapDtos = null;
-
         return new ConditionDto(mapDtos, graphDtos);
     }
 
     @GetMapping("/city/{city}/district/{district}/date/{date}")
     public ConditionDto cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable String date){
+        String regionName = conditionService.convertRegionToCode(city, district);
+        List<MapDto> mapDtos = conditionService.getMapDtoByRegion(regionName, "district");
+
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
@@ -74,18 +80,14 @@ public class ConditionController {
                         )
                 )
         );
-
-        List<MapDto> mapDtos = null;
-
-
         return new ConditionDto(mapDtos, graphDtos);
     }
 
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date")
-    public List<MapTmpDto> cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district, @PathVariable String neighborhood){
-        String regionName = city + ' ' + district + ' ' + neighborhood;
-        return conditionService.getMapDtoByCode(regionName, "neighborhood");
-    /*public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood){
+    public ConditionDto cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district, @PathVariable String neighborhood){
+        String regionName = conditionService.convertRegionToCode(city, district, neighborhood);
+        List<MapDto> mapDtos = conditionService.getMapDtoByRegion(regionName, "neighborhood");
+
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnYear(
@@ -93,16 +95,14 @@ public class ConditionController {
                         )
                 )
         );
-
-        List<MapDto> mapDtos = null;
-
-
-        return new ConditionDto(mapDtos, graphDtos);*/
+        return new ConditionDto(mapDtos, graphDtos);
     }
-
 
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date/{date}")
     public ConditionDto cityAndDistrictAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String district,@PathVariable String neighborhood, @PathVariable String date){
+        String regionName = conditionService.convertRegionToCode(city, district, neighborhood);
+        List<MapDto> mapDtos = conditionService.getMapDtoByRegion(regionName, "neighborhood");
+
         List<GraphDto> graphDtos = conditionService.convertTmpDto2GraphDto(
                 conditionService.convertEntity2Dto(
                         conditionService.getByCodeAndDateOnMonth(
@@ -110,10 +110,6 @@ public class ConditionController {
                         )
                 )
         );
-
-        List<MapDto> mapDtos = null;
-
-
         return new ConditionDto(mapDtos, graphDtos);
     }
 
