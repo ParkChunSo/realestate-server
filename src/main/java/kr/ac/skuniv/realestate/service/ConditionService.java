@@ -3,8 +3,8 @@ package kr.ac.skuniv.realestate.service;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.MapDto;
+import kr.ac.skuniv.realestate.exception.UserDefineException;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,50 +25,54 @@ public class ConditionService {
         this.regionCode = regionCode;
     }
 
-    public ConditionService(ForsaleRepository forsaleRepository){
+    public ConditionService(ForsaleRepository forsaleRepository) {
         this.forsaleRepository = forsaleRepository;
     }
 
-    public String convertRegionCityToCode(String city){
+    public String convertRegionCityToCode(String city) {
         return regionCode.get(city);
     }
 
-    public String convertRegionToCode(String city){
+    public String convertRegionToCode(String city) {
         return regionCode.get(city).substring(0, 2);
     }
 
-    public String convertRegionToCode(String city, String distict){
-        return regionCode.get(city + distict).substring(0,5);
+    public String convertRegionToCode(String city, String distict) {
+        return regionCode.get(city + distict).substring(0, 5);
     }
 
-    public String convertRegionToCode(String city, String distict, String neighborhood){
+    public String convertRegionToCode(String city, String distict, String neighborhood) {
         return regionCode.get(city + distict + neighborhood);
     }
 
-    public List<GraphTmpDto> convertEntity2Dto(List<Object[]> resultList){
+    public List<GraphTmpDto> convertEntity2Dto(List<Object[]> resultList) {
         return resultList.stream().map(graphTmpDto -> new GraphTmpDto(
-                (String)graphTmpDto[0], (String)graphTmpDto[1],
-                (Date)graphTmpDto[2],(Double) graphTmpDto[3]
+                (String) graphTmpDto[0], (String) graphTmpDto[1],
+                (Date) graphTmpDto[2], (Double) graphTmpDto[3]
         )).collect(Collectors.toList());
     }
 
-    public List<GraphDto> convertTmpDto2GraphDto(List<GraphTmpDto> dtos){
-        if(dtos.size() == 0)
+    public List<GraphDto> convertTmpDto2GraphDto(List<GraphTmpDto> dtos) {
+        if (dtos.size() == 0)
             return null;
 
         List<GraphDto> graphDtos = new ArrayList<>();
         String dealType = dtos.get(0).getDealType(), housingType = dtos.get(0).getHousingType();
         ArrayList<Double> arrayList = new ArrayList<>();
 
-        for(GraphTmpDto dto : dtos){
-            if(dealType.equals(dto.getDealType()) && housingType.equals(dto.getHousingType())){
+        for (GraphTmpDto dto : dtos) {
+            if (dealType.equals(dto.getDealType()) && housingType.equals(dto.getHousingType())) {
                 arrayList.add(dto.getAverage());
-            }else{
+            } else {
                 GraphDto graphDto = new GraphDto();
-                graphDto.setDealType(dealType); graphDto.setHousingType(housingType); graphDto.setAverage(arrayList);
+                graphDto.setDealType(dealType);
+                graphDto.setHousingType(housingType);
+                graphDto.setAverage(arrayList);
                 graphDtos.add(graphDto);
                 arrayList = new ArrayList<>();
-                dealType = dto.getDealType(); housingType = dto.getHousingType();arrayList.add(dto.getAverage());
+                dealType = dto.getDealType();
+                housingType = dto.getHousingType();
+                arrayList.add(dto.getAverage());
             }
         }
 
@@ -81,66 +85,78 @@ public class ConditionService {
         return graphDtos;
     }
 
-    public LocalDate convertString2LocalDate(String _date){
+    public LocalDate convertString2LocalDate(String _date) {
         String[] tmp = _date.split("-");
         LocalDate localDate = null;
 
-        if(tmp.length == 1)
-            return LocalDate.of(Integer.parseInt(tmp[0]),1,1);
+        if (tmp.length == 1)
+            return LocalDate.of(Integer.parseInt(tmp[0]), 1, 1);
 
-        else if(tmp.length == 2)
-            return LocalDate.of(Integer.parseInt(tmp[0]),Integer.parseInt(tmp[1]),1);
+        else if (tmp.length == 2)
+            return LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1);
 
         return null;
     }
-  
-    public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit){
-        String regionCode = convertRegionCodeToDbCode(regionName,regionUnit);
 
-        List<Object[]> objects = forsaleRepository.getMapDtoByRegion(regionCode);
-        return convertObjectToMapDto(objects);
+    public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit) {
+        List<MapDto> mapDtos;
+
+        try {
+            String regionCode = convertRegionCodeToDbCode(regionName, regionUnit);
+            List<Object[]> objects = forsaleRepository.getMapDtoByRegion(regionCode);
+            mapDtos = convertObjectToMapDto(objects);
+        } catch (Exception e) {
+            throw new UserDefineException("getMapDtoByRegion Error", e.getCause());
+        }
+
+        return mapDtos;
     }
 
-    public List<MapDto> getMapDtoByRegionCity(String regionName, String regionUnit){
-        String regionCode = convertRegionCodeToDbCode(regionName,regionUnit);
-        System.out.print("ttttttttt" + regionCode);
+    public List<MapDto> getMapDtoByRegionCity(String regionName, String regionUnit) {
+        List<MapDto> mapDtos;
 
-        List<Object[]> objects = forsaleRepository.getMapDtoByRegionCity(regionCode);
-        return convertObjectToMapDto(objects);
+        try {
+            String regionCode = convertRegionCodeToDbCode(regionName, regionUnit);
+            List<Object[]> objects = forsaleRepository.getMapDtoByRegionCity(regionCode);
+            mapDtos = convertObjectToMapDto(objects);
+        } catch (Exception e) {
+            throw new UserDefineException("getMapDtoByRegionCity Error", e.getCause());
+        }
+
+        return mapDtos;
     }
 
     private String convertRegionCodeToDbCode(String regionCode, String regionUnit) {
-        switch(regionUnit) {
+        switch (regionUnit) {
             case "city":
                 regionCode = regionCode.substring(2);
-                System.out.print("ttttttttt" + regionCode);
                 break;
             case "district":
-                regionCode = regionCode.substring(0,2);
+                regionCode = regionCode.substring(0, 2);
                 break;
             case "neighborhood":
-                regionCode = regionCode.substring(0,5);
+                regionCode = regionCode.substring(0, 5);
                 break;
         }
         return regionCode;
     }
 
-    private List<MapDto> convertObjectToMapDto(List<Object[]> resultList){
+    private List<MapDto> convertObjectToMapDto(List<Object[]> resultList) {
         return resultList.stream().map(mapDto -> new MapDto(
-                (String)mapDto[0], (int)mapDto[1], (long)mapDto[2]
+                (String) mapDto[0], (int) mapDto[1], (long) mapDto[2]
         )).collect(Collectors.toList());
     }
 
     // DB 메소드
-    public List<Object[]> getByCodeAndDateOnYear(String code){
+    public List<Object[]> getByCodeAndDateOnYear(String code) {
         return forsaleRepository.getByCodeAndDateOnYear(Integer.parseInt(code));
     }
 
-    public List<Object[]> getByCodeAndDateOnMonth(String code, LocalDate date){
+    public List<Object[]> getByCodeAndDateOnMonth(String code, LocalDate date) {
         return forsaleRepository.getByCodeAndDateOnMonth(Integer.parseInt(code), date);
     }
 
-    public List<Object[]> getByCodeAndDateOnDay(String code, LocalDate date){
+    public List<Object[]> getByCodeAndDateOnDay(String code, LocalDate date) {
         return forsaleRepository.getByCodeAndDateOnDay(Integer.parseInt(code), date);
     }
 }
