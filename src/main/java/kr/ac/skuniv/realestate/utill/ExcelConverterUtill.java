@@ -22,7 +22,6 @@ public class ExcelConverterUtill {
     }
 
     public void ReadRegionCode() throws FileNotFoundException, IOException {
-
         regionCodeMap = new HashMap<>();
         XSSFWorkbook workbook;
         XSSFSheet sheet;
