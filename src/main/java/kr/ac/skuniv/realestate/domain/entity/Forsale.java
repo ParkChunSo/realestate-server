@@ -1,5 +1,8 @@
 package kr.ac.skuniv.realestate.domain.entity;
-import lombok.*;
+
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
