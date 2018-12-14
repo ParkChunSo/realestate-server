@@ -51,7 +51,7 @@ public class ConditionService {
 
 
     public String convertRegionCityToCode(String city){
-        return regionCode.get(city);
+        return regionCodeHashmap.get(city);
     }
 
     public String convertRegionToCode(String city){
