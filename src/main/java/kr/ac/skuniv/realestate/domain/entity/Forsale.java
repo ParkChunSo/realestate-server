@@ -22,10 +22,11 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "web_forsale_tbl")
 public class Forsale {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
-    private int code;
+    private String code;
 
     private String housingType;
 

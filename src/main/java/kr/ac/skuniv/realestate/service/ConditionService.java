@@ -2,7 +2,9 @@ package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.MapDto;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class ConditionService {
@@ -22,7 +25,7 @@ public class ConditionService {
         this.forsaleRepository = forsaleRepository;
     }
 
-    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
+  public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
@@ -46,6 +49,10 @@ public class ConditionService {
         return convertTmpDto2GraphDto(graphTmpDtos);
     }
 
+
+    public String convertRegionCityToCode(String city){
+        return regionCode.get(city);
+    }
 
     public String convertRegionToCode(String city){
         return regionCodeHashmap.get(city).substring(0, 2);
@@ -86,7 +93,6 @@ public class ConditionService {
                 GraphDto graphDto = new GraphDto();
                 graphDto.setDealType(dealType); graphDto.setHousingType(housingType); graphDto.setAverage(arrayList);
                 graphDtos.add(graphDto);
-
                 arrayList = new ArrayList<>();
                 dealType = dto.getDealType(); housingType = dto.getHousingType();arrayList.add(dto.getAverage());
             }
@@ -99,5 +105,42 @@ public class ConditionService {
         graphDtos.add(graphDto);
 
         return graphDtos;
+    }
+
+    public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit){
+        String regionCode = convertRegionCodeToDbCode(regionName,regionUnit);
+
+        List<Object[]> objects = forsaleRepository.getMapDtoByRegion(regionCode);
+        return convertObjectToMapDto(objects);
+    }
+
+    public List<MapDto> getMapDtoByRegionCity(String regionName, String regionUnit){
+        String regionCode = convertRegionCodeToDbCode(regionName,regionUnit);
+        System.out.print("ttttttttt" + regionCode);
+
+        List<Object[]> objects = forsaleRepository.getMapDtoByRegionCity(regionCode);
+        return convertObjectToMapDto(objects);
+    }
+
+    private String convertRegionCodeToDbCode(String regionCode, String regionUnit) {
+        switch(regionUnit) {
+            case "city":
+                regionCode = regionCode.substring(2);
+                System.out.print("ttttttttt" + regionCode);
+                break;
+            case "district":
+                regionCode = regionCode.substring(0,2);
+                break;
+            case "neighborhood":
+                regionCode = regionCode.substring(0,5);
+                break;
+        }
+        return regionCode;
+    }
+
+    private List<MapDto> convertObjectToMapDto(List<Object[]> resultList){
+        return resultList.stream().map(mapDto -> new MapDto(
+                (String)mapDto[0], (int)mapDto[1], (long)mapDto[2]
+        )).collect(Collectors.toList());
     }
 }
