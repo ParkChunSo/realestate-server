@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 public class ConditionService {
 
@@ -30,21 +29,33 @@ public class ConditionService {
     }
 
     public List<GraphDto> findDataByCode(String regionCode){
-        List<GraphTmpDto> graphTmpDtos = forsaleRepository.getByCodeAndDateOnYear(Integer.parseInt(regionCode))
-                .stream().map(graphTmpDto -> new GraphTmpDto(
-                (String)graphTmpDto[0], (String)graphTmpDto[1],
-                (Date)graphTmpDto[2],(Double) graphTmpDto[3]
-        )).collect(Collectors.toList());
+        List<GraphTmpDto> graphTmpDtos;
+
+        try {
+            graphTmpDtos = forsaleRepository.getByCodeAndDateOnYear(Integer.parseInt(regionCode))
+                    .stream().map(graphTmpDto -> new GraphTmpDto(
+                            (String) graphTmpDto[0], (String) graphTmpDto[1],
+                            (Date) graphTmpDto[2], (Double) graphTmpDto[3]
+                    )).collect(Collectors.toList());
+        } catch(Exception e) {
+            throw new UserDefineException("findDataByCode Error", e.getCause());
+        }
 
         return convertTmpDto2GraphDto(graphTmpDtos);
     }
 
     public List<GraphDto> findDataByCode(String regionCode, String date){
-        List<GraphTmpDto> graphTmpDtos = findDataByCodeAndDate(Integer.parseInt(regionCode), date)
-                .stream().map(graphTmpDto -> new GraphTmpDto(
-                        (String)graphTmpDto[0], (String)graphTmpDto[1],
-                        (Date)graphTmpDto[2],(Double) graphTmpDto[3]
-                )).collect(Collectors.toList());
+        List<GraphTmpDto> graphTmpDtos;
+
+        try {
+            graphTmpDtos = findDataByCodeAndDate(Integer.parseInt(regionCode), date)
+                    .stream().map(graphTmpDto -> new GraphTmpDto(
+                            (String) graphTmpDto[0], (String) graphTmpDto[1],
+                            (Date) graphTmpDto[2], (Double) graphTmpDto[3]
+                    )).collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new UserDefineException("findDataByCode Error", e.getCause());
+        }
 
         return convertTmpDto2GraphDto(graphTmpDtos);
     }
