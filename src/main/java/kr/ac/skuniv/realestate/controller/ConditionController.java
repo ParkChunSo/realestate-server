@@ -42,7 +42,7 @@ public class ConditionController {
     @GetMapping("/city/{city}/district/{district}/date")
     public ConditionDto cityAndDistrict(@PathVariable String city, @PathVariable String district){
         List<GraphDto> graphDtos = conditionService.findDataByCode(conditionService.convertRegionToCode(city, district));
-        List<MapDto> mapDtos = conditionService.getMapDtoByRegion(conditionService.convertRegionCityToCode(city, district), "district");
+        List<MapDto> mapDtos = conditionService.getMapDtoByRegion(conditionService.convertRegionToCode(city, district), "district");
 
         return new ConditionDto(mapDtos, graphDtos);
     }
@@ -51,7 +51,7 @@ public class ConditionController {
     public ConditionDto cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable String date){
         List<GraphDto> graphDtos = conditionService.findDataByCode(conditionService.convertRegionToCode(city, district), date);
 
-        List<MapDto> mapDtos = conditionService.getMapDtoByRegion(conditionService.convertRegionCityToCode(city, district), "district");
+        List<MapDto> mapDtos = conditionService.getMapDtoByRegion(conditionService.convertRegionToCode(city, district), "district");
         return new ConditionDto(mapDtos, graphDtos);
     }
 

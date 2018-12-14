@@ -18,12 +18,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserDefineException.class)
     public ResponseEntity<?> handleUserDefineException(HttpServletRequest request, UserDefineException e) {
 
+        logger.info("======================================");
         logger.info("Time : "+ LocalDateTime.now());
         logger.info("RequestMethod : "+ request.getMethod());
         logger.info("RequestURL : " + request.getRequestURL());
         logger.info("RemoteHost : "+ request.getRemoteHost());
         logger.info("ErrorMessage : " + e.getMessage());
         logger.info("Cause : " + e.getCause());
+        logger.info("======================================");
 
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -32,12 +34,14 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseEntity<?> handleException(HttpServletRequest request, Exception e) {
 
+        logger.info("======================================");
         logger.info("Time : "+ LocalDateTime.now());
         logger.info("RequestMethod : "+ request.getMethod());
         logger.info("RequestURL : " + request.getRequestURL());
         logger.info("RemoteHost : "+ request.getRemoteHost());
         logger.info("ErrorMessage : " + e.getMessage());
         logger.info("Cause : " + e.getCause());
+        logger.info("======================================");
 
         return new ResponseEntity<>("예상치 못한 오류입니다.", HttpStatus.BAD_REQUEST);
     }
