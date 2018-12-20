@@ -42,7 +42,6 @@ public class ConditionService {
         return regionCode.get(city + distict + neighborhood);
     }
 
-
     public List<GraphTmpDto> convertEntity2Dto(List<Object[]> resultList){
         return resultList.stream().map(graphTmpDto -> new GraphTmpDto(
                 (String)graphTmpDto[0], (String)graphTmpDto[1],

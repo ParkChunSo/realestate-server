@@ -19,9 +19,7 @@
     </parent>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <start-class>kr.ac.skuniv.realestate.RealestateApplication</start-class>
     </properties>
 
     <dependencies>
@@ -130,8 +128,6 @@
         <artifactId>log4jdbc-log4j2-jdbc4</artifactId>
         <version>1.16</version>
     </dependency>
-
-
     </dependencies>
 
     <build>
@@ -139,9 +135,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
-
 </project>

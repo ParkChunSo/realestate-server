@@ -127,7 +127,6 @@ public class ConditionController {
                         )
                 )
         );
-
         return graphDtos;
 
     }
