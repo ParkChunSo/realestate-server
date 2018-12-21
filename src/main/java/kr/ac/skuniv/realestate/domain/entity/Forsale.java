@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-/*@SqlResultSetMapping(
+
+/*
+@SqlResultSetMapping(
         name="ProductOrderedMemberMapping",
         classes = @ConstructorResult(
                 targetClass = GraphTmpDto.class,
@@ -16,7 +18,9 @@ import java.util.Date;
                         @ColumnResult(name="date", type = Date.class),
                         @ColumnResult(name="average", type = Integer.class),
                 })
-)*/
+)
+*/
+
 @Entity
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

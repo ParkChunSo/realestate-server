@@ -5,6 +5,8 @@ import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.MapDto;
 import kr.ac.skuniv.realestate.exception.UserDefineException;
 import kr.ac.skuniv.realestate.repository.ForsaleRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ConditionService {
-
+    Logger logger = LoggerFactory.getLogger(ConditionService.class);
     private final ForsaleRepository forsaleRepository;
     private HashMap<String, String> regionCodeHashmap;
 
@@ -24,12 +26,12 @@ public class ConditionService {
         this.forsaleRepository = forsaleRepository;
     }
 
-  public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
+    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
-    public List<GraphDto> findDataByCode(String regionCode){
-        List<GraphTmpDto> graphTmpDtos;
+    public List<GraphDto> findDataByCode(String regionCode) {
+        List<GraphTmpDto> graphTmpDtos = null;
 
         try {
             graphTmpDtos = forsaleRepository.getByCodeAndDateOnYear(Integer.parseInt(regionCode))
@@ -37,15 +39,14 @@ public class ConditionService {
                             (String) graphTmpDto[0], (String) graphTmpDto[1],
                             (Date) graphTmpDto[2], (Double) graphTmpDto[3]
                     )).collect(Collectors.toList());
-        } catch(Exception e) {
-            throw new UserDefineException("findDataByCode Error", e.getCause());
+        } catch (Exception e) {
+            throw new UserDefineException("GraphDto DB오류입니다", e.getCause());
         }
-
         return convertTmpDto2GraphDto(graphTmpDtos);
     }
 
-    public List<GraphDto> findDataByCode(String regionCode, String date){
-        List<GraphTmpDto> graphTmpDtos;
+    public List<GraphDto> findDataByCode(String regionCode, String date) {
+        List<GraphTmpDto> graphTmpDtos = null;
 
         try {
             graphTmpDtos = findDataByCodeAndDate(Integer.parseInt(regionCode), date)
@@ -54,43 +55,59 @@ public class ConditionService {
                             (Date) graphTmpDto[2], (Double) graphTmpDto[3]
                     )).collect(Collectors.toList());
         } catch (Exception e) {
-            throw new UserDefineException("findDataByCode Error", e.getCause());
+            throw new UserDefineException("GraphDto DB오류입니다", e.getCause());
         }
 
         return convertTmpDto2GraphDto(graphTmpDtos);
     }
 
 
-    public String convertRegionCityToCode(String city){
-        return regionCodeHashmap.get(city);
+    public String convertRegionCityToCode(String city) {
+        if (regionCodeHashmap.get(city) == null) {
+            throw new UserDefineException("찾을수 없는 URL 파라미터 입니다");
+        } else {
+            return regionCodeHashmap.get(city);
+        }
     }
 
-    public String convertRegionToCode(String city){
-        return regionCodeHashmap.get(city).substring(0, 2);
+    public String convertRegionToCode(String city) {
+        if (regionCodeHashmap.get(city).substring(0, 2) == null) {
+            throw new UserDefineException("찾을수 없는 URL 파라미터 입니다");
+        } else {
+            return regionCodeHashmap.get(city).substring(0, 2);
+        }
     }
 
-    public String convertRegionToCode(String city, String distict){
-        return regionCodeHashmap.get(city + distict).substring(0,5);
+    public String convertRegionToCode(String city, String distict) {
+        if (regionCodeHashmap.get(city + distict).substring(0, 5) == null) {
+            throw new UserDefineException("찾을수 없는 URL 파라미터 입니다");
+        } else {
+            return regionCodeHashmap.get(city + distict).substring(0, 5);
+        }
     }
 
-    public String convertRegionToCode(String city, String distict, String neighborhood){
-        return regionCodeHashmap.get(city + distict + neighborhood);
+    public String convertRegionToCode(String city, String distict, String neighborhood) {
+        if (regionCodeHashmap.get(city + distict + neighborhood) == null) {
+            throw new UserDefineException("찾을수 없는 URL 파라미터 입니다");
+        } else {
+            return regionCodeHashmap.get(city + distict + neighborhood);
+        }
     }
 
-    private List<Object[]> findDataByCodeAndDate(int code, String _date){
+    private List<Object[]> findDataByCodeAndDate(int code, String _date) {
         String[] tmp = _date.split("-");
 
-        if(tmp.length == 1)
-            return forsaleRepository.getByCodeAndDateOnMonth(code, LocalDate.of(Integer.parseInt(tmp[0]),1,1));
+        if (tmp.length == 1)
+            return forsaleRepository.getByCodeAndDateOnMonth(code, LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
 
-        else if(tmp.length == 2)
-            return forsaleRepository.getByCodeAndDateOnDay(code, LocalDate.of(Integer.parseInt(tmp[0]),Integer.parseInt(tmp[1]),1));
+        else if (tmp.length == 2)
+            return forsaleRepository.getByCodeAndDateOnDay(code, LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
 
         return null;
     }
 
-    private List<GraphDto> convertTmpDto2GraphDto(List<GraphTmpDto> dtos){
-        if(dtos.size() == 0)
+    private List<GraphDto> convertTmpDto2GraphDto(List<GraphTmpDto> dtos) {
+        if (dtos.size() == 0)
             return null;
 
         List<GraphDto> graphDtos = new ArrayList<>();
@@ -121,7 +138,7 @@ public class ConditionService {
 
         return graphDtos;
     }
-  
+
     public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit) {
         List<MapDto> mapDtos;
 
@@ -130,10 +147,9 @@ public class ConditionService {
             List<Object[]> objects = forsaleRepository.getMapDtoByRegion(regionCode);
             mapDtos = convertObjectToMapDto(objects);
         } catch (Exception e) {
-            throw new UserDefineException("getMapDtoByRegion Error", e.getCause());
+            throw new UserDefineException("MapDto DB오류입니다", e.getCause());
         }
-
-        return mapDtos;
+        return mapDtos.size() > 0 ? mapDtos : null;
     }
 
     public List<MapDto> getMapDtoByRegionCity(String regionName, String regionUnit) {
@@ -144,10 +160,9 @@ public class ConditionService {
             List<Object[]> objects = forsaleRepository.getMapDtoByRegionCity(regionCode);
             mapDtos = convertObjectToMapDto(objects);
         } catch (Exception e) {
-            throw new UserDefineException("getMapDtoByRegionCity Error", e.getCause());
+            throw new UserDefineException("MapDto DB오류입니다", e.getCause());
         }
-
-        return mapDtos;
+        return mapDtos.size() > 0 ? mapDtos : null;
     }
 
     private String convertRegionCodeToDbCode(String regionCode, String regionUnit) {
@@ -166,9 +181,14 @@ public class ConditionService {
     }
 
     private List<MapDto> convertObjectToMapDto(List<Object[]> resultList) {
-        return resultList.stream().map(mapDto -> new MapDto(
-                (String) mapDto[0], (int) mapDto[1], (long) mapDto[2]
-        )).collect(Collectors.toList());
+        List<MapDto> mapDtos;
+
+        try {
+            mapDtos = resultList.stream().map(mapDto -> new MapDto((String) mapDto[0], (int) mapDto[1], (long) mapDto[2])).collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new UserDefineException("MapDto 변환 오류입니다", e.getCause());
+        }
+        return mapDtos;
     }
 
 }
