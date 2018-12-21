@@ -10,3 +10,4 @@ public interface PopulationRepository extends JpaRepository<Population, Long> {
     @Query("select p from Population p where p.code=:code")
     int getfind(@Param("code") int code);
 }
+

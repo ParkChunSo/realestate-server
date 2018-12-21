@@ -27,3 +27,4 @@ public interface ForsaleRepository extends JpaRepository<Forsale, Long> {
     @Query(value = "select f.code , p.population, count(f) from Forsale f, Population p where f.code = p.code and f.code like concat('%', :code) group by f.code order by f.code ASC")
     List<Object[]> getMapDtoByRegionCity(@Param("code") String code);
 }
+

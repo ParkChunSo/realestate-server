@@ -8,7 +8,7 @@ spring:
       ddl-auto: update
     show-sql: true
   datasource:
-    url: jdbc:log4jdbc:mysql://117.17.142.207:3306/real_test?useSSL=false&serverTimezone=UTC
+    url: jdbc:log4jdbc:mysql://117.17.142.207:3306/study?useSSL=false&serverTimezone=UTC
     username: root
     password: cs616
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
