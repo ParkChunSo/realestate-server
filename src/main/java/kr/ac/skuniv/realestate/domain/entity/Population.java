@@ -1,9 +1,11 @@
+
 package kr.ac.skuniv.realestate.domain.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Data
@@ -15,7 +17,12 @@ public class Population {
     private String code;
 
     private int population;
+
+}
+
 /*
     @OneToMany(fetch = FetchType.LAZY)
-    private List<Forsale> forsales;*/
+    private List<Forsale> forsales;*//*
+
 }
+*/

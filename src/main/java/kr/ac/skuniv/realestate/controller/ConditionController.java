@@ -3,9 +3,11 @@ package kr.ac.skuniv.realestate.controller;
 import kr.ac.skuniv.realestate.domain.dto.ConditionDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.MapDto;
+import kr.ac.skuniv.realestate.repository.BargainDateRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,9 @@ import java.util.List;
 public class ConditionController {
     private final ConditionService conditionService;
     Logger logger = LoggerFactory.getLogger(ConditionController.class);
+
+    @Autowired
+    BargainDateRepository bargainDateRepository;
 
     public ConditionController(ConditionService conditionService) {
         this.conditionService = conditionService;
@@ -69,5 +74,14 @@ public class ConditionController {
         List<MapDto> mapDtos = conditionService.getMapDtoByRegion(conditionService.convertRegionToCode(city, district, neighborhood), "neighborhood");
 
         return new ConditionDto(mapDtos, graphDtos);
+    }
+
+    @GetMapping("/test/city/{city}/date")
+    public List<Object[]> test(@PathVariable String city){
+        logger.info("=======================================================");
+        String code = conditionService.convertRegionToCode(city);
+        logger.info("=======================================================" + code);
+        List<Object[]> graphTmpDtos = bargainDateRepository.getByCodeAndDateOnYear(code);
+        return graphTmpDtos;
     }
 }
