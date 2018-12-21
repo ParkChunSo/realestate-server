@@ -12,6 +12,7 @@ spring:
     username: root
     password: cs616
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+
     hikari:
       pool-name: hikari-cp
       maximum-pool-size: 30
@@ -19,4 +20,9 @@ spring:
   http:
     converters:
       preferred-json-mapper: jackson
-
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  jackson:
+    time-zone: UTC
