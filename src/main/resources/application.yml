@@ -19,3 +19,5 @@ spring:
   http:
     converters:
       preferred-json-mapper: jackson
+
+

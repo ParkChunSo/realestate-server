@@ -12,7 +12,7 @@ public class Population {
     @Id
     private int id;
 
-    private int code;
+    private String code;
 
     private int population;
 /*

@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 @Component
 public class ExcelConverterUtill {
-    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\Kimyunsang\\Desktop\\spring\\RegionCode.xlsx";
+    private final String EXCEL_PATH_FOR_WINDOW = "C:\\realestatetest\\RegionCode.xlsx";
     private final String EXCEL_PATH_FOR_LINUX = "home/realEstate/RegionCode.xlsx";
     HashMap<String, String> regionCodeMap;
 
@@ -22,7 +22,6 @@ public class ExcelConverterUtill {
     }
 
     public void ReadRegionCode() throws FileNotFoundException, IOException {
-
         regionCodeMap = new HashMap<>();
         XSSFWorkbook workbook;
         XSSFSheet sheet;
