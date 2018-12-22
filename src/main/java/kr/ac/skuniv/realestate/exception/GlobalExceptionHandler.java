@@ -20,7 +20,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     UrlPathHelper urlPathHelper;
 
-    @ExceptionHandler(UserDefineException.class)
+    @ExceptionHandler(value = {UserDefineException.class})
     public ErrorInfo handleUserDefineException(HttpServletRequest request, UserDefineException e) {
         String requestURL = urlPathHelper.getOriginatingRequestUri(request);
 

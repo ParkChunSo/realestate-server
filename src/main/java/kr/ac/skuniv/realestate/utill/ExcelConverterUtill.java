@@ -52,7 +52,6 @@ public class ExcelConverterUtill {
                 log.warn(String.format("miss data => %s", regionName));
             }
             regionCodeMap.put(regionName, regionCode);
-
         }
         System.out.println("===================" + mySet.size());
 //        int rows = sheet.getPhysicalNumberOfRows();

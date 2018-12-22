@@ -85,10 +85,10 @@ public class RealestateRunner implements ApplicationRunner {
 //            }
 //        }
 
-        /*regionCode2 = regionCodeRepository.findById("서울특별시").get();
-        regionCode1 = regionCodeRepository.findByCode("1100000000");
-        logger.info(regionCode2.getRegion());
-        logger.info(regionCode2.getCode());
-        logger.info(regionCode1.getId());*/
+//        regionCode2 = regionCodeRepository.findById("서울특별시").get();
+//        regionCode1 = regionCodeRepository.findByCode("1100000000");
+//        logger.info(regionCode2.getRegion());
+//        logger.info(regionCode2.getCode());
+//        logger.info(regionCode1.getId());
     }
 }
