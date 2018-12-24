@@ -11,10 +11,10 @@ import java.util.TimeZone;
 @EnableJpaAuditing
 public class RealestateApplication {
 
-    /*@PostConstruct
+    @PostConstruct
     public void initApplication(){
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    }*/
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(RealestateApplication.class, args);
