@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RegionCodeRepository extends CrudRepository<RegionCode, String> {
-
 }

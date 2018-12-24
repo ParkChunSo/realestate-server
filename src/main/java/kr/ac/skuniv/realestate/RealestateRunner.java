@@ -90,5 +90,9 @@ public class RealestateRunner implements ApplicationRunner {
 //        logger.info(regionCode2.getRegion());
 //        logger.info(regionCode2.getCode());
 //        logger.info(regionCode1.getId());
+
+        RegionCode regionCode1 = new RegionCode();
+        regionCode1 = regionCodeRepository.findById("경기도광주시초월읍").get();
+        logger.info(regionCode1.getValue());
     }
 }
