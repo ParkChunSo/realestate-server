@@ -1,6 +1,5 @@
 package kr.ac.skuniv.realestate;
 
-import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -18,14 +17,9 @@ public class RealestateApplicationTests {
     @Autowired
     DataSource dataSource;
 
-    @Autowired
-    ForsaleRepository forsaleRepository;
-
     private Logger logger = LoggerFactory.getLogger(RealestateApplicationTests.class);
     @Test
     public void contextLoads() {
-
-        //logger.info(forsaleRepository.findByCode(1100000));
 
     }
 

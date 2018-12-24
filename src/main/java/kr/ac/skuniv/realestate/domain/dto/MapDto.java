@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class MapDto {
-
     private String name;
     private int population;
     private long volum;

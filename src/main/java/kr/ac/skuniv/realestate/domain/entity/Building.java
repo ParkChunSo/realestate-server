@@ -21,10 +21,10 @@ public class Building {
     private String buildingNum;
 
     @Column(nullable = false)
-    private int city;
+    private String city;
 
     @Column(nullable = false)
-    private int groop;
+    private String groop;
 
     @Column(nullable = false)
     private String dong;
