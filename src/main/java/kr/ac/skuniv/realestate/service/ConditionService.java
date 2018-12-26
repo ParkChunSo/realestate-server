@@ -83,7 +83,6 @@ public class ConditionService {
                 rentDateObjects = rentDateRepository.getByDongNameAndDateOnYear(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName());
                 break;
         }
-
         return mergeObjectsToGraphDtos(bargainDateObjects, charterDateObjects, rentDateObjects);
     }
 
@@ -166,6 +165,7 @@ public class ConditionService {
         return convertGraphTmpDtosToGraphDtos(graphTmpDtos);
     }
 
+    // 쿼리 결과로 나온 오브젝트 리스트에서 평균을 리스트로 가지는 객체로 변환
     private List<GraphDto> convertGraphTmpDtosToGraphDtos(List<GraphTmpDto> graphTmpDtos) {
         List<GraphDto> graphDtos = new ArrayList<>();
         String dealType = graphTmpDtos.get(0).getDealType(), housingType = graphTmpDtos.get(0).getHousingType();
