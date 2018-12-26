@@ -1,7 +1,6 @@
 package kr.ac.skuniv.realestate;
 
 import kr.ac.skuniv.realestate.domain.entity.RegionCode;
-import kr.ac.skuniv.realestate.repository.ForsaleRepository;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
