@@ -3,7 +3,7 @@ package kr.ac.skuniv.realestate.domain.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -14,7 +14,8 @@ public class BargainDate {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private LocalDate date;
+    @Temporal(value = TemporalType.DATE)
+    private Date date;
 
     @Column(name = "price")
     private Long price;

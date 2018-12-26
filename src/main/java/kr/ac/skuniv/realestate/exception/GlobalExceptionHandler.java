@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -15,13 +16,12 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-    //WebRequest
 
     @Autowired
     UrlPathHelper urlPathHelper;
 
-    @ExceptionHandler(value = {UserDefineException.class})
-    public ErrorInfo handleUserDefineException(HttpServletRequest request, UserDefineException e) {
+    @ExceptionHandler({UserDefineException.class, Exception.class})
+    public ResponseEntity handleUserDefineException(HttpServletRequest request, UserDefineException e) {
         String requestURL = urlPathHelper.getOriginatingRequestUri(request);
 
         logger.info("======================================");
@@ -33,11 +33,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.info("Cause : " + e.getCause());
         logger.info("======================================");
 
-        return new ErrorInfo(HttpStatus.BAD_REQUEST.toString(), e.getMessage(), requestURL);
+        return new ResponseEntity<>(new ErrorInfo(e.getMessage(),requestURL), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ErrorInfo handleException(HttpServletRequest request, Exception e) {
+   /* @ExceptionHandler(Exception.class)
+    public ResponseEntity handleException(HttpServletRequest request, Exception e) {
         String requestURL = urlPathHelper.getOriginatingRequestUri(request);
 
         logger.info("======================================");
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.info("Cause : " + e.getCause());
         logger.info("======================================");
 
-        return new ErrorInfo(HttpStatus.BAD_REQUEST.toString(), "예상치 못한 오류입니다", requestURL);
-    }
+        return new ResponseEntity<>(new ErrorInfo(e.getMessage(),requestURL), HttpStatus.BAD_REQUEST);
+    }*/
 
 }

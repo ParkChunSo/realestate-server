@@ -4,14 +4,11 @@ import lombok.Data;
 
 @Data
 public class ErrorInfo {
-
-    private String statusCode;
-    private String message;
+    private String errorMessage;
     private String requestURL;
 
-    public ErrorInfo(String statusCode, String message, String requestURL) {
-        this.statusCode = statusCode;
-        this.message = message;
+    public ErrorInfo(String errorMessage, String requestURL) {
+        this.errorMessage = errorMessage;
         this.requestURL = requestURL;
     }
 }

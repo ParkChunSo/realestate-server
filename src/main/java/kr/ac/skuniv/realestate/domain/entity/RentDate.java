@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -14,7 +15,8 @@ public class RentDate {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private LocalDate date;
+    @Temporal(value = TemporalType.DATE)
+    private Date date;
 
     @Column(name = "guarantee_price")
     private Long guaranteePrice;
