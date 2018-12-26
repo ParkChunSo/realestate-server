@@ -177,6 +177,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.5.2.RELEASE</version>
+                <configuration>
+                    <fork>true</fork>
+                    <mainClass>kr.ac.skuniv.realestate.RealestateApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.mysema.maven</groupId>
@@ -191,11 +203,6 @@
                             <outputDirectory>target/generated-sources/java</outputDirectory>
                             <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
                         </configuration>
-                    </execution>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

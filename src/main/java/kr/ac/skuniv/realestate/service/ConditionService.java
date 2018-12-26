@@ -3,9 +3,11 @@ package kr.ac.skuniv.realestate.service;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
+import kr.ac.skuniv.realestate.domain.entity.RegionCode;
 import kr.ac.skuniv.realestate.exception.UserDefineException;
 import kr.ac.skuniv.realestate.repository.BargainDateRepository;
 import kr.ac.skuniv.realestate.repository.CharterDateRepository;
+import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.repository.RentDateRepository;
 import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
@@ -25,39 +27,53 @@ public class ConditionService {
     private final BargainDateRepository bargainDateRepository;
     private final CharterDateRepository charterDateRepository;
     private final RentDateRepository rentDateRepository;
+    private final RegionCodeRepository regionCodeRepository;
     private HashMap<String, String> regionCodeHashmap;
 
-    public ConditionService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository) {
+    public ConditionService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository,
+                            RentDateRepository rentDateRepository, RegionCodeRepository regionCodeRepository) {
         this.bargainDateRepository = bargainDateRepository;
         this.charterDateRepository = charterDateRepository;
         this.rentDateRepository = rentDateRepository;
+        this.regionCodeRepository = regionCodeRepository;
     }
 
     public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
+//    public RegionDto convertRegionToDto(String city) {
+//        if (regionCodeHashmap.get(city) == null) {
+//            throw new UserDefineException("찾을수 없는 URL 파라미터");
+//        } else {
+//            return new RegionDto(regionCodeHashmap.get(city).substring(0, 2), "city");
+//        }
+//    }
+
     public RegionDto convertRegionToDto(String city) {
-        if (regionCodeHashmap.get(city) == null) {
+        RegionCode regionCode = regionCodeRepository.findById(city).get();
+        if (regionCode.getValue() == null) {
             throw new UserDefineException("찾을수 없는 URL 파라미터");
         } else {
-            return new RegionDto(regionCodeHashmap.get(city).substring(0, 2), "city");
+            return new RegionDto(regionCode.getValue().substring(0, 2), "city");
         }
     }
 
     public RegionDto convertRegionToDto(String city, String distict) {
-        if (regionCodeHashmap.get(city + distict) == null) {
+        RegionCode regionCode = regionCodeRepository.findById(city + distict).get();
+        if (regionCode.getValue() == null) {
             throw new UserDefineException("찾을수 없는 URL 파라미터");
         } else {
-            return new RegionDto(regionCodeHashmap.get(city + distict).substring(0, 2), regionCodeHashmap.get(city + distict).substring(2, 5), "distict");
+            return new RegionDto(regionCode.getValue().substring(0, 2), regionCode.getValue().substring(2, 5), "distict");
         }
     }
 
     public RegionDto convertRegionToDto(String city, String distict, String neighborhood) {
-        if (regionCodeHashmap.get(city + distict + neighborhood) == null) {
+        RegionCode regionCode = regionCodeRepository.findById(city+distict+neighborhood).get();
+        if (regionCode.getValue() == null) {
             throw new UserDefineException("찾을수 없는 URL 파라미터");
         } else {
-            return new RegionDto(regionCodeHashmap.get(city + distict).substring(0, 2), regionCodeHashmap.get(city + distict).substring(2, 5), neighborhood, "neighborhood");
+            return new RegionDto(regionCode.getValue().substring(0, 2), regionCode.getValue().substring(2, 5), neighborhood, "neighborhood");
         }
     }
 
@@ -69,6 +85,7 @@ public class ConditionService {
         switch (regionDto.getRegionStatus()) {
             case "city":
                 bargainDateObjects = bargainDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
+
                 charterDateObjects = charterDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
                 rentDateObjects = rentDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
                 break;
