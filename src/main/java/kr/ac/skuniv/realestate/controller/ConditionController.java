@@ -2,6 +2,7 @@ package kr.ac.skuniv.realestate.controller;
 
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
+import kr.ac.skuniv.realestate.domain.entity.Building;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,11 @@ public class ConditionController {
     public List<GraphDto> cityAndDistrictAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String district, @PathVariable String neighborhood, @PathVariable String date){
         RegionDto regionDto = conditionService.convertRegionToDto(city,district,neighborhood);
         return conditionService.getGraphDtoByRegionDtoAndDate(regionDto, date);
+    }
+
+    @GetMapping("/test")
+    public Iterable<Building> testQueryDsl() {
+        return conditionService.search(1L,"11");
     }
 
 

@@ -6,10 +6,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- *
- *
- */
 @Component
 public class AcessInfoUtill {
     Logger logger = LoggerFactory.getLogger(AcessInfoUtill.class);

@@ -40,7 +40,7 @@ public class RealestateRunner implements ApplicationRunner {
             conditionService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
             System.out.println(excelConverterUtill.getRegionCodeMap().size());
         }catch (Exception e){
-            System.out.println(e);
+            logger.error(e.getMessage());
         }
     }
 }

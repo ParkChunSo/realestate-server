@@ -3,14 +3,18 @@ package kr.ac.skuniv.realestate.service;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
-import kr.ac.skuniv.realestate.exception.UserDefineException;
+import kr.ac.skuniv.realestate.domain.entity.Building;
+import kr.ac.skuniv.realestate.predicate.BuildingPredicate;
 import kr.ac.skuniv.realestate.repository.BargainDateRepository;
+import kr.ac.skuniv.realestate.repository.BuildingRepository;
 import kr.ac.skuniv.realestate.repository.CharterDateRepository;
 import kr.ac.skuniv.realestate.repository.RentDateRepository;
 import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ConditionService {
-    Logger logger = LoggerFactory.getLogger(ConditionService.class);
+    private Logger logger = LoggerFactory.getLogger(ConditionService.class);
     private final BargainDateRepository bargainDateRepository;
     private final CharterDateRepository charterDateRepository;
     private final RentDateRepository rentDateRepository;
@@ -38,55 +42,44 @@ public class ConditionService {
     }
 
     public RegionDto convertRegionToDto(String city) {
-        if (regionCodeHashmap.get(city) == null) {
-            throw new UserDefineException("찾을수 없는 URL 파라미터");
-        } else {
-            return new RegionDto(regionCodeHashmap.get(city).substring(0, 2), "city");
-        }
+        return new RegionDto(regionCodeHashmap.get(city).substring(0, 2), RegionDto.RegionType.CITY);
     }
 
     public RegionDto convertRegionToDto(String city, String distict) {
-        if (regionCodeHashmap.get(city + distict) == null) {
-            throw new UserDefineException("찾을수 없는 URL 파라미터");
-        } else {
-            return new RegionDto(regionCodeHashmap.get(city + distict).substring(0, 2), regionCodeHashmap.get(city + distict).substring(2, 5), "distict");
-        }
+        return new RegionDto(regionCodeHashmap.get(city + distict).substring(0, 2), regionCodeHashmap.get(city + distict).substring(2, 5), RegionDto.RegionType.DISTRICT);
     }
 
     public RegionDto convertRegionToDto(String city, String distict, String neighborhood) {
-        if (regionCodeHashmap.get(city + distict + neighborhood) == null) {
-            throw new UserDefineException("찾을수 없는 URL 파라미터");
-        } else {
-            return new RegionDto(regionCodeHashmap.get(city + distict).substring(0, 2), regionCodeHashmap.get(city + distict).substring(2, 5), neighborhood, "neighborhood");
-        }
+        return new RegionDto(regionCodeHashmap.get(city + distict).substring(0, 2), regionCodeHashmap.get(city + distict).substring(2, 5), neighborhood, RegionDto.RegionType.NEIGHBORHOOD);
     }
 
+    @Transactional
     public List<GraphDto> getGraphDtoByRegionDto(RegionDto regionDto) {
         List<Object[]> bargainDateObjects = new ArrayList<>();
         List<Object[]> charterDateObjects = new ArrayList<>();
         List<Object[]> rentDateObjects = new ArrayList<>();
 
-        switch (regionDto.getRegionStatus()) {
-            case "city":
+        switch (regionDto.getRegionType()) {
+            case CITY:
                 bargainDateObjects = bargainDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
                 charterDateObjects = charterDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
                 rentDateObjects = rentDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
                 break;
-            case "district":
+            case DISTRICT:
                 bargainDateObjects = bargainDateRepository.getByGroopCodeAndDateOnYear(regionDto.getCityCode(), regionDto.getGroopCode());
                 charterDateObjects = charterDateRepository.getByGroopCodeAndDateOnYear(regionDto.getCityCode(), regionDto.getGroopCode());
                 rentDateObjects = rentDateRepository.getByGroopCodeAndDateOnYear(regionDto.getCityCode(), regionDto.getGroopCode());
                 break;
-            case "neighborhood":
+            case NEIGHBORHOOD:
                 bargainDateObjects = bargainDateRepository.getByDongNameAndDateOnYear(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName());
                 charterDateObjects = charterDateRepository.getByDongNameAndDateOnYear(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName());
                 rentDateObjects = rentDateRepository.getByDongNameAndDateOnYear(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName());
                 break;
         }
-
         return mergeObjectsToGraphDtos(bargainDateObjects, charterDateObjects, rentDateObjects);
     }
 
+    @Transactional
     public List<GraphDto> getGraphDtoByRegionDtoAndDate(RegionDto regionDto, String date) {
         List<Object[]> bargainDateObjects = new ArrayList<>();
         List<Object[]> charterDateObjects = new ArrayList<>();
@@ -94,79 +87,67 @@ public class ConditionService {
         String[] tmp = date.split("-");
 
         if (tmp.length == 1) {
-            switch (regionDto.getRegionStatus()) {
-                case "city":
+            switch (regionDto.getRegionType()) {
+                case CITY:
                     bargainDateObjects = bargainDateRepository.getByCityCodeAndDateOnMonth(regionDto.getCityCode(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     charterDateObjects = charterDateRepository.getByCityCodeAndDateOnMonth(regionDto.getCityCode(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     rentDateObjects = rentDateRepository.getByCityCodeAndDateOnMonth(regionDto.getCityCode(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     break;
-                case "district":
+                case DISTRICT:
                     bargainDateObjects = bargainDateRepository.getByGroopCodeAndDateOnMonth(regionDto.getCityCode(), regionDto.getGroopCode(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     charterDateObjects = charterDateRepository.getByGroopCodeAndDateOnMonth(regionDto.getCityCode(), regionDto.getGroopCode(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     rentDateObjects = rentDateRepository.getByGroopCodeAndDateOnMonth(regionDto.getCityCode(), regionDto.getGroopCode(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     break;
-                case "neighborhood":
+                case NEIGHBORHOOD:
                     bargainDateObjects = bargainDateRepository.getByDongNameAndDateOnMonth(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     charterDateObjects = charterDateRepository.getByDongNameAndDateOnMonth(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     rentDateObjects = rentDateRepository.getByDongNameAndDateOnMonth(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName(), LocalDate.of(Integer.parseInt(tmp[0]), 1, 1));
                     break;
             }
         } else if (tmp.length == 2) {
-            switch (regionDto.getRegionStatus()) {
-                case "city":
+            switch (regionDto.getRegionType()) {
+                case CITY:
                     bargainDateObjects = bargainDateRepository.getByCityCodeAndDateOnDay(regionDto.getCityCode(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     charterDateObjects = charterDateRepository.getByCityCodeAndDateOnDay(regionDto.getCityCode(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     rentDateObjects = rentDateRepository.getByCityCodeAndDateOnDay(regionDto.getCityCode(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     break;
-                case "district":
+                case DISTRICT:
                     bargainDateObjects = bargainDateRepository.getByGroopCodeAndDateOnDay(regionDto.getCityCode(), regionDto.getGroopCode(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     charterDateObjects = charterDateRepository.getByGroopCodeAndDateOnDay(regionDto.getCityCode(), regionDto.getGroopCode(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     rentDateObjects = rentDateRepository.getByGroopCodeAndDateOnDay(regionDto.getCityCode(), regionDto.getGroopCode(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     break;
-                case "neighborhood":
+                case NEIGHBORHOOD:
                     bargainDateObjects = bargainDateRepository.getByDongNameAndDateOnDay(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     charterDateObjects = charterDateRepository.getByDongNameAndDateOnDay(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     rentDateObjects = rentDateRepository.getByDongNameAndDateOnDay(regionDto.getCityCode(), regionDto.getGroopCode(), regionDto.getDongName(), LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1));
                     break;
             }
         }
-
         return mergeObjectsToGraphDtos(bargainDateObjects, charterDateObjects, rentDateObjects);
     }
 
-    private List<GraphDto> mergeObjectsToGraphDtos(List<Object[]> bargainDateObjects, List<Object[]> charterDateObjects, List<Object[]> rentDateObjects) {
+    public List<GraphDto> mergeObjectsToGraphDtos(List<Object[]> bargainDateObjects, List<Object[]> charterDateObjects, List<Object[]> rentDateObjects) {
         List<GraphDto> bargainDateGraphDtos = new ArrayList<>();
         List<GraphDto> charterDateGraphDtos = new ArrayList<>();
         List<GraphDto> rentDateGraphDtos = new ArrayList<>();
-        List<GraphDto> graphDtos;
 
-        try {
-            bargainDateGraphDtos = bargainDateObjects.size() > 0 ? convertObjectsToGraphDtos(bargainDateObjects, "매매") : bargainDateGraphDtos;
-            charterDateGraphDtos = charterDateObjects.size() > 0 ? convertObjectsToGraphDtos(charterDateObjects, "전세") : charterDateGraphDtos;
-            rentDateGraphDtos = rentDateObjects.size() > 0 ? convertObjectsToGraphDtos(rentDateObjects, "월세") : rentDateGraphDtos;
+        bargainDateGraphDtos = bargainDateObjects.size() > 0 ? convertObjectsToGraphDtos(bargainDateObjects, "매매") : bargainDateGraphDtos;
+        charterDateGraphDtos = charterDateObjects.size() > 0 ? convertObjectsToGraphDtos(charterDateObjects, "전세") : charterDateGraphDtos;
+        rentDateGraphDtos = rentDateObjects.size() > 0 ? convertObjectsToGraphDtos(rentDateObjects, "월세") : rentDateGraphDtos;
 
-            graphDtos = ListUtils.union(bargainDateGraphDtos, charterDateGraphDtos);
-            graphDtos = ListUtils.union(graphDtos, rentDateGraphDtos);
-        } catch (Exception e) {
-            throw new UserDefineException("GraphDto 병합 과정에서 오류", e.getMessage());
-        }
+        List<GraphDto> graphDtos = ListUtils.union(bargainDateGraphDtos, charterDateGraphDtos);
+        graphDtos = ListUtils.union(graphDtos, rentDateGraphDtos);
         return graphDtos;
     }
 
+    public List<GraphDto> convertObjectsToGraphDtos(List<Object[]> objects, String dealType) {
+        List<GraphTmpDto> graphTmpDtos = objects.stream().map(graphTmpDto -> new GraphTmpDto(dealType, (String) graphTmpDto[0],
+                (Date) graphTmpDto[1], (Double) graphTmpDto[2])).collect(Collectors.toList());
 
-    private List<GraphDto> convertObjectsToGraphDtos(List<Object[]> objects, String dealType) {
-        List<GraphTmpDto> graphTmpDtos;
-        try {
-            graphTmpDtos = objects.stream().map(graphTmpDto -> new GraphTmpDto(dealType, (String) graphTmpDto[0],
-                    (Date) graphTmpDto[1], (Double) graphTmpDto[2])).collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.info("convertObjectsToGraphDtos 예외 : " + e.getMessage());
-            throw new UserDefineException("Objects -> GraphDto 변환과정에서 오류", e.getMessage());
-        }
         return convertGraphTmpDtosToGraphDtos(graphTmpDtos);
     }
 
-    private List<GraphDto> convertGraphTmpDtosToGraphDtos(List<GraphTmpDto> graphTmpDtos) {
+    public List<GraphDto> convertGraphTmpDtosToGraphDtos(List<GraphTmpDto> graphTmpDtos) {
         List<GraphDto> graphDtos = new ArrayList<>();
         String dealType = graphTmpDtos.get(0).getDealType(), housingType = graphTmpDtos.get(0).getHousingType();
         ArrayList<Double> arrayList = new ArrayList<>();
@@ -194,6 +175,13 @@ public class ConditionService {
         graphDtos.add(graphDto);
 
         return graphDtos;
+    }
+
+    @Autowired
+    BuildingRepository buildingRepository;
+
+    public Iterable<Building> search(Long builgingNo, String city) {
+        return buildingRepository.findAll(BuildingPredicate.search(builgingNo, city));
     }
 
 
