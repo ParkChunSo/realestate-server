@@ -147,9 +147,10 @@ public class ConditionService {
         return convertGraphTmpDtosToGraphDtos(graphTmpDtos);
     }
 
-    public List<GraphDto> convertGraphTmpDtosToGraphDtos(List<GraphTmpDto> graphTmpDtos) {
+    private List<GraphDto> convertGraphTmpDtosToGraphDtos(List<GraphTmpDto> graphTmpDtos) {
         List<GraphDto> graphDtos = new ArrayList<>();
-        String dealType = graphTmpDtos.get(0).getDealType(), housingType = graphTmpDtos.get(0).getHousingType();
+        String dealType = graphTmpDtos.get(0).getDealType();
+        String housingType = graphTmpDtos.get(0).getHousingType();
         ArrayList<Double> arrayList = new ArrayList<>();
 
         for (GraphTmpDto dto : graphTmpDtos) {
