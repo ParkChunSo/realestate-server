@@ -1,5 +1,6 @@
 package kr.ac.skuniv.realestate;
 
+import kr.ac.skuniv.realestate.aop.AspectException;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.apache.logging.log4j.LogManager;
@@ -18,11 +19,13 @@ public class RealestateRunner implements ApplicationRunner {
     private final DataSource dataSource;
     private final ExcelConverterUtill excelConverterUtill;
     private final ConditionService conditionService;
+    private final AspectException aspectException;
 
-    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, ConditionService conditionService) {
+    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, ConditionService conditionService, AspectException aspectException) {
         this.dataSource = dataSource;
         this.excelConverterUtill = excelConverterUtill;
         this.conditionService = conditionService;
+        this.aspectException = aspectException;
     }
 
     @Override
@@ -38,7 +41,8 @@ public class RealestateRunner implements ApplicationRunner {
         try{
             excelConverterUtill.ReadRegionCode();
             conditionService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
-            System.out.println(excelConverterUtill.getRegionCodeMap().size());
+            aspectException.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
+            logger.info("RegionCodeMap Size : " + excelConverterUtill.getRegionCodeMap().size());
         }catch (Exception e){
             logger.error(e.getMessage());
         }
