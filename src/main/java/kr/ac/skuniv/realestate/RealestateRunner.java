@@ -47,8 +47,8 @@ public class RealestateRunner implements ApplicationRunner {
             excelConverterUtill.ReadRegionCode();
             conditionService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
             System.out.println(excelConverterUtill.getRegionCodeMap().size());
-        } catch (Exception e) {
-            System.out.println(e);
+        }catch (Exception e){
+            logger.error(e.getMessage());
         }
 //        RegionCode regionCode = new RegionCode();
 //        regionCode.setValue("서울특별시");
