@@ -1,8 +1,11 @@
 package kr.ac.skuniv.realestate.domain.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class RegionDto {
     private String cityCode;
     private String groopCode;
@@ -20,6 +23,7 @@ public class RegionDto {
         this.regionType = regionType;
     }
 
+    @Builder
     public RegionDto(String cityCode, String groopCode, String dongName, RegionType regionType) {
         this.cityCode = cityCode;
         this.groopCode = groopCode;

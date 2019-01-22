@@ -22,7 +22,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Autowired
     private UrlPathHelper urlPathHelper;
 
-    @ExceptionHandler({UserDefineException.class, Exception.class})
+    @ExceptionHandler(UserDefineException.class)
     public ResponseEntity handleUserDefineException(HttpServletRequest request, UserDefineException e) {
         String requestURL = urlPathHelper.getOriginatingRequestUri(request);
 
@@ -40,23 +40,35 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Explanation", "RealEstate Service");
 
-        return new ResponseEntity<>(new ErrorDto(e.getOriginalErrorMessage(), e.getMessage(),requestURL),httpHeaders,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ErrorDto.builder()
+                .originalErrorMessage(e.getOriginalErrorMessage())
+                .errorMessage(e.getMessage())
+                .requestURL(requestURL)
+                .build(), httpHeaders, HttpStatus.BAD_REQUEST);
     }
 
-   /* @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity handleException(HttpServletRequest request, Exception e) {
         String requestURL = urlPathHelper.getOriginatingRequestUri(request);
 
         logger.info("======================================");
-        logger.info("Time : " + LocalDateTime.now());
-        logger.info("RequestMethod : " + request.getMethod());
-        logger.info("RequestURL : " + requestURL);
-        logger.info("RemoteHost : " + request.getRemoteHost());
-        logger.info("ErrorMessage : " + e.getMessage());
+        logger.info("예외 발생 시간 : " + LocalDateTime.now());
+        logger.info("요청 HTTP 메소드 : " + request.getMethod());
+        logger.info("요청 URL : " + requestURL);
+        logger.info("클라이언트 : " + request.getRemoteHost());
+        logger.info("원본 에러 메세지 : " + e.getMessage());
+        logger.info("사용자 정의 에러 메세지 : " + e.getMessage());
         logger.info("Cause : " + e.getCause());
         logger.info("======================================");
 
-        return new ResponseEntity<>(new ErrorDto(e.getMessage(),requestURL), HttpStatus.BAD_REQUEST);
-    }*/
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Explanation", "RealEstate Service");
+
+        return new ResponseEntity<>(ErrorDto.builder()
+                .originalErrorMessage(e.getMessage())
+                .errorMessage("예상치 못한 예외 발생")
+                .requestURL(requestURL)
+                .build(), httpHeaders, HttpStatus.BAD_REQUEST);
+    }
 
 }
