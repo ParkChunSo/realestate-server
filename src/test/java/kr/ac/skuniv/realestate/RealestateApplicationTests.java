@@ -31,7 +31,6 @@ public class RealestateApplicationTests {
     public void contextLoads() {
         //regionCode = regionCodeRepository.findByCode(11);
         //logger.info(regionCode.getRegion());
-
     }
 
 }

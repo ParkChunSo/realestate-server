@@ -6,13 +6,11 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**
@@ -24,8 +22,11 @@ import java.util.HashMap;
 @Component
 public class AspectException {
     private Logger logger = LoggerFactory.getLogger(AspectException.class);
-    @Autowired
-    private ExcelConverterUtill excelConverterUtill;
+    private HashMap<String, String> regionCodeHashmap;
+
+    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
+        this.regionCodeHashmap = regionCodeHashmap;
+    }
 
     @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.convertRegionToDto(..))")
     public void convertRegionToDto() {
@@ -75,7 +76,7 @@ public class AspectException {
         Object result;
         String region = null;
         Object[] paramValues = proceedingJoinPoint.getArgs();//본래 메소드가 받은 매개변수
-        HashMap<String, String> regionCodeMap = excelConverterUtill.getRegionCodeMap();
+//        HashMap<String, String> regionCodeMap = excelConverterUtill.getRegionCodeMap();
 
         if (paramValues.length == 1) {
             region = paramValues[0].toString();
@@ -85,7 +86,7 @@ public class AspectException {
             region = paramValues[0].toString() + paramValues[1].toString() + paramValues[2].toString();
         }
 
-        if (!regionCodeMap.containsKey(region)) {
+        if (!regionCodeHashmap.containsKey(region)) {
             throw new UserDefineException("찾을 수 없는 URL 파라미터");
         }
 

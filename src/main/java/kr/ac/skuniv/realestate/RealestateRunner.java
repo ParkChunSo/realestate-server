@@ -1,7 +1,5 @@
 package kr.ac.skuniv.realestate;
 
-import kr.ac.skuniv.realestate.domain.entity.RegionCode;
-import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.service.ConditionService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.apache.logging.log4j.LogManager;
@@ -12,10 +10,6 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class RealestateRunner implements ApplicationRunner {
@@ -46,7 +40,7 @@ public class RealestateRunner implements ApplicationRunner {
         try {
             excelConverterUtill.ReadRegionCode();
             conditionService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
-            System.out.println(excelConverterUtill.getRegionCodeMap().size());
+            logger.info("RegionCodeMap Size : " + excelConverterUtill.getRegionCodeMap().size());
         }catch (Exception e){
             logger.error(e.getMessage());
         }
