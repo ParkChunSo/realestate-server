@@ -1,16 +1,24 @@
 package kr.ac.skuniv.realestate.domain.dto;
 
-import lombok.Data;
+import com.querydsl.core.annotations.QueryProjection;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 public class GraphTmpDto {
     private String dealType;
     private String housingType;
     private Date date;
     private Double average;
 
+    public GraphTmpDto() {
+    }
+
+    @QueryProjection
     public GraphTmpDto(String housingType, Date date, Double average) {
         this.housingType = housingType;
         this.date = date;
@@ -23,5 +31,4 @@ public class GraphTmpDto {
         this.date = date;
         this.average = average;
     }
-
 }

@@ -28,29 +28,37 @@ public class AspectException {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getConditionDto(..))")
+    public void getConditionDto() {
+    }
+
     @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.convertRegionToDto(..))")
     public void convertRegionToDto() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getGraphDtoByRegionDto(..))")
-    public void getGraphDtoByRegionDto() {
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.convertDateToDto(..))")
+    public void convertDateToDto() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.mergeObjectsToGraphDtos(..))")
-    public void mergeObjectsToGraphDtos() {
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getGraphDtoByRegionDtoAndDateDto(..))")
+    public void getGraphDtoByRegionDtoAndDateDto() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.convertObjectsToGraphDtos(..))")
-    public void convertObjectsToGraphDtos() {
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.mergeGraphTmpDtosToGraphDtos(..))")
+    public void mergeGraphTmpDtosToGraphDtos() {
+    }
+
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.setDealTypeOnGraphTmpDtos(..))")
+    public void setDealTypeOnGraphTmpDtos() {
     }
 
     @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.convertGraphTmpDtosToGraphDtos(..))")
     public void convertGraphTmpDtosToGraphDtos() {
     }
 
-//    @Around("execution(* kr.ac.skuniv.realestate.service.ConditionService.*(..))")
-//    @Around("@annotation(AspectExceptionAnnotation)")
-    @Around("getGraphDtoByRegionDto() || mergeObjectsToGraphDtos() || convertObjectsToGraphDtos() || convertGraphTmpDtosToGraphDtos()")
+    //  @Around("execution(* kr.ac.skuniv.realestate.service.ConditionService.*(..))")
+//  @Around("@annotation(AspectExceptionAnnotation)")
+    @Around("getConditionDto() || convertDateToDto() || getGraphDtoByRegionDtoAndDateDto() || mergeGraphTmpDtosToGraphDtos() || setDealTypeOnGraphTmpDtos() || convertGraphTmpDtosToGraphDtos()")
     private Object aroundException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object result = new Object();
         try {
@@ -58,16 +66,22 @@ public class AspectException {
         } catch (Exception e) {
             String exceptionMethod = e.getStackTrace()[0].getMethodName();
 
-            if (exceptionMethod.contains("getGraphDtoByRegionDto")) {
-                throw new UserDefineException("데이터베이스에서 가져오는 과정에서 오류", e.toString(), exceptionMethod);
-            } else if (exceptionMethod.equals("mergeObjectsToGraphDtos")) {
-                throw new UserDefineException("GraphDto 병합 과정에서 오류", e.toString(), exceptionMethod);
-            } else if (exceptionMethod.equals("convertObjectsToGraphDtos")) {
-                throw new UserDefineException("Objects -> GraphDto 변환과정에서 오류", e.toString(), exceptionMethod);
-            } else if (exceptionMethod.equals("convertGraphTmpDtosToGraphDtos")) {
-                throw new UserDefineException("GraphTmpDto -> GraphDto 변환과정에서 오류", e.toString(), exceptionMethod);
+            switch (exceptionMethod) {
+                case "getConditionDto":
+                    throw new UserDefineException("ConditionDto 가져오는 과정에서 오류", e.toString(), exceptionMethod);
+                case "convertDateToDto":
+                    throw new UserDefineException("Date -> Dto 변환 과정에서 오류", e.toString(), exceptionMethod);
+                case "getGraphDtoByRegionDtoAndDateDto":
+                    throw new UserDefineException("데이터베이스에서 가져오는 과정에서 오류", e.toString(), exceptionMethod);
+                case "mergeGraphTmpDtosToGraphDtos":
+                    throw new UserDefineException("GraphDto 병합 과정에서 오류", e.toString(), exceptionMethod);
+                case "setDealTypeOnGraphTmpDtos":
+                    throw new UserDefineException("DealType Setting 과정에서 오류", e.toString(), exceptionMethod);
+                case "convertGraphTmpDtosToGraphDtos":
+                    throw new UserDefineException("GraphTmpDto -> GraphDto 변환과정에서 오류", e.toString(), exceptionMethod);
             }
         }
+
         return result;
     }
 
@@ -76,7 +90,7 @@ public class AspectException {
         Object result;
         String region = null;
         Object[] paramValues = proceedingJoinPoint.getArgs();//본래 메소드가 받은 매개변수
-//        HashMap<String, String> regionCodeMap = excelConverterUtill.getRegionCodeMap();
+//      HashMap<String, String> regionCodeMap = excelConverterUtill.getRegionCodeMap();
 
         if (paramValues.length == 1) {
             region = paramValues[0].toString();

@@ -20,7 +20,7 @@ import java.util.Set;
 @Component
 @Slf4j
 public class ExcelConverterUtill {
-    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\Kimyunsang\\Desktop\\spring\\RegionCode.xlsx";
+    private final String EXCEL_PATH_FOR_WINDOW = "C:\\realestatetest\\RegionCode.xlsx";
     private final String EXCEL_PATH_FOR_LINUX = "home/realEstate/RegionCode.xlsx";
     HashMap<String, String> regionCodeMap;
 
@@ -53,8 +53,6 @@ public class ExcelConverterUtill {
             }
             regionCodeMap.put(regionName, regionCode);
         }
-        System.out.println("===================" + mySet.size());
-
 
 //        int rows = sheet.getPhysicalNumberOfRows();
 //        for(rowIndex = 0; rowIndex< rows; rowIndex++){

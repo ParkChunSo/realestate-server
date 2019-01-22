@@ -1,16 +1,21 @@
 package kr.ac.skuniv.realestate.domain.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class ConditionDto {
     private List<MapDto> mapDtos;
     private List<GraphDto> graphDtos;
 
-    public ConditionDto(List<MapDto> _mapDtos, List<GraphDto> _graphDtos) {
-        this.mapDtos = _mapDtos;
-        this.graphDtos = _graphDtos;
+    @Builder
+    public ConditionDto(List<MapDto> mapDtos, List<GraphDto> graphDtos) {
+        this.mapDtos = mapDtos;
+        this.graphDtos = graphDtos;
     }
+
 }
