@@ -84,5 +84,4 @@ public class ConditionController {
 
         return conditionService.getConditionDto(regionDto, dateDto);
     }
-
 }

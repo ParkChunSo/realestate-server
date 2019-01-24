@@ -17,5 +17,4 @@ public class ConditionDto {
         this.mapDtos = mapDtos;
         this.graphDtos = graphDtos;
     }
-
 }
