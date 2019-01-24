@@ -28,6 +28,8 @@ public class ConditionController {
     @ApiOperation("날짜없이 대코드 조회")
     @GetMapping("/city/{city}")
     public ConditionDto onlyCity(@PathVariable String city) {
+
+        logger.info("controller======");
         RegionDto regionDto = conditionService.convertRegionToDto(city);
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)

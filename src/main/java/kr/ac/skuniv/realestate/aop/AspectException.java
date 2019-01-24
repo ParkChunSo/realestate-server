@@ -1,6 +1,7 @@
 package kr.ac.skuniv.realestate.aop;
 
 import kr.ac.skuniv.realestate.exception.UserDefineException;
+import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -22,11 +23,12 @@ import java.util.HashMap;
 @Component
 public class AspectException {
     private Logger logger = LoggerFactory.getLogger(AspectException.class);
-    private HashMap<String, String> regionCodeHashmap;
+    //private HashMap<String, String> regionCodeHashmap;
+    private RegionCodeRepository regionCodeRepository;
 
-    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
-        this.regionCodeHashmap = regionCodeHashmap;
-    }
+//    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
+//        this.regionCodeHashmap = regionCodeHashmap;
+//    }
 
     @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getConditionDto(..))")
     public void getConditionDto() {
@@ -84,32 +86,32 @@ public class AspectException {
 
         return result;
     }
-
-    @Around("convertRegionToDto()")
-    private Object aroundConvertRegionToDtoException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Object result;
-        String region = null;
-        Object[] paramValues = proceedingJoinPoint.getArgs();//본래 메소드가 받은 매개변수
-//      HashMap<String, String> regionCodeMap = excelConverterUtill.getRegionCodeMap();
-
-        if (paramValues.length == 1) {
-            region = paramValues[0].toString();
-        } else if (paramValues.length == 2) {
-            region = paramValues[0].toString() + paramValues[1].toString();
-        } else if (paramValues.length == 3) {
-            region = paramValues[0].toString() + paramValues[1].toString() + paramValues[2].toString();
-        }
-
-        if (!regionCodeHashmap.containsKey(region)) {
-            throw new UserDefineException("찾을 수 없는 URL 파라미터");
-        }
-
-        try {
-            result = proceedingJoinPoint.proceed();
-        } catch (Exception e) {
-            throw new UserDefineException("찾을수 없는 URL 파라미터", e.toString(), e.getStackTrace()[0].getMethodName());
-        }
-
-        return result;
-    }
+//
+//    @Around("convertRegionToDto()")
+//    private Object aroundConvertRegionToDtoException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+//        Object result;
+//        String region = null;
+//        Object[] paramValues = proceedingJoinPoint.getArgs();//본래 메소드가 받은 매개변수
+////      HashMap<String, String> regionCodeMap = excelConverterUtill.getRegionCodeMap();
+//
+//        if (paramValues.length == 1) {
+//            region = paramValues[0].toString();
+//        } else if (paramValues.length == 2) {
+//            region = paramValues[0].toString() + paramValues[1].toString();
+//        } else if (paramValues.length == 3) {
+//            region = paramValues[0].toString() + paramValues[1].toString() + paramValues[2].toString();
+//        }
+//
+//        if (!regionCodeHashmap.containsKey(region)) {
+//            throw new UserDefineException("찾을 수 없는 URL 파라미터");
+//        }
+//
+//        try {
+//            result = proceedingJoinPoint.proceed();
+//        } catch (Exception e) {
+//            throw new UserDefineException("찾을수 없는 URL 파라미터", e.toString(), e.getStackTrace()[0].getMethodName());
+//        }
+//
+//        return result;
+//    }
 }

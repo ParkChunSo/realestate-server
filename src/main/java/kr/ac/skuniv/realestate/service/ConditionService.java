@@ -2,10 +2,7 @@ package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.dto.*;
 import kr.ac.skuniv.realestate.domain.entity.Building;
-import kr.ac.skuniv.realestate.repository.BargainDateRepository;
-import kr.ac.skuniv.realestate.repository.BuildingRepository;
-import kr.ac.skuniv.realestate.repository.CharterDateRepository;
-import kr.ac.skuniv.realestate.repository.RentDateRepository;
+import kr.ac.skuniv.realestate.repository.*;
 import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +20,15 @@ public class ConditionService {
     private final BargainDateRepository bargainDateRepository;
     private final CharterDateRepository charterDateRepository;
     private final RentDateRepository rentDateRepository;
+    private final RegionCodeRepository regionCodeRepository;
     private HashMap<String, String> regionCodeHashmap;
 
-    public ConditionService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository) {
+    public ConditionService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository
+    ,RegionCodeRepository regionCodeRepository) {
         this.bargainDateRepository = bargainDateRepository;
         this.charterDateRepository = charterDateRepository;
         this.rentDateRepository = rentDateRepository;
+        this.regionCodeRepository= regionCodeRepository;
     }
 
     public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
@@ -38,33 +38,57 @@ public class ConditionService {
     public ConditionDto getConditionDto(RegionDto regionDto, DateDto dateDto) {
         List<GraphDto> graphDtos = getGraphDtoByRegionDtoAndDateDto(regionDto, dateDto);
 
+        logger.info("get condition dto");
         return ConditionDto.builder()
                 .graphDtos(graphDtos)
                 .build();
     }
     
     public RegionDto convertRegionToDto(String city) {
-        return RegionDto.builder()
+        /*return RegionDto.builder()
                 .cityCode(regionCodeHashmap.get(city).substring(0, 2))
                 .regionType(RegionDto.RegionType.CITY)
+                .build();*/
+        logger.info("convert region to dto");
+        RegionDto regionDto = RegionDto.builder()
+                .cityCode(regionCodeRepository.findById(city).get().getValue().substring(0, 2))
+                .regionType(RegionDto.RegionType.CITY)
                 .build();
+
+        return regionDto;
     }
 
     public RegionDto convertRegionToDto(String city, String distict) {
-        return RegionDto.builder()
+        /*return RegionDto.builder()
                 .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
                 .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
                 .regionType(RegionDto.RegionType.DISTRICT)
+                .build();*/
+        String code = regionCodeRepository.findById(city + distict).get().getValue();
+        RegionDto regionDto = RegionDto.builder()
+                .cityCode(code.substring(0, 2))
+                .groopCode(code.substring(2, 5))
+                .regionType(RegionDto.RegionType.DISTRICT)
                 .build();
+        return regionDto;
     }
 
     public RegionDto convertRegionToDto(String city, String distict, String neighborhood) {
-        return RegionDto.builder()
+        /*return RegionDto.builder()
                 .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
                 .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
                 .dongName(neighborhood)
                 .regionType(RegionDto.RegionType.NEIGHBORHOOD)
+                .build();*/
+
+        String code = regionCodeRepository.findById(city + distict).get().getValue();
+        RegionDto regionDto = RegionDto.builder()
+                .cityCode(code.substring(0, 2))
+                .groopCode(code.substring(2, 5))
+                .dongName(neighborhood)
+                .regionType(RegionDto.RegionType.NEIGHBORHOOD)
                 .build();
+        return regionDto;
     }
 
     public DateDto convertDateToDto(String date) {
@@ -76,7 +100,6 @@ public class ConditionService {
         } else if (tmp.length == 2) {
             dateDto = new DateDto(LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1), DateDto.DateType.DAY);
         }
-
         return dateDto;
     }
 
