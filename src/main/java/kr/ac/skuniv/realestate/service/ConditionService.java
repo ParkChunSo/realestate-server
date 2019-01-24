@@ -50,6 +50,7 @@ public class ConditionService {
 //        }
 //    }
 
+
     public RegionDto convertRegionToDto(String city) {
         RegionCode regionCode = regionCodeRepository.findById(city).get();
         if (regionCode.getValue() == null) {
@@ -85,7 +86,6 @@ public class ConditionService {
         switch (regionDto.getRegionStatus()) {
             case "city":
                 bargainDateObjects = bargainDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
-
                 charterDateObjects = charterDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
                 rentDateObjects = rentDateRepository.getByCityCodeAndDateOnYear(regionDto.getCityCode());
                 break;
@@ -169,7 +169,7 @@ public class ConditionService {
         return graphDtos;
     }
 
-
+    // Object -> GraphTmpDto
     private List<GraphDto> convertObjectsToGraphDtos(List<Object[]> objects, String dealType) {
         List<GraphTmpDto> graphTmpDtos;
         try {
@@ -212,52 +212,6 @@ public class ConditionService {
 
         return graphDtos;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /*public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit) {
         List<MapDto> mapDtos;
 

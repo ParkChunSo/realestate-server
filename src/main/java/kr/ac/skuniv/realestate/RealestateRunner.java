@@ -43,13 +43,13 @@ public class RealestateRunner implements ApplicationRunner {
             logger.error(e.getMessage());
         }
 
-        try {
-            excelConverterUtill.ReadRegionCode();
-            conditionService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
-            System.out.println(excelConverterUtill.getRegionCodeMap().size());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+//        try {
+//            excelConverterUtill.ReadRegionCode();
+//            conditionService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
+//            System.out.println(excelConverterUtill.getRegionCodeMap().size());
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
 //        RegionCode regionCode = new RegionCode();
 //        regionCode.setValue("서울특별시");
 //        regionCode.setId("11");
@@ -57,6 +57,7 @@ public class RealestateRunner implements ApplicationRunner {
 //
 //        regionCode = regionCodeRepository.findById("11").get();
 //        logger.info(regionCode.getValue());
+//        excelConverterUtill.ReadRegionCode();
 //        HashMap<String, String> codes = excelConverterUtill.getRegionCodeMap();
 //        RegionCode regionCode1 = new RegionCode();
 //        RegionCode regionCode2 = new RegionCode();
@@ -69,8 +70,11 @@ public class RealestateRunner implements ApplicationRunner {
 //
 //            regionCode1.setId(key);
 //            regionCode1.setValue(value);
+//            regionCode2.setId(value);
+//            regionCode2.setValue(key);
 //            count++;
 //            regionCodeRepository.save(regionCode1);
+//            regionCodeRepository.save(regionCode2);
 //        }
 //
 //        List<RegionCode> regionCodes = (List<RegionCode>) regionCodeRepository.findAll();
@@ -90,9 +94,9 @@ public class RealestateRunner implements ApplicationRunner {
 //        logger.info(regionCode2.getRegion());
 //        logger.info(regionCode2.getCode());
 //        logger.info(regionCode1.getId());
-
-        RegionCode regionCode1 = new RegionCode();
-        regionCode1 = regionCodeRepository.findById("경기도광주시초월읍").get();
-        logger.info(regionCode1.getValue());
+//
+//        RegionCode regionCode1 = new RegionCode();
+//        regionCode1 = regionCodeRepository.findById("경기도광주시초월읍").get();
+//        logger.info(regionCode1.getValue());
     }
 }

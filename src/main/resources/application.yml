@@ -28,14 +28,11 @@ spring:
     time-zone: UTC
 
   redis:
-    host: 127.0.0.1
+    host: "redis"
     password: ""
     port: 6379
-
 
   data:
     redis:
       repositories:
         enabled: true
-
-

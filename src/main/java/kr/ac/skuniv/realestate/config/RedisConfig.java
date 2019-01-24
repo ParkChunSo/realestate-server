@@ -17,8 +17,13 @@ public class RedisConfig {
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
-        return new JedisConnectionFactory();
+        JedisConnectionFactory factory = new JedisConnectionFactory();
+        factory.setHostName(redisHost);
+        factory.setPort(redisPort);
+        factory.setUsePool(true);
+        return factory;
     }
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -30,7 +35,7 @@ public class RedisConfig {
     private String redisHost;
 
     @Value("${spring.redis.port}")
-    private String redisPort;
+    private int redisPort;
 
     @Value("${spring.redis.password}")
     private String password;
