@@ -24,15 +24,15 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
-  jackson:
-    time-zone: UTC
-
   redis:
-    host: "redis"
+    host: 127.0.0.1
     password: ""
     port: 6379
+
 
   data:
     redis:
       repositories:
         enabled: true
+
+

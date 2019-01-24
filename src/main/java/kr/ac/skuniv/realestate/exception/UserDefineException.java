@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public class UserDefineException extends RuntimeException {
 
-    private String originalMessage;
+    String originalErrorMessage;
+    String errorMethod;
 
     public UserDefineException(String message) {
         super(message);
@@ -13,11 +14,12 @@ public class UserDefineException extends RuntimeException {
 
     public UserDefineException(String message, String originalMessage) {
         super(message);
-        this.originalMessage = originalMessage;
+        this.originalErrorMessage = originalMessage;
     }
 
-    public UserDefineException(String message, Throwable cause, String originalMessage) {
-        super(message, cause);
-        this.originalMessage = originalMessage;
+    public UserDefineException(String message, String originalErrorMessage, String errorMethod) {
+        super(message);
+        this.originalErrorMessage = originalErrorMessage;
+        this.errorMethod = errorMethod;
     }
 }

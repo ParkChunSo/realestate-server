@@ -7,9 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-@RedisHash("RegionCode")
 @Data
+@RedisHash("RegionCode")
 public class RegionCode implements Serializable {
-    @Id String id;
+    @Id
+    String id;
     String value;
 }
