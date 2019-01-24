@@ -2,12 +2,14 @@ package kr.ac.skuniv.realestate.repository.impl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
+import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
 import kr.ac.skuniv.realestate.domain.dto.DateDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
 import kr.ac.skuniv.realestate.domain.entity.*;
 import kr.ac.skuniv.realestate.repository.custom.CharterDateRepositoryCustom;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,6 +19,7 @@ import java.util.List;
  * Created by youngman on 2019-01-16.
  */
 @SuppressWarnings("Duplicates")
+@Component
 public class CharterDateRepositoryImpl extends QuerydslRepositorySupport implements CharterDateRepositoryCustom {
 
     @PersistenceContext
@@ -27,15 +30,15 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
+    @AspectExceptionAnnotation
     public List<GraphTmpDto> getByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto) {
         QBuilding building = QBuilding.building;
         QCharterDate charterDate = QCharterDate.charterDate;
 
-        //JPQLQuery 인터페이스 구현체
         JPAQuery<GraphTmpDto> query = new JPAQuery<>(entityManager);
         query.select(Projections.constructor(GraphTmpDto.class, building.type, charterDate.date, charterDate.price.avg()))
                 .from(charterDate)
-                .join(charterDate.building, building);//타겟,별칭
+                .join(charterDate.building, building);
 
         if (regionDto.getRegionType() == RegionDto.RegionType.CITY) {
             query.where(building.city.eq(regionDto.getCityCode()));

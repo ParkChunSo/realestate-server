@@ -2,6 +2,7 @@ package kr.ac.skuniv.realestate.repository.impl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
+import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
 import kr.ac.skuniv.realestate.domain.dto.DateDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
@@ -9,6 +10,7 @@ import kr.ac.skuniv.realestate.domain.entity.*;
 import kr.ac.skuniv.realestate.repository.custom.CharterDateRepositoryCustom;
 import kr.ac.skuniv.realestate.repository.custom.RentDateRepositoryCustom;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +20,7 @@ import java.util.List;
  * Created by youngman on 2019-01-19.
  */
 @SuppressWarnings("Duplicates")
+@Component
 public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements RentDateRepositoryCustom {
 
     @PersistenceContext
@@ -28,15 +31,15 @@ public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     @Override
+    @AspectExceptionAnnotation
     public List<GraphTmpDto> getByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto) {
         QBuilding building = QBuilding.building;
         QRentDate rentDate = QRentDate.rentDate;
 
-        //JPQLQuery 인터페이스 구현체
         JPAQuery<GraphTmpDto> query = new JPAQuery<>(entityManager);
         query.select(Projections.constructor(GraphTmpDto.class, building.type, rentDate.date, rentDate.monthlyPrice.avg()))
                 .from(rentDate)
-                .join(rentDate.building, building);//타겟,별칭
+                .join(rentDate.building, building);
 
         if (regionDto.getRegionType() == RegionDto.RegionType.CITY) {
             query.where(building.city.eq(regionDto.getCityCode()));

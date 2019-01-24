@@ -85,4 +85,24 @@ public class ConditionController {
         return conditionService.getConditionDto(regionDto, dateDto);
     }
 
+    @ApiOperation("날짜없이 대코드 소코드 조회(세종 특별시 경우)")
+    @GetMapping("/city/{city}/neighborhood/{neighborhood}")
+    public ConditionDto cityAndNeighborhood(@PathVariable String city, @PathVariable String neighborhood) {
+        RegionDto regionDto = conditionService.convertRegionToDto(city, "", neighborhood);
+        DateDto dateDto = DateDto.builder()
+                .dateType(DateDto.DateType.YEAR)
+                .build();
+
+        return conditionService.getConditionDto(regionDto, dateDto);
+    }
+
+    @ApiOperation("날짜와 대코드 소코드 조회(세종 특별시 경우)")
+    @GetMapping("/city/{city}/neighborhood/{neighborhood}/date/{date}")
+    public ConditionDto cityAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String neighborhood, @PathVariable String date) {
+        RegionDto regionDto = conditionService.convertRegionToDto(city, "", neighborhood);
+        DateDto dateDto = conditionService.convertDateToDto(date);
+
+        return conditionService.getConditionDto(regionDto, dateDto);
+    }
+
 }

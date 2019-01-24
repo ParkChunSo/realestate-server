@@ -42,7 +42,7 @@ public class ConditionService {
                 .graphDtos(graphDtos)
                 .build();
     }
-    
+
     public RegionDto convertRegionToDto(String city) {
         return RegionDto.builder()
                 .cityCode(regionCodeHashmap.get(city).substring(0, 2))
@@ -75,8 +75,8 @@ public class ConditionService {
             dateDto = new DateDto(LocalDate.of(Integer.parseInt(tmp[0]), 1, 1), DateDto.DateType.MONTH);
         } else if (tmp.length == 2) {
             dateDto = new DateDto(LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1), DateDto.DateType.DAY);
-        }
 
+        }
         return dateDto;
     }
 

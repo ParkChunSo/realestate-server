@@ -20,7 +20,7 @@ public class CharterDate {
     private Date date;
 
     @Column(name = "price")
-    private Long price;
+    private Double price;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "buildingNo")

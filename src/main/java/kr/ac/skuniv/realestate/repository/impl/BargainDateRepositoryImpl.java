@@ -2,6 +2,7 @@ package kr.ac.skuniv.realestate.repository.impl;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
+import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
 import kr.ac.skuniv.realestate.domain.dto.DateDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
@@ -13,6 +14,7 @@ import kr.ac.skuniv.realestate.service.ConditionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,13 +26,14 @@ import java.util.List;
  * QuerydslRepositorySupport : 페이징 처리, 헬퍼 클래스
  */
 @SuppressWarnings("Duplicates")
+@Component
 public class BargainDateRepositoryImpl extends QuerydslRepositorySupport implements BargainDateRepositoryCustom {
 
     /*
      * https://stackoverflow.com/questions/31335211/autowired-vs-persistencecontext-for-entitymanager-bean
      * https://medium.com/@SlackBeck/jpa-entitymanager%EC%99%80-%EB%8F%99%EC%8B%9C%EC%84%B1-e30f841fcdf8
      * EntityManager 동시성 문제 해결을 위한 어노테이션
-     * EntityManager 생성을 Container에게 위임하고 필요할 때마다 의존성 주입을 받아 사용한다.
+     * EntityManager 생성을 Container 에게 위임하고 필요할 때마다 의존성 주입을 받아 사용한다.
      */
     @PersistenceContext
     private EntityManager entityManager;
@@ -41,6 +44,7 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
+    @AspectExceptionAnnotation
     public List<GraphTmpDto> getByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto) {
         QBuilding building = QBuilding.building;
         QBargainDate bargainDate = QBargainDate.bargainDate;
@@ -65,10 +69,12 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
             query.where(bargainDate.date.year().eq(dateDto.getLocalDate().getYear()))
                  .groupBy(building.type, bargainDate.date.month());
         } else if (dateDto.getDateType() == DateDto.DateType.DAY) {//월 같고 날짜별로
-            logger.info("===============" + bargainDate.date.year());
+            logger.info("========날짜 테스트==========");
+            logger.info(String.valueOf(bargainDate.date.year()));
             logger.info(String.valueOf(dateDto.getLocalDate().getYear()));
             logger.info(bargainDate.date.month().toString());
             logger.info(String.valueOf(dateDto.getLocalDate().getMonthValue()));
+            logger.info("========날짜 테스트==========");
 
             query.where(bargainDate.date.year().eq(dateDto.getLocalDate().getYear()), bargainDate.date.month().eq(dateDto.getLocalDate().getMonthValue()))
                  .groupBy(building.type, bargainDate.date);
@@ -146,8 +152,5 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
                     .groupBy(building.type, bargainDate.date)
                     .fetch();
     }*/
-
-
-
 
 }

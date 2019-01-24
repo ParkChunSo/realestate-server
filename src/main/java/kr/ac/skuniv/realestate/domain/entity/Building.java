@@ -22,25 +22,25 @@ public class Building {
     @Column(name = "building_num", nullable = false)
     private String buildingNum;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String city;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String groop;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String dong;
 
-//    @Column(name = "construct_year", nullable = false)
+    @Column(name = "construct_year", nullable = false)
     private String constructYear;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private int floor;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String name;
 
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private String type;
 
     @OneToMany(mappedBy = "building")

@@ -20,10 +20,10 @@ public class RentDate {
     private Date date;
 
     @Column(name = "guarantee_price")
-    private Long guaranteePrice;
+    private Double guaranteePrice;
 
     @Column(name = "monthly_price")
-    private Long monthlyPrice;
+    private Double monthlyPrice;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "buildingNo")

@@ -1,14 +1,12 @@
 package kr.ac.skuniv.realestate.aop;
 
 import kr.ac.skuniv.realestate.exception.UserDefineException;
-import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -57,7 +55,6 @@ public class AspectException {
     }
 
     //  @Around("execution(* kr.ac.skuniv.realestate.service.ConditionService.*(..))")
-//  @Around("@annotation(AspectExceptionAnnotation)")
     @Around("getConditionDto() || convertDateToDto() || getGraphDtoByRegionDtoAndDateDto() || mergeGraphTmpDtosToGraphDtos() || setDealTypeOnGraphTmpDtos() || convertGraphTmpDtosToGraphDtos()")
     private Object aroundException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object result = new Object();
@@ -110,6 +107,18 @@ public class AspectException {
             throw new UserDefineException("찾을수 없는 URL 파라미터", e.toString(), e.getStackTrace()[0].getMethodName());
         }
 
+        return result;
+    }
+
+    @Around("@annotation(AspectExceptionAnnotation)")
+    private Object aroundQueryDslException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        Object result;
+        try {
+            result = proceedingJoinPoint.proceed();
+        } catch (Exception e) {
+            String exceptionMethod = e.getStackTrace()[0].getMethodName();
+            throw new UserDefineException("QueryDsl 쿼리 오류 ", e.toString(), exceptionMethod);
+        }
         return result;
     }
 }
