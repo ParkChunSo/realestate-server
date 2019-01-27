@@ -24,7 +24,7 @@ public class ConditionService {
         this.forsaleRepository = forsaleRepository;
     }
 
-  public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
+    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
@@ -59,7 +59,6 @@ public class ConditionService {
 
         return convertTmpDto2GraphDto(graphTmpDtos);
     }
-
 
     public String convertRegionCityToCode(String city){
         return regionCodeHashmap.get(city);
