@@ -1,127 +1,196 @@
 package kr.ac.skuniv.realestate.service;
 
-import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
-import kr.ac.skuniv.realestate.domain.dto.MapDto;
-import kr.ac.skuniv.realestate.exception.UserDefineException;
-import kr.ac.skuniv.realestate.repository.ForsaleRepository;
+import kr.ac.skuniv.realestate.domain.dto.*;
+import kr.ac.skuniv.realestate.domain.entity.Building;
+import kr.ac.skuniv.realestate.repository.BargainDateRepository;
+import kr.ac.skuniv.realestate.repository.BuildingRepository;
+import kr.ac.skuniv.realestate.repository.CharterDateRepository;
+import kr.ac.skuniv.realestate.repository.RentDateRepository;
+import org.apache.commons.collections4.ListUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ConditionService {
-
-    private final ForsaleRepository forsaleRepository;
+    private Logger logger = LoggerFactory.getLogger(ConditionService.class);
+    private final BargainDateRepository bargainDateRepository;
+    private final CharterDateRepository charterDateRepository;
+    private final RentDateRepository rentDateRepository;
     private HashMap<String, String> regionCodeHashmap;
 
-    public ConditionService(ForsaleRepository forsaleRepository) {
-        this.forsaleRepository = forsaleRepository;
+    public ConditionService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository) {
+        this.bargainDateRepository = bargainDateRepository;
+        this.charterDateRepository = charterDateRepository;
+        this.rentDateRepository = rentDateRepository;
     }
 
     public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
-    public List<GraphDto> findDataByCode(String regionCode){
-        List<GraphTmpDto> graphTmpDtos;
+    public ConditionDto getConditionDto(RegionDto regionDto, DateDto dateDto) {
+        List<GraphDto> graphDtos = getGraphDtoByRegionDtoAndDateDto(regionDto, dateDto);
 
-        try {
-            graphTmpDtos = forsaleRepository.getByCodeAndDateOnYear(Integer.parseInt(regionCode))
-                    .stream().map(graphTmpDto -> new GraphTmpDto(
-                            (String) graphTmpDto[0], (String) graphTmpDto[1],
-                            (Date) graphTmpDto[2], (Double) graphTmpDto[3]
-                    )).collect(Collectors.toList());
-        } catch(Exception e) {
-            throw new UserDefineException("findDataByCode Error", e.getCause());
+        return ConditionDto.builder()
+                .graphDtos(graphDtos)
+                .build();
+    }
+    
+    public RegionDto convertRegionToDto(String city) {
+        return RegionDto.builder()
+                .cityCode(regionCodeHashmap.get(city).substring(0, 2))
+                .regionType(RegionDto.RegionType.CITY)
+                .build();
+    }
+
+    public RegionDto convertRegionToDto(String city, String distict) {
+        return RegionDto.builder()
+                .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
+                .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
+                .regionType(RegionDto.RegionType.DISTRICT)
+                .build();
+    }
+
+    public RegionDto convertRegionToDto(String city, String distict, String neighborhood) {
+        return RegionDto.builder()
+                .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
+                .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
+                .dongName(neighborhood)
+                .regionType(RegionDto.RegionType.NEIGHBORHOOD)
+                .build();
+    }
+
+    public DateDto convertDateToDto(String date) {
+        String[] tmp = date.split("-");
+        DateDto dateDto = null;
+
+        if (tmp.length == 1) {
+            dateDto = new DateDto(LocalDate.of(Integer.parseInt(tmp[0]), 1, 1), DateDto.DateType.MONTH);
+        } else if (tmp.length == 2) {
+            dateDto = new DateDto(LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1), DateDto.DateType.DAY);
         }
 
-        return convertTmpDto2GraphDto(graphTmpDtos);
+        return dateDto;
     }
 
-    public List<GraphDto> findDataByCode(String regionCode, String date){
-        List<GraphTmpDto> graphTmpDtos;
+    public List<GraphDto> getGraphDtoByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto) {
+        List<GraphTmpDto> bargainDateGraphTmpDtos = new ArrayList<>();
+        List<GraphTmpDto> charterDateGraphTmpDtos = new ArrayList<>();
+        List<GraphTmpDto> rentDateGraphTmpDtos = new ArrayList<>();
 
-        try {
-            graphTmpDtos = findDataByCodeAndDate(Integer.parseInt(regionCode), date)
-                    .stream().map(graphTmpDto -> new GraphTmpDto(
-                            (String) graphTmpDto[0], (String) graphTmpDto[1],
-                            (Date) graphTmpDto[2], (Double) graphTmpDto[3]
-                    )).collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new UserDefineException("findDataByCode Error", e.getCause());
-        }
+        bargainDateGraphTmpDtos = bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
+        charterDateGraphTmpDtos = charterDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
+        rentDateGraphTmpDtos = rentDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
 
-        return convertTmpDto2GraphDto(graphTmpDtos);
+        return mergeGraphTmpDtosToGraphDtos(bargainDateGraphTmpDtos, charterDateGraphTmpDtos, rentDateGraphTmpDtos);
     }
 
-    public String convertRegionCityToCode(String city){
-        return regionCodeHashmap.get(city);
-    }
-
-    public String convertRegionToCode(String city){
-        return regionCodeHashmap.get(city).substring(0, 2);
-    }
-
-    public String convertRegionToCode(String city, String distict){
-        return regionCodeHashmap.get(city + distict).substring(0,5);
-    }
-
-    public String convertRegionToCode(String city, String distict, String neighborhood){
-        return regionCodeHashmap.get(city + distict + neighborhood);
-    }
-
-    private List<Object[]> findDataByCodeAndDate(int code, String _date){
-        String[] tmp = _date.split("-");
-
-        if(tmp.length == 1)
-            return forsaleRepository.getByCodeAndDateOnMonth(code, LocalDate.of(Integer.parseInt(tmp[0]),1,1));
-
-        else if(tmp.length == 2)
-            return forsaleRepository.getByCodeAndDateOnDay(code, LocalDate.of(Integer.parseInt(tmp[0]),Integer.parseInt(tmp[1]),1));
-
-        return null;
-    }
-
-    private List<GraphDto> convertTmpDto2GraphDto(List<GraphTmpDto> dtos){
-        if(dtos.size() == 0)
-            return null;
-
+    public List<GraphDto> mergeGraphTmpDtosToGraphDtos(List<GraphTmpDto> bargainDateGraphTmpDtos, List<GraphTmpDto> charterDateGraphTmpDtos, List<GraphTmpDto> rentDateGraphTmpDtos) {
+        List<GraphDto> bargainDateGraphDtos = new ArrayList<>();
+        List<GraphDto> charterDateGraphDtos = new ArrayList<>();
+        List<GraphDto> rentDateGraphDtos = new ArrayList<>();
         List<GraphDto> graphDtos = new ArrayList<>();
-        String dealType = dtos.get(0).getDealType(), housingType = dtos.get(0).getHousingType();
+
+        bargainDateGraphDtos = bargainDateGraphTmpDtos.size() > 0 ? setDealTypeOnGraphTmpDtos(bargainDateGraphTmpDtos, "매매") : bargainDateGraphDtos;
+        charterDateGraphDtos = charterDateGraphTmpDtos.size() > 0 ? setDealTypeOnGraphTmpDtos(charterDateGraphTmpDtos, "전세") : charterDateGraphDtos;
+        rentDateGraphDtos = rentDateGraphTmpDtos.size() > 0 ? setDealTypeOnGraphTmpDtos(rentDateGraphTmpDtos, "월세") : rentDateGraphDtos;
+
+        graphDtos = ListUtils.union(bargainDateGraphDtos, charterDateGraphDtos);
+        graphDtos = ListUtils.union(graphDtos, rentDateGraphDtos);
+        return graphDtos;
+    }
+
+    public List<GraphDto> setDealTypeOnGraphTmpDtos(List<GraphTmpDto> graphTmpDtos, String dealType) {
+
+        for (GraphTmpDto graphTmpDto : graphTmpDtos) {
+            graphTmpDto.setDealType(dealType);
+        }
+
+        return convertGraphTmpDtosToGraphDtos(graphTmpDtos);
+    }
+
+    public List<GraphDto> convertGraphTmpDtosToGraphDtos(List<GraphTmpDto> graphTmpDtos) {
+        List<GraphDto> graphDtos = new ArrayList<>();
+        String dealType = graphTmpDtos.get(0).getDealType();
+        String housingType = graphTmpDtos.get(0).getHousingType();
         ArrayList<Double> arrayList = new ArrayList<>();
 
-        for (GraphTmpDto dto : dtos) {
-            if (dealType.equals(dto.getDealType()) && housingType.equals(dto.getHousingType())) {
-                arrayList.add(dto.getAverage());
+        for (GraphTmpDto graphTmpDto : graphTmpDtos) {
+            if (dealType.equals(graphTmpDto.getDealType()) && housingType.equals(graphTmpDto.getHousingType())) {
+                arrayList.add(graphTmpDto.getAverage());
             } else {
-                GraphDto graphDto = new GraphDto();
-                graphDto.setDealType(dealType);
-                graphDto.setHousingType(housingType);
-                graphDto.setAverage(arrayList);
-                graphDtos.add(graphDto);
+                graphDtos.add(GraphDto.builder().dealType(dealType).housingType(housingType).average(arrayList).build());
                 arrayList = new ArrayList<>();
-                dealType = dto.getDealType();
-                housingType = dto.getHousingType();
-                arrayList.add(dto.getAverage());
+                dealType = graphTmpDto.getDealType();
+                housingType = graphTmpDto.getHousingType();
+                arrayList.add(graphTmpDto.getAverage());
             }
         }
 
-        GraphDto graphDto = new GraphDto();
-        graphDto.setDealType(dealType);
-        graphDto.setHousingType(housingType);
-        graphDto.setAverage(arrayList);
-        graphDtos.add(graphDto);
-
+        graphDtos.add(GraphDto.builder().dealType(dealType).housingType(housingType).average(arrayList).build());
         return graphDtos;
     }
-  
-    public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit) {
         List<MapDto> mapDtos;
 
         try {
@@ -129,10 +198,9 @@ public class ConditionService {
             List<Object[]> objects = forsaleRepository.getMapDtoByRegion(regionCode);
             mapDtos = convertObjectToMapDto(objects);
         } catch (Exception e) {
-            throw new UserDefineException("getMapDtoByRegion Error", e.getCause());
+            throw new UserDefineException("MapDto DB오류입니다", e.getCause());
         }
-
-        return mapDtos;
+        return mapDtos.size() > 0 ? mapDtos : null;
     }
 
     public List<MapDto> getMapDtoByRegionCity(String regionName, String regionUnit) {
@@ -143,10 +211,9 @@ public class ConditionService {
             List<Object[]> objects = forsaleRepository.getMapDtoByRegionCity(regionCode);
             mapDtos = convertObjectToMapDto(objects);
         } catch (Exception e) {
-            throw new UserDefineException("getMapDtoByRegionCity Error", e.getCause());
+            throw new UserDefineException("MapDto DB오류입니다", e.getCause());
         }
-
-        return mapDtos;
+        return mapDtos.size() > 0 ? mapDtos : null;
     }
 
     private String convertRegionCodeToDbCode(String regionCode, String regionUnit) {
@@ -157,7 +224,7 @@ public class ConditionService {
             case "district":
                 regionCode = regionCode.substring(0, 2);
                 break;
-            case "neighborhood":
+            case "dongName":
                 regionCode = regionCode.substring(0, 5);
                 break;
         }
@@ -165,9 +232,15 @@ public class ConditionService {
     }
 
     private List<MapDto> convertObjectToMapDto(List<Object[]> resultList) {
-        return resultList.stream().map(mapDto -> new MapDto(
-                (String) mapDto[0], (int) mapDto[1], (long) mapDto[2]
-        )).collect(Collectors.toList());
+        List<MapDto> mapDtos;
+
+        try {
+            mapDtos = resultList.stream().map(mapDto -> new MapDto((String) mapDto[0], (int) mapDto[1], (long) mapDto[2])).collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new UserDefineException("MapDto 변환 오류입니다", e.getCause());
+        }
+        return mapDtos;
     }
+*/
 
 }
