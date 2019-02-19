@@ -10,6 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class GraphTmpDto {
+
     private String dealType;
     private String housingType;
     private Date date;
@@ -30,5 +31,14 @@ public class GraphTmpDto {
         this.housingType = housingType;
         this.date = date;
         this.average = average;
+    }
+
+    @Override
+    public String toString() {
+        return "GraphTmpDto{" +
+                "housingType='" + housingType + '\'' +
+                ", date=" + date +
+                ", average=" + average +
+                '}';
     }
 }

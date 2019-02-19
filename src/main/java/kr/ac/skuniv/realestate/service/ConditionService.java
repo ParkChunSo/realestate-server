@@ -35,12 +35,8 @@ public class ConditionService {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
-    public ConditionDto getConditionDto(RegionDto regionDto, DateDto dateDto) {
-        List<GraphDto> graphDtos = getGraphDtoByRegionDtoAndDateDto(regionDto, dateDto);
-
-        return ConditionDto.builder()
-                .graphDtos(graphDtos)
-                .build();
+    public List<GraphDto> getGraphDtos(RegionDto regionDto, DateDto dateDto) {
+        return getGraphDtoByRegionDtoAndDateDto(regionDto, dateDto);
     }
 
     public RegionDto convertRegionToDto(String city) {
@@ -68,14 +64,13 @@ public class ConditionService {
     }
 
     public DateDto convertDateToDto(String date) {
-        String[] tmp = date.split("-");
+        String[] splitDate = date.split("-");
         DateDto dateDto = null;
 
-        if (tmp.length == 1) {
-            dateDto = new DateDto(LocalDate.of(Integer.parseInt(tmp[0]), 1, 1), DateDto.DateType.MONTH);
-        } else if (tmp.length == 2) {
-            dateDto = new DateDto(LocalDate.of(Integer.parseInt(tmp[0]), Integer.parseInt(tmp[1]), 1), DateDto.DateType.DAY);
-
+        if (splitDate.length == 1) {
+            dateDto = new DateDto(LocalDate.of(Integer.parseInt(splitDate[0]), 1, 1), DateDto.DateType.MONTH);
+        } else if (splitDate.length == 2) {
+            dateDto = new DateDto(LocalDate.of(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]), 1), DateDto.DateType.DAY);
         }
         return dateDto;
     }

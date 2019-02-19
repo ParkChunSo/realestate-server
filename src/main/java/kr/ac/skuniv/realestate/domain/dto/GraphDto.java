@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Component
 public class GraphDto {
+
     private String dealType;
     private String housingType;
     private List<Double> average;

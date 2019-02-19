@@ -19,6 +19,7 @@ import java.util.List;
 /**
  * Created by youngman on 2019-01-19.
  */
+
 @SuppressWarnings("Duplicates")
 @Component
 public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements RentDateRepositoryCustom {

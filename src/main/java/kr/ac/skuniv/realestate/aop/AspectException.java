@@ -19,6 +19,7 @@ import java.util.HashMap;
 @Aspect
 @Component
 public class AspectException {
+
     private Logger logger = LoggerFactory.getLogger(AspectException.class);
     private HashMap<String, String> regionCodeHashmap;
 
@@ -26,7 +27,7 @@ public class AspectException {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getConditionDto(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getGraphDtos(..))")
     public void getConditionDto() {
     }
 
@@ -64,7 +65,7 @@ public class AspectException {
             String exceptionMethod = e.getStackTrace()[0].getMethodName();
 
             switch (exceptionMethod) {
-                case "getConditionDto":
+                case "getGraphDtos":
                     throw new UserDefineException("ConditionDto 가져오는 과정에서 오류", e.toString(), exceptionMethod);
                 case "convertDateToDto":
                     throw new UserDefineException("Date -> Dto 변환 과정에서 오류", e.toString(), exceptionMethod);

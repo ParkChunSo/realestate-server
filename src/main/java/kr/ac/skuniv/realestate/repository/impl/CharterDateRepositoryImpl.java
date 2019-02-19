@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * Created by youngman on 2019-01-16.
  */
+
 @SuppressWarnings("Duplicates")
 @Component
 public class CharterDateRepositoryImpl extends QuerydslRepositorySupport implements CharterDateRepositoryCustom {

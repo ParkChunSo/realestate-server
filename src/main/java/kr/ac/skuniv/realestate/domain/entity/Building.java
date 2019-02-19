@@ -17,7 +17,7 @@ public class Building {
     private Long buildingNo;
 
     @Column(nullable = false)
-    private double area;
+    private Double area;
 
     @Column(name = "building_num", nullable = false)
     private String buildingNum;
