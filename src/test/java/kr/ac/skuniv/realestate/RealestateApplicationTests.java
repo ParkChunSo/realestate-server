@@ -27,6 +27,7 @@ public class RealestateApplicationTests {
     RegionCode regionCode;
 
     private Logger logger = LoggerFactory.getLogger(RealestateApplicationTests.class);
+
     @Test
     public void contextLoads() {
         //regionCode = regionCodeRepository.findByCode(11);

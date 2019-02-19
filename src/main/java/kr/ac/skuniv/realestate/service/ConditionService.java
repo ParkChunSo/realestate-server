@@ -42,7 +42,7 @@ public class ConditionService {
                 .graphDtos(graphDtos)
                 .build();
     }
-    
+
     public RegionDto convertRegionToDto(String city) {
         return RegionDto.builder()
                 .cityCode(regionCodeHashmap.get(city).substring(0, 2))

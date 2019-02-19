@@ -34,7 +34,7 @@ public class AcessInfoUtill {
         if (ip == null) {
             ip = request.getRemoteAddr();
         }
-        logger.info(">>>> Result : IP Address : "+ip);
+        logger.info(">>>> Result : IP Address : " + ip);
 
         return ip;
     }

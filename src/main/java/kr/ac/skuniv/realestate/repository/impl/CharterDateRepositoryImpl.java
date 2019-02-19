@@ -41,7 +41,7 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
             query.where(building.city.eq(regionDto.getCityCode()));
         } else if (regionDto.getRegionType() == RegionDto.RegionType.DISTRICT) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()));
-        } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD){
+        } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()), building.dong.eq(regionDto.getDongName()));
         }
 

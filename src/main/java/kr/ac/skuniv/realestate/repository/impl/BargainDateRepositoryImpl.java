@@ -9,7 +9,6 @@ import kr.ac.skuniv.realestate.domain.entity.BargainDate;
 import kr.ac.skuniv.realestate.domain.entity.QBargainDate;
 import kr.ac.skuniv.realestate.domain.entity.QBuilding;
 import kr.ac.skuniv.realestate.repository.custom.BargainDateRepositoryCustom;
-import kr.ac.skuniv.realestate.service.ConditionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -48,14 +47,14 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
         //JPQLQuery 인터페이스 구현체
         JPAQuery<GraphTmpDto> query = new JPAQuery<>(entityManager);
         query.select(Projections.constructor(GraphTmpDto.class, building.type, bargainDate.date, bargainDate.price.avg()))
-             .from(bargainDate)
-             .join(bargainDate.building, building);//타겟,별칭
+                .from(bargainDate)
+                .join(bargainDate.building, building);//타겟,별칭
 
         if (regionDto.getRegionType() == RegionDto.RegionType.CITY) {
             query.where(building.city.eq(regionDto.getCityCode()));
         } else if (regionDto.getRegionType() == RegionDto.RegionType.DISTRICT) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()));
-        } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD){
+        } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()), building.dong.eq(regionDto.getDongName()));
         }
 
@@ -63,7 +62,7 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
             query.groupBy(building.type, bargainDate.date.year());
         } else if (dateDto.getDateType() == DateDto.DateType.MONTH) {//년도 같고 월별로
             query.where(bargainDate.date.year().eq(dateDto.getLocalDate().getYear()))
-                 .groupBy(building.type, bargainDate.date.month());
+                    .groupBy(building.type, bargainDate.date.month());
         } else if (dateDto.getDateType() == DateDto.DateType.DAY) {//월 같고 날짜별로
             logger.info("===============" + bargainDate.date.year());
             logger.info(String.valueOf(dateDto.getLocalDate().getYear()));
@@ -71,7 +70,7 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
             logger.info(String.valueOf(dateDto.getLocalDate().getMonthValue()));
 
             query.where(bargainDate.date.year().eq(dateDto.getLocalDate().getYear()), bargainDate.date.month().eq(dateDto.getLocalDate().getMonthValue()))
-                 .groupBy(building.type, bargainDate.date);
+                    .groupBy(building.type, bargainDate.date);
         }
 
         return query.fetch();
@@ -146,8 +145,6 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
                     .groupBy(building.type, bargainDate.date)
                     .fetch();
     }*/
-
-
 
 
 }

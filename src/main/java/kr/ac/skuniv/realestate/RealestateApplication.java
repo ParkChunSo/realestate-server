@@ -12,7 +12,7 @@ import java.util.TimeZone;
 public class RealestateApplication {
 
     @PostConstruct
-    public void initApplication(){
+    public void initApplication() {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
