@@ -7,11 +7,13 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 /**
- * Created by youngman on 2019-01-19.
+ * Created by YoungMan on 2019-01-19.
  */
+
 @Getter
 @Setter
 public class DateDto {
+
     private LocalDate localDate;
     private DateType dateType;
 

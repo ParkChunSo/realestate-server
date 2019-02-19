@@ -1,14 +1,12 @@
 package kr.ac.skuniv.realestate.aop;
 
 import kr.ac.skuniv.realestate.exception.UserDefineException;
-import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -21,6 +19,7 @@ import java.util.HashMap;
 @Aspect
 @Component
 public class AspectException {
+
     private Logger logger = LoggerFactory.getLogger(AspectException.class);
     private HashMap<String, String> regionCodeHashmap;
 
@@ -28,7 +27,7 @@ public class AspectException {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getConditionDto(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getGraphDtos(..))")
     public void getConditionDto() {
     }
 
@@ -57,7 +56,6 @@ public class AspectException {
     }
 
     //  @Around("execution(* kr.ac.skuniv.realestate.service.ConditionService.*(..))")
-//  @Around("@annotation(AspectExceptionAnnotation)")
     @Around("getConditionDto() || convertDateToDto() || getGraphDtoByRegionDtoAndDateDto() || mergeGraphTmpDtosToGraphDtos() || setDealTypeOnGraphTmpDtos() || convertGraphTmpDtosToGraphDtos()")
     private Object aroundException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object result = new Object();
@@ -67,7 +65,7 @@ public class AspectException {
             String exceptionMethod = e.getStackTrace()[0].getMethodName();
 
             switch (exceptionMethod) {
-                case "getConditionDto":
+                case "getGraphDtos":
                     throw new UserDefineException("ConditionDto 가져오는 과정에서 오류", e.toString(), exceptionMethod);
                 case "convertDateToDto":
                     throw new UserDefineException("Date -> Dto 변환 과정에서 오류", e.toString(), exceptionMethod);
@@ -110,6 +108,18 @@ public class AspectException {
             throw new UserDefineException("찾을수 없는 URL 파라미터", e.toString(), e.getStackTrace()[0].getMethodName());
         }
 
+        return result;
+    }
+
+    @Around("@annotation(AspectExceptionAnnotation)")
+    private Object aroundQueryDslException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        Object result;
+        try {
+            result = proceedingJoinPoint.proceed();
+        } catch (Exception e) {
+            String exceptionMethod = e.getStackTrace()[0].getMethodName();
+            throw new UserDefineException("QueryDsl 쿼리 오류 ", e.toString(), exceptionMethod);
+        }
         return result;
     }
 }

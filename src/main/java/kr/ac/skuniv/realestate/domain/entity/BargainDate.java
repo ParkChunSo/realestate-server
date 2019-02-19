@@ -7,14 +7,14 @@ import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity//DB 에 등록될 객체임을 명시
+@Entity
 @Getter
 @Setter
-@Table(name = "bargain_date")//DB 테이블 이름 명시
+@Table(name = "bargain_date")
 public class BargainDate {
 
-    @Id//PK
-    @GeneratedValue(strategy = GenerationType.AUTO)//PK 생성전략
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Temporal(value = TemporalType.DATE)
