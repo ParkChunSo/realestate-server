@@ -11,11 +11,6 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class RealestateApplication {
 
-    /*@PostConstruct
-    public void initApplication(){
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-    }*/
-
     public static void main(String[] args) {
         SpringApplication.run(RealestateApplication.class, args);
     }

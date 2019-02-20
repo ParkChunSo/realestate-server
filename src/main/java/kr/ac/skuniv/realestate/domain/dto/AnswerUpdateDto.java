@@ -1,31 +1,30 @@
 package kr.ac.skuniv.realestate.domain.dto;
 
-import kr.ac.skuniv.realestate.domain.entity.Board;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Created by YoungMan on 2019-02-18.
+ * Created by YoungMan on 2019-02-19.
  */
 
 @Getter
 @Setter
-public class BoardRequestDto {
+public class AnswerUpdateDto {
 
     private Long no;
-    private String title;
     private String content;
     private String author;
+    private Long boardNo;
 
-    public BoardRequestDto() {
+    public AnswerUpdateDto() {
     }
 
     @Builder
-    public BoardRequestDto(Long no, String title, String content, String author) {
+    public AnswerUpdateDto(Long no, String content, String author, Long boardNo) {
         this.no = no;
-        this.title = title;
         this.content = content;
         this.author = author;
+        this.boardNo = boardNo;
     }
 }
