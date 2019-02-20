@@ -2,7 +2,7 @@ package kr.ac.skuniv.realestate;
 
 import kr.ac.skuniv.realestate.aop.AspectException;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
-import kr.ac.skuniv.realestate.service.ConditionService;
+import kr.ac.skuniv.realestate.service.GraphService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,16 +20,16 @@ public class RealestateRunner implements ApplicationRunner {
     private final Logger logger = LogManager.getLogger(RealestateRunner.class);
     private final DataSource dataSource;
     private final ExcelConverterUtill excelConverterUtill;
-    private final ConditionService conditionService;
+    private final GraphService graphService;
     private final RegionCodeRepository regionCodeRepository;
 
     @Autowired
     AspectException aspectException;
 
-    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, ConditionService conditionService, RegionCodeRepository regionCodeRepository) {
+    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, GraphService graphService, RegionCodeRepository regionCodeRepository) {
         this.dataSource = dataSource;
         this.excelConverterUtill = excelConverterUtill;
-        this.conditionService = conditionService;
+        this.graphService = graphService;
         this.regionCodeRepository = regionCodeRepository;
     }
 
@@ -45,7 +45,7 @@ public class RealestateRunner implements ApplicationRunner {
 
         try {
             excelConverterUtill.ReadRegionCode();
-            conditionService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
+            graphService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
             aspectException.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
             logger.info("RegionCodeMap Size : " + excelConverterUtill.getRegionCodeMap().size());
         } catch (Exception e) {

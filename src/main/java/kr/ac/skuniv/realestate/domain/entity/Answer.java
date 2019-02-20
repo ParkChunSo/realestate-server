@@ -1,8 +1,11 @@
 package kr.ac.skuniv.realestate.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -27,14 +30,20 @@ public class Answer {
 
     private String author;
 
-    @CreatedDate
-    private String registerDate;
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    private Date registerDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
+    @Temporal(TemporalType.DATE)
     private Date modifyDate;
 
     @ManyToOne
+    @JsonBackReference
     private Board board;
+
+    public Answer() {
+    }
 
     @Builder
     public Answer(String content, String author, Board board) {

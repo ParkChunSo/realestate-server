@@ -1,7 +1,9 @@
 package kr.ac.skuniv.realestate.service;
 
-import kr.ac.skuniv.realestate.domain.dto.AnswerRequestDto;
-import kr.ac.skuniv.realestate.domain.dto.BoardRequestDto;
+import kr.ac.skuniv.realestate.domain.dto.AnswerSaveDto;
+import kr.ac.skuniv.realestate.domain.dto.AnswerUpdateDto;
+import kr.ac.skuniv.realestate.domain.dto.BoardSaveDto;
+import kr.ac.skuniv.realestate.domain.dto.BoardUpdateDto;
 import kr.ac.skuniv.realestate.domain.entity.Answer;
 import kr.ac.skuniv.realestate.domain.entity.Board;
 import kr.ac.skuniv.realestate.exception.UserDefineException;
@@ -38,73 +40,67 @@ public class BoardService {
     }
 
     public Page<Board> getBoardsByPage(int pageNum) {
-        PageRequest pageRequest = new PageRequest(pageNum - 1, 20, Sort.Direction.DESC, "boardId");
+        PageRequest pageRequest = new PageRequest(pageNum - 1, 20, Sort.Direction.DESC, "no");
         return boardRepository.findAll(pageRequest);
     }
 
-    public Board getDetailByBoard(Long boardNum) {
-        return boardRepository.findById(boardNum).orElseThrow(() -> new UserDefineException("해당 아이디의 게시판글이 없습니다."));
-    }
-
     public List<Board> getBoardsByTitle(String title) {
-        return boardRepository.findByTitle(title);
+        return boardRepository.getBoardsByTitle(title);
     }
 
-    public void saveBoard(BoardRequestDto boardRequestDto) {
-        boardRepository.save(convertDtoToSaveBoard(boardRequestDto));
+    public Board saveBoard(BoardSaveDto boardSaveDto) {
+        return boardRepository.save(convertDtoToSaveBoard(boardSaveDto));
     }
 
-    public void updateBoard(BoardRequestDto boardRequestDto) {
-        boardRepository.save(convertDtoToUpdateBoard(boardRequestDto));
-    }
-
-    public void deleteBoard(Long boardNum) {
-        Board board = getBoardById(boar)
-        boardRepository.delete(board);
-    }
-
-    private Board convertDtoToSaveBoard(BoardRequestDto boardRequestDto) {
+    private Board convertDtoToSaveBoard(BoardSaveDto boardSaveDto) {
         return Board.builder()
-                .title(boardRequestDto.getTitle())
-                .content(boardRequestDto.getContent())
-                .author(boardRequestDto.getAuthor())
+                .title(boardSaveDto.getTitle())
+                .content(boardSaveDto.getContent())
+                .author(boardSaveDto.getAuthor())
                 .build();
     }
 
-    private Board convertDtoToUpdateBoard(BoardRequestDto boardRequestDto) {
-        Board board = boardRepository.findById(boardRequestDto.getNo()).orElseThrow(() -> new UserDefineException("해당 No의 게시글이 없습니다."));
-        board.setTitle(boardRequestDto.getTitle());
-        board.setContent(boardRequestDto.getContent());
+    public Board updateBoard(BoardUpdateDto boardUpdateDto) {
+        return boardRepository.save(convertDtoToUpdateBoard(boardUpdateDto));
+    }
+
+    private Board convertDtoToUpdateBoard(BoardUpdateDto boardUpdateDto) {
+        Board board = getBoardById(boardUpdateDto.getNo());
+        board.setTitle(boardUpdateDto.getTitle());
+        board.setContent(boardUpdateDto.getContent());
         return board;
     }
 
-    public void saveAnswer(AnswerRequestDto answerRequestDto) {
-        answerRepository.save(convertDtoToSaveAnswer(answerRequestDto));
+    public void deleteBoard(Long boardNo) {
+        boardRepository.deleteById(boardNo);
     }
 
-    public void updateAnswer(AnswerRequestDto answerRequestDto) {
-        answerRepository.save(convertDtoToUpdateAnswer(answerRequestDto));
+    public Answer saveAnswer(AnswerSaveDto answerSaveDto) {
+        return answerRepository.save(convertDtoToSaveAnswer(answerSaveDto));
     }
 
-    private Answer convertDtoToSaveAnswer(AnswerRequestDto answerRequestDto) {
-        Board board = boardRepository.findById(answerRequestDto.getBoardNum()).orElseThrow(() -> new UserDefineException("해당 No의 게시글이 없습니다."));
+    private Answer convertDtoToSaveAnswer(AnswerSaveDto answerSaveDto) {
+        Board board = getBoardById(answerSaveDto.getBoardNo());
 
         return Answer.builder()
-                .content(answerRequestDto.getContent())
-                .author(answerRequestDto.getAuthor())
+                .content(answerSaveDto.getContent())
+                .author(answerSaveDto.getAuthor())
                 .board(board)
                 .build();
     }
 
-    private Answer convertDtoToUpdateAnswer(AnswerRequestDto answerRequestDto) {
-        Answer answer = answerRepository.findById(answerRequestDto.getBoardNum()).orElseThrow(() -> new UserDefineException("해당 No의 게시글이 없습니다."));
-        answer.setContent(answerRequestDto.getContent());
+    public Answer updateAnswer(AnswerUpdateDto answerUpdateDto) {
+        return answerRepository.save(convertDtoToUpdateAnswer(answerUpdateDto));
+    }
+
+    private Answer convertDtoToUpdateAnswer(AnswerUpdateDto answerUpdateDto) {
+        Answer answer = getAnswerById(answerUpdateDto.getNo());
+        answer.setContent(answerUpdateDto.getContent());
         return answer;
     }
 
-    public void deleteAnswer(Long answerNum) {
-
-        answerRepository.delete(answerNum);
+    public void deleteAnswer(Long answerNo) {
+        answerRepository.deleteById(answerNo);
     }
 
 
