@@ -17,8 +17,8 @@ import java.util.List;
 public interface BargainDateRepositoryCustom {
 
     List<GraphTmpDto> getByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto);
-/*
-    List<GraphTmpDto> getByCityCodeAndYear(String cityCode);
+
+    /*List<GraphTmpDto> getByCityCodeAndYear(String cityCode);
 
     List<GraphTmpDto> getByGroopCodeAndYear(String cityCode, String groopCode);
 
@@ -45,11 +45,12 @@ public interface BargainDateRepositoryCustom {
     @Query(value = "select building.type, bargaindate.date, avg(bargaindate.price) from BargainDate bargaindate, Building building where bargaindate.building = building.buildingNo and building.city = :cityCode and building.groop = :groopCode and building.dong = :dongName group by building.type, function('date_format', bargaindate.date, '%Y')")
     List<Object[]> getByDongNameAndDateOnYear(@Param("cityCode") String cityCode, @Param("groopCode") String groopCode, @Param("dongName") String dongName);
 
-    @Query(value = "select new kr.ac.skuniv.realestate.domain.dto.GraphTmpDto(:dealType, building.type, bargaindate.date, avg(bargaindate.price)) from BargainDate bargaindate, Building building where bargaindate.building = building.buildingNo and building.city = :cityCode group by building.type, function('date_format', bargaindate.date, '%Y')")
-    List<GraphTmpDto> getByRegionDtoAndDateDto(@Param("cityCode") String cityCode, @Param("dealType") String dealType);*//*
+    */
+    /*@Query(value = "select new kr.ac.skuniv.realestate.domain.dto.GraphTmpDto(:dealType, building.type, bargaindate.date, avg(bargaindate.price)) from BargainDate bargaindate, Building building where bargaindate.building = building.buildingNo and building.city = :cityCode group by building.type, function('date_format', bargaindate.date, '%Y')")
+    List<GraphTmpDto> getByRegionDtoAndDateDto(@Param("cityCode") String cityCode, @Param("dealType") String dealType);*/
 
 
-    @Query(value = "select building.type, bargaindate.date, avg(bargaindate.price) from BargainDate bargaindate, Building building where bargaindate.building = building.buildingNo and building.city = :cityCode and function('date_format', bargaindate.date, '%Y' ) = function('date_format', :date, '%Y' ) group by building.type, function('date_format', bargaindate.date, '%Y-%m')")
+    /*@Query(value = "select building.type, bargaindate.date, avg(bargaindate.price) from BargainDate bargaindate, Building building where bargaindate.building = building.buildingNo and building.city = :cityCode and function('date_format', bargaindate.date, '%Y' ) = function('date_format', :date, '%Y' ) group by building.type, function('date_format', bargaindate.date, '%Y-%m')")
     List<Object[]> getByCityCodeAndDateOnMonth(@Param("cityCode") String cityCode, @Param("date") LocalDate date);
 
     @Query(value = "select building.type, bargaindate.date, avg(bargaindate.price) from BargainDate bargaindate, Building building where bargaindate.building = building.buildingNo and building.city = :cityCode and building.groop = :groopCode and function('date_format', bargaindate.date, '%Y' ) = function('date_format', :date, '%Y' ) group by building.type, function('date_format', bargaindate.date, '%Y-%m')")
@@ -66,6 +67,5 @@ public interface BargainDateRepositoryCustom {
     List<Object[]> getByGroopCodeAndDateOnDay(@Param("cityCode") String cityCode, @Param("groopCode") String groopCode, @Param("date") LocalDate date);
 
     @Query(value = "select building.type, bargaindate.date, avg(bargaindate.price) from BargainDate bargaindate, Building building where bargaindate.building = building.buildingNo and building.city = :cityCode and building.groop = :groopCode and building.dong = :dongName and function('date_format', bargaindate.date, '%Y-%m' ) = function('date_format', :date, '%Y-%m' ) group by building.type, function('date_format', bargaindate.date, '%Y-%m-%d')")
-    List<Object[]> getByDongNameAndDateOnDay(@Param("cityCode") String cityCode, @Param("groopCode") String groopCode, @Param("dongName") String dongName, @Param("date") LocalDate date);
-*/
+    List<Object[]> getByDongNameAndDateOnDay(@Param("cityCode") String cityCode, @Param("groopCode") String groopCode, @Param("dongName") String dongName, @Param("date") LocalDate date);*/
 }
