@@ -1,15 +1,12 @@
 package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.dto.*;
-import kr.ac.skuniv.realestate.domain.entity.Building;
 import kr.ac.skuniv.realestate.repository.BargainDateRepository;
-import kr.ac.skuniv.realestate.repository.BuildingRepository;
 import kr.ac.skuniv.realestate.repository.CharterDateRepository;
 import kr.ac.skuniv.realestate.repository.RentDateRepository;
 import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,14 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class ConditionService {
-    private Logger logger = LoggerFactory.getLogger(ConditionService.class);
+public class GraphService {
     private final BargainDateRepository bargainDateRepository;
     private final CharterDateRepository charterDateRepository;
     private final RentDateRepository rentDateRepository;
     private HashMap<String, String> regionCodeHashmap;
 
-    public ConditionService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository) {
+    public GraphService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository) {
         this.bargainDateRepository = bargainDateRepository;
         this.charterDateRepository = charterDateRepository;
         this.rentDateRepository = rentDateRepository;

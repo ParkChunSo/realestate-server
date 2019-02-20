@@ -27,31 +27,31 @@ public class AspectException {
         this.regionCodeHashmap = regionCodeHashmap;
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getGraphDtos(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.getGraphDtos(..))")
     public void getConditionDto() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.convertRegionToDto(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.convertRegionToDto(..))")
     public void convertRegionToDto() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.convertDateToDto(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.convertDateToDto(..))")
     public void convertDateToDto() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.getGraphDtoByRegionDtoAndDateDto(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.getGraphDtoByRegionDtoAndDateDto(..))")
     public void getGraphDtoByRegionDtoAndDateDto() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.mergeGraphTmpDtosToGraphDtos(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.mergeGraphTmpDtosToGraphDtos(..))")
     public void mergeGraphTmpDtosToGraphDtos() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.setDealTypeOnGraphTmpDtos(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.setDealTypeOnGraphTmpDtos(..))")
     public void setDealTypeOnGraphTmpDtos() {
     }
 
-    @Pointcut("execution(* kr.ac.skuniv.realestate.service.ConditionService.convertGraphTmpDtosToGraphDtos(..))")
+    @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.convertGraphTmpDtosToGraphDtos(..))")
     public void convertGraphTmpDtosToGraphDtos() {
     }
 

@@ -14,7 +14,7 @@ import java.util.Date;
 public class BargainDate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Temporal(value = TemporalType.DATE)
