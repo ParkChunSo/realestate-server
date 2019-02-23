@@ -47,13 +47,13 @@ public class BoardController {
 
     @ApiOperation("게시판 저장")
     @PostMapping
-    public Board saveBoard(BoardSaveDto boardSaveDto) {
+    public Board saveBoard(@RequestBody BoardSaveDto boardSaveDto) {
         return boardService.saveBoard(boardSaveDto);
     }
 
     @ApiOperation("게시판 수정")
     @PutMapping
-    public Board updateBoard(BoardUpdateDto boardUpdateDto) {
+    public Board updateBoard(@RequestBody BoardUpdateDto boardUpdateDto) {
         return boardService.updateBoard(boardUpdateDto);
     }
 
@@ -65,13 +65,13 @@ public class BoardController {
 
     @ApiOperation("댓글 저장")
     @PostMapping("/answer")
-    public Answer saveAnswer(AnswerSaveDto answerSaveDto) {
+    public Answer saveAnswer(@RequestBody AnswerSaveDto answerSaveDto) {
         return boardService.saveAnswer(answerSaveDto);
     }
 
     @ApiOperation("댓글 수정")
     @PutMapping("/answer")
-    public Answer updateAnswer(AnswerUpdateDto answerUpdateDto) {
+    public Answer updateAnswer(@RequestBody AnswerUpdateDto answerUpdateDto) {
         return boardService.updateAnswer(answerUpdateDto);
     }
 

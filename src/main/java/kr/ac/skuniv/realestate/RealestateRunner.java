@@ -24,7 +24,7 @@ public class RealestateRunner implements ApplicationRunner {
     private final RegionCodeRepository regionCodeRepository;
 
     @Autowired
-    AspectException aspectException;
+    private AspectException aspectException;
 
     public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, GraphService graphService, RegionCodeRepository regionCodeRepository) {
         this.dataSource = dataSource;

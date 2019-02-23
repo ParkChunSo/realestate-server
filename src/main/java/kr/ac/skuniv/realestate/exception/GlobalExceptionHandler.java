@@ -65,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         httpHeaders.set("Explanation", "RealEstate Service");
 
         return new ResponseEntity<>(ErrorDto.builder()
-                .originalErrorMessage(e.getMessage())
+                .originalErrorMessage(e.toString())
                 .errorMessage("예상치 못한 예외 발생")
                 .requestURL(requestURL)
                 .build(), httpHeaders, HttpStatus.BAD_REQUEST);
