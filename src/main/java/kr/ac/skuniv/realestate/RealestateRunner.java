@@ -1,21 +1,18 @@
 package kr.ac.skuniv.realestate;
 
-import kr.ac.skuniv.realestate.domain.entity.RegionCode;
+import kr.ac.skuniv.realestate.aop.AspectException;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
-import kr.ac.skuniv.realestate.service.ConditionService;
+import kr.ac.skuniv.realestate.service.GraphService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class RealestateRunner implements ApplicationRunner {
@@ -23,13 +20,16 @@ public class RealestateRunner implements ApplicationRunner {
     private final Logger logger = LogManager.getLogger(RealestateRunner.class);
     private final DataSource dataSource;
     private final ExcelConverterUtill excelConverterUtill;
-    private final ConditionService conditionService;
+    private final GraphService graphService;
     private final RegionCodeRepository regionCodeRepository;
 
-    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, ConditionService conditionService, RegionCodeRepository regionCodeRepository) {
+    @Autowired
+    AspectException aspectException;
+
+    public RealestateRunner(DataSource dataSource, ExcelConverterUtill excelConverterUtill, GraphService graphService, RegionCodeRepository regionCodeRepository) {
         this.dataSource = dataSource;
         this.excelConverterUtill = excelConverterUtill;
-        this.conditionService = conditionService;
+        this.graphService = graphService;
         this.regionCodeRepository = regionCodeRepository;
     }
 
@@ -43,13 +43,15 @@ public class RealestateRunner implements ApplicationRunner {
             logger.error(e.getMessage());
         }
 
-//        try {
-//            excelConverterUtill.ReadRegionCode();
-//            conditionService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
-//            System.out.println(excelConverterUtill.getRegionCodeMap().size());
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
+        try {
+            excelConverterUtill.ReadRegionCode();
+            graphService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
+            aspectException.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
+            logger.info("RegionCodeMap Size : " + excelConverterUtill.getRegionCodeMap().size());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+
 //        RegionCode regionCode = new RegionCode();
 //        regionCode.setValue("서울특별시");
 //        regionCode.setId("11");
@@ -57,7 +59,6 @@ public class RealestateRunner implements ApplicationRunner {
 //
 //        regionCode = regionCodeRepository.findById("11").get();
 //        logger.info(regionCode.getValue());
-//        excelConverterUtill.ReadRegionCode();
 //        HashMap<String, String> codes = excelConverterUtill.getRegionCodeMap();
 //        RegionCode regionCode1 = new RegionCode();
 //        RegionCode regionCode2 = new RegionCode();
@@ -70,11 +71,8 @@ public class RealestateRunner implements ApplicationRunner {
 //
 //            regionCode1.setId(key);
 //            regionCode1.setValue(value);
-//            regionCode2.setId(value);
-//            regionCode2.setValue(key);
 //            count++;
 //            regionCodeRepository.save(regionCode1);
-//            regionCodeRepository.save(regionCode2);
 //        }
 //
 //        List<RegionCode> regionCodes = (List<RegionCode>) regionCodeRepository.findAll();
@@ -94,9 +92,5 @@ public class RealestateRunner implements ApplicationRunner {
 //        logger.info(regionCode2.getRegion());
 //        logger.info(regionCode2.getCode());
 //        logger.info(regionCode1.getId());
-//
-//        RegionCode regionCode1 = new RegionCode();
-//        regionCode1 = regionCodeRepository.findById("경기도광주시초월읍").get();
-//        logger.info(regionCode1.getValue());
     }
 }

@@ -13,14 +13,14 @@ import java.util.Date;
 public class CharterDate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Temporal(value = TemporalType.DATE)
     private Date date;
 
     @Column(name = "price")
-    private Long price;
+    private Double price;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "buildingNo")

@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegionDto {
+
     private String cityCode;
     private String groopCode;
     private String dongName;

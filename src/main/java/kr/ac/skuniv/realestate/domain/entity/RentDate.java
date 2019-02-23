@@ -13,17 +13,17 @@ import java.util.Date;
 public class RentDate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Temporal(value = TemporalType.DATE)
     private Date date;
 
     @Column(name = "guarantee_price")
-    private Long guaranteePrice;
+    private Double guaranteePrice;
 
     @Column(name = "monthly_price")
-    private Long monthlyPrice;
+    private Double monthlyPrice;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "buildingNo")
