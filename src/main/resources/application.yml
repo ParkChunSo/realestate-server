@@ -9,7 +9,7 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: jdbc:log4jdbc:mysql://117.17.142.207:3306/realestate_db?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:log4jdbc:mysql://117.17.142.207:3306/study?useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: cs616
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
@@ -33,7 +33,7 @@ spring:
     redis:
       repositories:
         enabled: true
-server:
-  port: 8090
+#server:
+#  port: 8090
 
 
