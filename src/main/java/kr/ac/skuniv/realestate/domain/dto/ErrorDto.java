@@ -9,7 +9,7 @@ import lombok.Setter;
 public class ErrorDto {
 
     private String originalErrorMessage;
-    private final String errorMessage;
+    private String errorMessage;
     private String requestURL;
 
     @Builder

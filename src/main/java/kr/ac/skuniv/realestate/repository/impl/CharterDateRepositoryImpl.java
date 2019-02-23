@@ -6,7 +6,8 @@ import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
 import kr.ac.skuniv.realestate.domain.dto.DateDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
-import kr.ac.skuniv.realestate.domain.entity.*;
+import kr.ac.skuniv.realestate.domain.entity.CharterDate;
+import kr.ac.skuniv.realestate.domain.entity.QBuilding;
 import kr.ac.skuniv.realestate.repository.custom.CharterDateRepositoryCustom;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+
+import static kr.ac.skuniv.realestate.domain.entity.QCharterDate.charterDate;
 
 /**
  * Created by youngman on 2019-01-16.
@@ -25,6 +28,7 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
 
     @PersistenceContext
     private EntityManager entityManager;
+    private QBuilding building = QBuilding.building;
 
     public CharterDateRepositoryImpl() {
         super(CharterDate.class);
@@ -33,21 +37,34 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
     @Override
     @AspectExceptionAnnotation
     public List<GraphTmpDto> getByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto) {
-        QBuilding building = QBuilding.building;
-        QCharterDate charterDate = QCharterDate.charterDate;
+        JPAQuery<GraphTmpDto> jpaQuery = new JPAQuery<>(entityManager);
+        jpaQuery = setQuery(jpaQuery);
+        jpaQuery = setQueryByRegionDto(jpaQuery, regionDto);
+        jpaQuery = setQueryByDateDto(jpaQuery, dateDto);
 
-        JPAQuery<GraphTmpDto> query = new JPAQuery<>(entityManager);
-        query.select(Projections.constructor(GraphTmpDto.class, building.type, charterDate.date, charterDate.price.avg()))
+        return jpaQuery.fetch();
+    }
+
+    private JPAQuery<GraphTmpDto> setQuery(JPAQuery<GraphTmpDto> query) {
+        return query.select(Projections.constructor(GraphTmpDto.class, building.type, charterDate.date, charterDate.price.avg()))
                 .from(charterDate)
                 .join(charterDate.building, building);
+    }
+
+    private JPAQuery<GraphTmpDto> setQueryByRegionDto(JPAQuery<GraphTmpDto> query, RegionDto regionDto) {
 
         if (regionDto.getRegionType() == RegionDto.RegionType.CITY) {
             query.where(building.city.eq(regionDto.getCityCode()));
         } else if (regionDto.getRegionType() == RegionDto.RegionType.DISTRICT) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()));
-        } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD){
+        } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()), building.dong.eq(regionDto.getDongName()));
         }
+
+        return query;
+    }
+
+    private JPAQuery<GraphTmpDto> setQueryByDateDto(JPAQuery<GraphTmpDto> query, DateDto dateDto) {
 
         if (dateDto.getDateType() == DateDto.DateType.YEAR) {
             query.groupBy(building.type, charterDate.date.year());
@@ -59,6 +76,7 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
                     .groupBy(building.type, charterDate.date);
         }
 
-        return query.fetch();
+        return query;
     }
+
 }
