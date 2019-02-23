@@ -16,21 +16,18 @@ import javax.sql.DataSource;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RealestateApplicationTests {
-    @Autowired
+
+    @MockBean
     RegionCodeRepository regionCodeRepository;
 
     @MockBean
     RegionCode regionCode;
 
-
     private Logger logger = LoggerFactory.getLogger(RealestateApplicationTests.class);
     @Test
     public void contextLoads() {
-        String code = regionCodeRepository.findById("서울특별시").get().getValue();
-
-        logger.info("region code = " + code);
-
-
+//        String code = regionCodeRepository.findById("서울특별시").get().getValue();
+//
+//        logger.info("region code = " + code);
     }
-
 }
