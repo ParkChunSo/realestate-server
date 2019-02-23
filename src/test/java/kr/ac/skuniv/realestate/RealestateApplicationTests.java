@@ -13,6 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RealestateApplicationTests {
@@ -29,5 +31,7 @@ public class RealestateApplicationTests {
 //        String code = regionCodeRepository.findById("서울특별시").get().getValue();
 //
 //        logger.info("region code = " + code);
+
+       // assertThat(regionCodeRepository.findById("서울특별시").get().getValue()).isEqualTo(1100000000);
     }
 }

@@ -99,9 +99,9 @@ public class AspectException {
             region = paramValues[0].toString() + paramValues[1].toString() + paramValues[2].toString();
         }
 
-        if (!regionCodeHashmap.containsKey(region)) {
-            throw new UserDefineException("찾을 수 없는 URL 파라미터");
-        }
+//        if (!regionCodeHashmap.containsKey(region)) {
+//            throw new UserDefineException("찾을 수 없는 URL 파라미터");
+//        }
 
         try {
             result = proceedingJoinPoint.proceed();

@@ -1,6 +1,7 @@
 package kr.ac.skuniv.realestate;
 
 import kr.ac.skuniv.realestate.aop.AspectException;
+import kr.ac.skuniv.realestate.domain.entity.RegionCode;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.service.GraphService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
@@ -43,14 +44,14 @@ public class RealestateRunner implements ApplicationRunner {
             logger.error(e.getMessage());
         }
 
-        try {
-            excelConverterUtill.ReadRegionCode();
-            graphService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
-            aspectException.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
-            logger.info("RegionCodeMap Size : " + excelConverterUtill.getRegionCodeMap().size());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
+//        try {
+//            excelConverterUtill.ReadRegionCode();
+//            graphService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
+//            aspectException.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
+//            logger.info("RegionCodeMap Size : " + excelConverterUtill.getRegionCodeMap().size());
+//        } catch (Exception e) {
+//            logger.error(e.getMessage());
+//        }
 
 //        RegionCode regionCode = new RegionCode();
 //        regionCode.setValue("서울특별시");
@@ -87,10 +88,10 @@ public class RealestateRunner implements ApplicationRunner {
 //            }
 //        }
 
-//        regionCode2 = regionCodeRepository.findById("서울특별시").get();
+//          regionCode1 = regionCodeRepository.findById("서울특별시").get();
 //        regionCode1 = regionCodeRepository.findByCode("1100000000");
 //        logger.info(regionCode2.getRegion());
 //        logger.info(regionCode2.getCode());
-//        logger.info(regionCode1.getId());
+//          logger.info(regionCode1.getId());
     }
 }
