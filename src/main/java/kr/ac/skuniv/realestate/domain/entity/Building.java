@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -51,6 +52,10 @@ public class Building {
 
     @OneToMany(mappedBy = "building")
     private List<RentDate> rentDates;
+
+    private BigDecimal latitude;
+
+    private BigDecimal longitude;
 
 }
 
