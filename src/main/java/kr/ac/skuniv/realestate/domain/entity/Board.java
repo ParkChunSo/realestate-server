@@ -1,5 +1,6 @@
 package kr.ac.skuniv.realestate.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,11 +34,13 @@ public class Board {
     private String author;
 
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date registerDate;
 
     @UpdateTimestamp
-    @Temporal(TemporalType.DATE)
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date modifyDate;
 
     @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)

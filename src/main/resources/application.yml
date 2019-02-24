@@ -33,5 +33,7 @@ spring:
     redis:
       repositories:
         enabled: true
+#server:
+#  port: 8090
 
 
