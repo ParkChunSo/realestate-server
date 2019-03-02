@@ -29,6 +29,8 @@ public class GraphController {
     @Autowired
     RegionCodeRepository regionCodeRepository;
 
+    private Logger logger = LoggerFactory.getLogger(GraphController.class);
+
     @ApiOperation("날짜없이 대코드 조회")
     @GetMapping("/city/{city}")
     public List<GraphDto> onlyCity(@PathVariable String city) {
@@ -115,5 +117,4 @@ public class GraphController {
 
         return graphService.getGraphDtos(regionDto, dateDto);
     }
-
 }

@@ -1,6 +1,7 @@
 package kr.ac.skuniv.realestate.domain.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "building")
+@NoArgsConstructor
 public class Building {
 
     @Id

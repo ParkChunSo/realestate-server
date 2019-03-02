@@ -5,8 +5,8 @@ import kr.ac.skuniv.realestate.domain.entity.RegionCode;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.service.GraphService;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -18,7 +18,7 @@ import java.sql.Connection;
 @Component
 public class RealestateRunner implements ApplicationRunner {
 
-    private final Logger logger = LogManager.getLogger(RealestateRunner.class);
+    private final Logger logger = LoggerFactory.getLogger(RealestateRunner.class);
     private final DataSource dataSource;
     private final ExcelConverterUtill excelConverterUtill;
     private final GraphService graphService;

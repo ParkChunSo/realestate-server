@@ -1,6 +1,7 @@
 package kr.ac.skuniv.realestate.domain.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "rent_date")
+@NoArgsConstructor
 public class RentDate {
 
     @Id
