@@ -29,8 +29,8 @@ public class BoardController {
 
     @ApiOperation("페이지에 따른 게시판글")
     @GetMapping("/{pageNo}")
-    public Page<Board> getBoardsByPage(@PathVariable int pageNo) {
-        return boardService.getBoardsByPage(pageNo);
+    public List<Board> getBoardsByPage(@PathVariable int pageNo) {
+        return boardService.getBoardsByPage();
     }
 
     @ApiOperation("게시판글 번호에 따른 세부 내용")
