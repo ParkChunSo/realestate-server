@@ -17,7 +17,6 @@ import java.util.List;
  * Created by YoungMan on 2019-02-16.
  */
 
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/realestate/board")
 public class BoardController {

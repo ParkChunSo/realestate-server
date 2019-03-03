@@ -1,10 +1,11 @@
 package kr.ac.skuniv.realestate.domain.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter @Setter @AllArgsConstructor
 public class MapLocationDto {
-
     private LocationDto rightTop;
 
     private LocationDto leftBottom;

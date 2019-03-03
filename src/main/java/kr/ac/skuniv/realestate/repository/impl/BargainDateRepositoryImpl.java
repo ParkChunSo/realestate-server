@@ -5,9 +5,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
-import kr.ac.skuniv.realestate.domain.dto.DateDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
-import kr.ac.skuniv.realestate.domain.dto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.*;
 import kr.ac.skuniv.realestate.domain.entity.BargainDate;
 import kr.ac.skuniv.realestate.domain.entity.QBuilding;
 import kr.ac.skuniv.realestate.repository.custom.BargainDateRepositoryCustom;
@@ -93,5 +91,49 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
         }
         return builder;
     }*/
+
+    @Override
+    public List<SearchResDto> getDealBuildingsByMapXYAndHousingType(SearchReqDto searchReqDto){
+        JPAQuery<SearchResDto> jpaQuery = new JPAQuery<>(entityManager);
+        jpaQuery = setQuery(jpaQuery, searchReqDto);
+        jpaQuery.join(bargainDate.building, building);
+        jpaQuery = setQueryHousingType(jpaQuery, searchReqDto.getHousingType());
+
+        return jpaQuery.fetch();
+    }
+
+    private JPAQuery<SearchResDto> setQuery(JPAQuery<SearchResDto> jpaQuery, SearchReqDto searchReqDto){
+        jpaQuery.select(Projections.constructor(SearchResDto.class, building.city, building.groop, building.dong, building.name, building.area, building.floor, building.type, building.buildingNum,building.constructYear, bargainDate.price, building.latitude, building.longitude))
+                .from(bargainDate)
+                .where(building.latitude.between(searchReqDto.getMapLocation().getLeftBottom().getLatitude(), searchReqDto.getMapLocation().getRightTop().getLatitude()))
+                .where(building.longitude.between(searchReqDto.getMapLocation().getLeftBottom().getLongitude(), searchReqDto.getMapLocation().getRightTop().getLongitude()));
+        return jpaQuery;
+    }
+
+    private JPAQuery<SearchResDto> setQueryHousingType(JPAQuery<SearchResDto> jpaQuery, List<SearchReqDto.HousingType> housingType) {
+        // housing type의 따라 동적 쿼리 생성
+        if(housingType.contains(SearchReqDto.HousingType.APART) && housingType.contains(SearchReqDto.HousingType.OFFICETEL) && housingType.contains(SearchReqDto.HousingType.HOUSE)){
+            return jpaQuery;
+        }
+        else if(housingType.contains(SearchReqDto.HousingType.APART) && housingType.contains(SearchReqDto.HousingType.OFFICETEL)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.APART.name()).or(building.type.eq(SearchReqDto.HousingType.OFFICETEL.name())));
+        }
+        else if(housingType.contains(SearchReqDto.HousingType.OFFICETEL) && housingType.contains(SearchReqDto.HousingType.HOUSE)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.OFFICETEL.name()).or(building.type.eq(SearchReqDto.HousingType.HOUSE.name())));
+        }
+        else if(housingType.contains(SearchReqDto.HousingType.APART) && housingType.contains(SearchReqDto.HousingType.HOUSE)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.APART.name()).or(building.type.eq(SearchReqDto.HousingType.HOUSE.name())));
+        }
+        else if(housingType.contains(SearchReqDto.HousingType.APART)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.APART.name()));
+        }
+        else if(housingType.contains(SearchReqDto.HousingType.OFFICETEL)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.OFFICETEL.name()));
+        }
+        else if(housingType.contains(SearchReqDto.HousingType.HOUSE)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.HOUSE.name()));
+        }
+        return jpaQuery;
+    }
 
 }
