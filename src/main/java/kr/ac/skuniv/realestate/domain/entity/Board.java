@@ -1,16 +1,14 @@
 package kr.ac.skuniv.realestate.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,20 +34,21 @@ public class Board {
     private String author;
 
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date registerDate;
 
     @UpdateTimestamp
-    @Temporal(TemporalType.DATE)
+    @Temporal(value = TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date modifyDate;
 
     @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Answer> answers;
+    private List<Answer> answers = new ArrayList<>();
 
     public Board() {
     }
-
 
     @Builder
     public Board(String title, String content, String author) {

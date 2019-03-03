@@ -57,7 +57,7 @@ public class CosmosTest {
 
     @Test
     public void getBoardById() {
-        Board board = boardService.getBoardById(2L);
+        Board board = boardService.getBoardById(14L);
         System.out.println("============================");
         System.out.println(board.toString());
     }

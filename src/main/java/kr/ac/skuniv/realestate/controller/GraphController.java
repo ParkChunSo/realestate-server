@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping(value = "/realestate/graph")
 public class GraphController {
 
-    private Logger logger = LoggerFactory.getLogger(GraphController.class);
     private final GraphService graphService;
 
     public GraphController(GraphService graphService) {

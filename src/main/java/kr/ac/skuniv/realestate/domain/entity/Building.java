@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,44 +15,35 @@ import java.util.List;
 public class Building {
 
     @Id
-    @Column(name = "building_no", nullable = false)
+    @Column(name = "building_no")
     private Long buildingNo;
 
-    @Column(nullable = false)
     private Double area;
 
-    @Column(name = "building_num", nullable = false)
     private String buildingNum;
 
-    @Column(nullable = false)
     private String city;
 
-    @Column(nullable = false)
     private String groop;
 
-    @Column(nullable = false)
     private String dong;
 
-    @Column(name = "construct_year", nullable = false)
     private String constructYear;
 
-    @Column(nullable = false)
     private int floor;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String type;
 
     @OneToMany(mappedBy = "building")
-    private List<BargainDate> bargainDates;
+    private List<BargainDate> bargainDates = new ArrayList<>();
 
     @OneToMany(mappedBy = "building")
-    private List<CharterDate> charterDates;
+    private List<CharterDate> charterDates = new ArrayList<>();
 
     @OneToMany(mappedBy = "building")
-    private List<RentDate> rentDates;
+    private List<RentDate> rentDates = new ArrayList<>();
 
     private BigDecimal latitude;
 

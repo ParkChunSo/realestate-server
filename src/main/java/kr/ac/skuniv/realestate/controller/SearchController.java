@@ -18,6 +18,4 @@ public class SearchController {
         this.searchService = searchService;
     }
 
-
-
 }

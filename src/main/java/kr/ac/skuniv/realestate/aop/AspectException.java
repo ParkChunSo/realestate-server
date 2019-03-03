@@ -28,7 +28,7 @@ public class AspectException {
     }
 
     @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.getGraphDtos(..))")
-    public void getConditionDto() {
+    public void getGraphDtos() {
     }
 
     @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.convertRegionToDto(..))")
@@ -56,7 +56,7 @@ public class AspectException {
     }
 
     //  @Around("execution(* kr.ac.skuniv.realestate.service.ConditionService.*(..))")
-    @Around("getConditionDto() || convertDateToDto() || getGraphDtoByRegionDtoAndDateDto() || mergeGraphTmpDtosToGraphDtos() || setDealTypeOnGraphTmpDtos() || convertGraphTmpDtosToGraphDtos()")
+    @Around("getGraphDtos() || convertDateToDto() || getGraphDtoByRegionDtoAndDateDto() || mergeGraphTmpDtosToGraphDtos() || setDealTypeOnGraphTmpDtos() || convertGraphTmpDtosToGraphDtos()")
     private Object aroundException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object result = new Object();
         try {
