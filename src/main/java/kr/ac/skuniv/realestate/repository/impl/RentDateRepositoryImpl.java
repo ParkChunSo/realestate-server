@@ -3,9 +3,7 @@ package kr.ac.skuniv.realestate.repository.impl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
-import kr.ac.skuniv.realestate.domain.dto.DateDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
-import kr.ac.skuniv.realestate.domain.dto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.*;
 import kr.ac.skuniv.realestate.domain.entity.QBuilding;
 import kr.ac.skuniv.realestate.domain.entity.RentDate;
 import kr.ac.skuniv.realestate.repository.custom.RentDateRepositoryCustom;
@@ -16,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
+import static kr.ac.skuniv.realestate.domain.entity.QBargainDate.bargainDate;
 import static kr.ac.skuniv.realestate.domain.entity.QRentDate.rentDate;
 
 /**
@@ -78,5 +77,4 @@ public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements
 
         return query;
     }
-
 }
