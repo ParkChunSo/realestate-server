@@ -1,4 +1,4 @@
-package com.example.demolastsecurity.domain;
+package kr.ac.skuniv.realestate.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

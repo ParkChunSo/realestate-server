@@ -76,9 +76,9 @@ public class CosmosTest {
 
     @Test
     public void getBoardsByPage() {
-        Page<Board> boards = boardService.getBoardsByPage(1);
+/*        Page<Board> boards = boardService.getBoardsByPage();
         System.out.println("============================");
-        boards.forEach(s-> System.out.println(s.toString()));
+        boards.forEach(s-> System.out.println(s.toString()));*/
     }
 
     @Test

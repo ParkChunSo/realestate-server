@@ -39,9 +39,9 @@ public class BoardService {
         return answerRepository.findById(answerNo).orElseThrow(() -> new UserDefineException("해당 No의 게시글이 없습니다."));
     }
 
-    public Page<Board> getBoardsByPage(int pageNum) {
-        PageRequest pageRequest = new PageRequest(pageNum - 1, 20, Sort.Direction.DESC, "no");
-        return boardRepository.findAll(pageRequest);
+    public List<Board> getBoardsByPage() {
+//        PageRequest pageRequest = new PageRequest(pageNum - 1, 20, Sort.Direction.DESC, "no");
+        return boardRepository.findAll();
     }
 
     public List<Board> getBoardsByTitle(String title) {
