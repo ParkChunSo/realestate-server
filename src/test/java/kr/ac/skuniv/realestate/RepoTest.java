@@ -75,8 +75,6 @@ public class RepoTest {
                 }
                 log.info("================" + building.getLatitude().add(new BigDecimal(-5)) );
             }
-
         }
-
     }
 }
