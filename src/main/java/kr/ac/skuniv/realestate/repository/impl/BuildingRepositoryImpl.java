@@ -23,20 +23,10 @@ public class BuildingRepositoryImpl extends QuerydslRepositorySupport implements
     @PersistenceContext
     private EntityManager entityManager;
     private QBuilding building = QBuilding.building;
-//    private QBargainDate bargainDate = QBargainDate.bargainDate;
-//    private QCharterDate charterDate = QCharterDate.charterDate;
-//    private QRentDate rentDate = QRentDate.rentDate;
 
     public BuildingRepositoryImpl() {
         super(Building.class);
     }
-
-/*    public List<SearchTmpDto> getSearchDataByXYAndHousingType(SearchReqDto searchReqDto){
-        JPAQuery<SearchTmpDto> jpaQuery = new JPAQuery<>(entityManager);
-        jpaQuery.select(SearchTmpDto.class, building.buildingNo,)
-                .from(new JPAExpressions.)
-
-    }*/
 
     @Override
     public List<SearchTmpDto> getDealBuildingsByMapXYAndHousingType(SearchReqDto searchReqDto){
