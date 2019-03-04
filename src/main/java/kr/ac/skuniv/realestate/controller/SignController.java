@@ -5,7 +5,6 @@ import kr.ac.skuniv.realestate.domain.MemberRole;
 import kr.ac.skuniv.realestate.domain.dto.SignInDto;
 import kr.ac.skuniv.realestate.domain.dto.SignupDto;
 import kr.ac.skuniv.realestate.service.SignService;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
