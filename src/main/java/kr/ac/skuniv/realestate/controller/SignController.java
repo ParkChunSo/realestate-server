@@ -18,31 +18,31 @@ public class SignController {
     }
 
     @ApiOperation("일반 사용자 회원가입")
-    @PostMapping("/client/signup")
+    @PostMapping("/client")
     public String clientSignUp(@RequestBody SignupDto signUpDto) {
         return signService.saveMember(signUpDto, MemberRole.USER.name());
     }
 
     @ApiOperation("관리자 회원가입")
-    @PostMapping("/admin/signup")
+    @PostMapping("/admin")
     public String adminSignUp(@RequestBody SignupDto signUpDto) {
         return signService.saveMember(signUpDto, MemberRole.ADMIN.name());
     }
 
     @ApiOperation("로그인")
-    @PostMapping("/signin")
+    @PostMapping()
     public String signIn(@RequestBody SignInDto signInDto) {
         return signService.signInMember(signInDto);
     }
 
     @ApiOperation("사용자 정보 수정")
-    @PutMapping("/update")
+    @PutMapping()
     public void updateMember(@RequestBody SignupDto signupDto) {
         signService.updateMember(signupDto);
     }
 
     @ApiOperation("사용자 정보 삭제")
-    @DeleteMapping("/delete")
+    @DeleteMapping()
     public void deleteMember(@RequestBody SignInDto signInDto) {
         signService.deleteMember(signInDto);
     }
