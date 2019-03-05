@@ -34,10 +34,10 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-/*            else{
+            else{
                 HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
                 httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-            }*/
+            }
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
