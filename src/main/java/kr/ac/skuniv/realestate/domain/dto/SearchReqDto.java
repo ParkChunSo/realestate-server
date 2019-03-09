@@ -20,6 +20,6 @@ public class SearchReqDto {
     }
 
     public enum HousingType{
-        APART, OPISTEL, HOUSE
+        APART, OPPICETEL, HOUSE
     }
 }

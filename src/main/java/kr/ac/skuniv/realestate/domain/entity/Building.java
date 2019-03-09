@@ -17,16 +17,16 @@ import java.util.List;
 public class Building {
 
     @Id
-    @Column(name = "building_no")
+    @Column(name = "no")
     private Long buildingNo;
 
     private Double area;
 
     private String buildingNum;
 
-    private String city;
+    private int city;
 
-    private String groop;
+    private int groop;
 
     private String dong;
 

@@ -47,9 +47,10 @@ public class GraphService {
                 .cityCode(regionCodeHashmap.get(city).substring(0, 2))
                 .regionType(RegionDto.RegionType.CITY)
                 .build();*/
+
         logger.info("convert region to dto");
         return  RegionDto.builder()
-                .cityCode(regionCodeRepository.findById(city).get().getValue().substring(0, 2))
+                .cityCode(Integer.valueOf(regionCodeRepository.findById(city).get().getValue().substring(0, 2)))
                 .regionType(RegionDto.RegionType.CITY)
                 .build();
 
@@ -64,8 +65,8 @@ public class GraphService {
                 .build();*/
         String code = regionCodeRepository.findById(city + district).get().getValue();
         RegionDto regionDto = RegionDto.builder()
-                .cityCode(code.substring(0, 2))
-                .groopCode(code.substring(2, 5))
+                .cityCode(Integer.valueOf(code.substring(0, 2)))
+                .groopCode(Integer.valueOf(code.substring(2, 5)))
                 .regionType(RegionDto.RegionType.DISTRICT)
                 .build();
         return regionDto;
@@ -81,8 +82,8 @@ public class GraphService {
 
         String code = regionCodeRepository.findById(city + district).get().getValue();
         RegionDto regionDto = RegionDto.builder()
-                .cityCode(code.substring(0, 2))
-                .groopCode(code.substring(2, 5))
+                .cityCode(Integer.valueOf(code.substring(0, 2)))
+                .groopCode(Integer.valueOf(code.substring(2, 5)))
                 .dongName(neighborhood)
                 .regionType(RegionDto.RegionType.NEIGHBORHOOD)
                 .build();

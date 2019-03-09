@@ -75,10 +75,10 @@ public class SearchService {
 
         for (LocationDto option : options){
             for (SearchTmpDto searchTmpDto : searchTmpDtos){
-                if(option.getLatitude().compareTo(searchTmpDto.getLatitude().add(new BigDecimal(-5))) == 1 &&
-                        option.getLatitude().compareTo(searchTmpDto.getLatitude().add(new BigDecimal(5))) == -1 &&
-                        option.getLongitude().compareTo(searchTmpDto.getLongitude().add(new BigDecimal(-5))) == 1 &&
-                            option.getLongitude().compareTo(searchTmpDto.getLongitude().add(new BigDecimal(5))) == -1){
+                if(option.getLatitude().compareTo(searchTmpDto.getLatitude().add(new BigDecimal(-0.0004))) == 1 &&
+                        option.getLatitude().compareTo(searchTmpDto.getLatitude().add(new BigDecimal(0.0004))) == -1 &&
+                        option.getLongitude().compareTo(searchTmpDto.getLongitude().add(new BigDecimal(-0.0004))) == 1 &&
+                            option.getLongitude().compareTo(searchTmpDto.getLongitude().add(new BigDecimal(0.0004))) == -1){
 
                     searchResDtos.add(searchTmpDto);
                     log.info("==============dddddd" + searchTmpDto.getName());

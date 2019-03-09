@@ -9,6 +9,7 @@ import kr.ac.skuniv.realestate.domain.entity.Board;
 import kr.ac.skuniv.realestate.exception.UserDefineException;
 import kr.ac.skuniv.realestate.repository.AnswerRepository;
 import kr.ac.skuniv.realestate.repository.BoardRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by YoungMan on 2019-02-16.
  */
 
-@Service
+@Service @Log4j2
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -41,7 +42,9 @@ public class BoardService {
 
     public List<Board> getBoardsByPage() {
         //PageRequest pageRequest = new PageRequest(pageNum - 1, 20, Sort.Direction.DESC, "no");
-        return boardRepository.findAll();
+        List<Board> boards = boardRepository.findAll();
+        log.info("============get board size : " + boards.size() );
+        return boards;
     }
 
     public List<Board> getBoardsByTitle(String title) {

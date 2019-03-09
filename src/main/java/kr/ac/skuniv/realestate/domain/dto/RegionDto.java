@@ -11,17 +11,17 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RegionDto {
 
-    private String cityCode;
-    private String groopCode;
+    private int cityCode;
+    private int groopCode;
     private String dongName;
     private RegionType regionType;
 
-    public RegionDto(String cityCode, RegionType regionType) {
+    public RegionDto(int cityCode, RegionType regionType) {
         this.cityCode = cityCode;
         this.regionType = regionType;
     }
 
-    public RegionDto(String cityCode, String groopCode, RegionType regionType) {
+    public RegionDto(int cityCode, int groopCode, RegionType regionType) {
         this.cityCode = cityCode;
         this.groopCode = groopCode;
         this.regionType = regionType;

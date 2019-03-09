@@ -41,7 +41,7 @@ public class GraphController {
 //                .regionType(RegionDto.RegionType.CITY)
 //                .build();
         RegionDto regionDto = graphService.convertRegionToDto(city);
-        logger.info("city===============22222222");
+        logger.info("city===============" + regionDto.getCityCode());
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();

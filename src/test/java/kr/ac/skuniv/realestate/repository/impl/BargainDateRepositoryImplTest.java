@@ -28,7 +28,7 @@ public class BargainDateRepositoryImplTest{
         public void test(){
             SearchReqDto searchReqDto = new SearchReqDto();
             searchReqDto.setDealType(Arrays.asList(SearchReqDto.DealType.DEAL));
-            searchReqDto.setHousingType(Arrays.asList(SearchReqDto.HousingType.APART, SearchReqDto.HousingType.OPISTEL));
+            searchReqDto.setHousingType(Arrays.asList(SearchReqDto.HousingType.APART, SearchReqDto.HousingType.OPPICETEL));
             searchReqDto.setMapLocation(
                     new MapLocationDto(
                             new LocationDto(BigDecimal.valueOf(20.0),BigDecimal.valueOf(20.0)),new LocationDto(BigDecimal.valueOf(25.0),BigDecimal.valueOf(26.0))
