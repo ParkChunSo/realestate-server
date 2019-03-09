@@ -7,7 +7,6 @@ import kr.ac.skuniv.realestate.domain.entity.Member;
 import kr.ac.skuniv.realestate.exception.UserDefineException;
 import kr.ac.skuniv.realestate.repository.SignRepository;
 import kr.ac.skuniv.realestate.security.TokenUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,21 +23,18 @@ import java.util.stream.Stream;
 
 @Service
 public class SignService implements UserDetailsService {
-    @Autowired
-    private SignRepository signRepository;
+    private final SignRepository signRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-/*
     public SignService(SignRepository signRepository, PasswordEncoder passwordEncoder) {
         this.signRepository = signRepository;
         this.passwordEncoder = passwordEncoder;
-    }*/
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = signRepository.findByEmail(username)
-                .orElseThrow(() -> new UserDefineException(username + "은 없는 사용자입니다."));
+                .orElseThrow(() -> new UserDefineException("아이디를 잘못 입력하셨습니다."));
         return new User(member.getEmail(), member.getPassword(), authorities(member.getRoles()));
     }
 
@@ -48,8 +44,18 @@ public class SignService implements UserDetailsService {
                 .collect(Collectors.toSet());
     }
 
+    public String signInMember(SignInDto signInDto){
+        User user = (User) loadUserByUsername(signInDto.getEmail());
+        if(passwordEncoder.matches(signInDto.getPassword(), user.getPassword()))
+            return TokenUtils.createToken(user);
+        else
+            throw new UserDefineException("비밀번호가 잘못되었습니다.");
+    }
+
     public String saveMember(SignupDto signupDto, String who){
         signupDto.setPassword(passwordEncoder.encode(signupDto.getPassword()));
+        if(signRepository.findByEmail(signupDto.getEmail()).isPresent())
+            throw new UserDefineException("이미 존재하는 회원입니다.");
 
         Member member;
         if(who.equals(MemberRole.ADMIN.name()))
@@ -68,24 +74,18 @@ public class SignService implements UserDetailsService {
         return TokenUtils.createToken(member.toUser());
     }
 
-    public String signInMember(SignInDto signInDto){
-        User user = (User) loadUserByUsername(signInDto.getEmail());
-        if(passwordEncoder.matches(signInDto.getPassword(), user.getPassword()))
-            return TokenUtils.createToken(user);
-        else
-            throw new UserDefineException("비밀번호가 잘못되었습니다.");
-
-    }
-
     public void updateMember(SignupDto signupDto){
-        Member member = signRepository.findByEmail(signupDto.getEmail()).orElse(null);
-        if(member != null)
-            signRepository.save(member);
+        Member member = signRepository.findByEmail(signupDto.getEmail())
+                .orElseThrow(() -> new UserDefineException("아이디가 존재하지 않습니다."));
+        signRepository.save(member);
     }
 
     public void deleteMember(SignInDto signInDto){
-        Member member = signRepository.findByEmail(signInDto.getEmail()).orElse(null);
-        if(member != null)
-            signRepository.delete(member);
+        Member member = signRepository.findByEmail(signInDto.getEmail())
+                .orElseThrow(() -> new UserDefineException("아이디를 잘못 입력하셨습니다."));
+        if(passwordEncoder.matches(signInDto.getPassword(), member.getPassword()))
+            signRepository.deleteById(member.getId());
+        else
+            throw new UserDefineException("비밀번호를 잘못 입력하셨습니다.");
     }
 }
