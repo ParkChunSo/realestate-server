@@ -52,7 +52,7 @@ public class SignService implements UserDetailsService {
             throw new UserDefineException("비밀번호가 잘못되었습니다.");
     }
 
-    public String saveMember(SignupDto signupDto, String who){
+    public void saveMember(SignupDto signupDto, String who){
         signupDto.setPassword(passwordEncoder.encode(signupDto.getPassword()));
         if(signRepository.findByEmail(signupDto.getEmail()).isPresent())
             throw new UserDefineException("이미 존재하는 회원입니다.");
@@ -70,8 +70,6 @@ public class SignService implements UserDetailsService {
                             Stream.of(MemberRole.USER).collect(Collectors.toSet())
                     )
             );
-
-        return TokenUtils.createToken(member.toUser());
     }
 
     public void updateMember(SignupDto signupDto){
