@@ -26,7 +26,7 @@ public class SearchController {
 
 
     @ApiOperation("매매 정보 검색")
-    @GetMapping()
+    @PostMapping()
     public List<SearchTmpDto> searchBuilding(@RequestBody SearchReqDto searchReqDto){
         List<SearchTmpDto> searchTmpDtos = searchService.buildingFiltering(searchReqDto);
         return searchService.optionFiltering(searchTmpDtos, searchReqDto.getOptions());
