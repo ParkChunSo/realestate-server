@@ -2,6 +2,7 @@ package kr.ac.skuniv.realestate.domain.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**

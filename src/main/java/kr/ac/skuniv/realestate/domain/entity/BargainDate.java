@@ -1,6 +1,7 @@
 package kr.ac.skuniv.realestate.domain.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.annotation.Nullable;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "bargain_date")
+@NoArgsConstructor
 public class BargainDate {
 
     @Id

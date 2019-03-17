@@ -4,9 +4,11 @@ import io.swagger.annotations.ApiOperation;
 import kr.ac.skuniv.realestate.domain.dto.DateDto;
 import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
+import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.service.GraphService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +26,22 @@ public class GraphController {
         this.graphService = graphService;
     }
 
+    @Autowired
+    RegionCodeRepository regionCodeRepository;
+
+    private Logger logger = LoggerFactory.getLogger(GraphController.class);
+
     @ApiOperation("날짜없이 대코드 조회")
     @GetMapping("/city/{city}")
     public List<GraphDto> onlyCity(@PathVariable String city) {
+        logger.info(city);
+        logger.info(regionCodeRepository.findById(city).get().getValue());
+//        RegionDto regionDto = RegionDto.builder()
+//                .cityCode(regionCodeRepository.findById(city).get().getValue().substring(0, 2))
+//                .regionType(RegionDto.RegionType.CITY)
+//                .build();
         RegionDto regionDto = graphService.convertRegionToDto(city);
+        logger.info("city===============" + regionDto.getCityCode());
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();
@@ -103,5 +117,4 @@ public class GraphController {
 
         return graphService.getGraphDtos(regionDto, dateDto);
     }
-
 }

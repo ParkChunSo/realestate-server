@@ -71,14 +71,14 @@ public class BuildingRepositoryImpl extends QuerydslRepositorySupport implements
 
     private JPAQuery<SearchTmpDto> setQueryHousingType(JPAQuery<SearchTmpDto> jpaQuery, List<SearchReqDto.HousingType> housingType) {
         // 모든 housing타입을 원함.
-        if(housingType.contains(SearchReqDto.HousingType.APART) && housingType.contains(SearchReqDto.HousingType.OPISTEL) && housingType.contains(SearchReqDto.HousingType.HOUSE)){
+        if(housingType.contains(SearchReqDto.HousingType.APART) && housingType.contains(SearchReqDto.HousingType.OPPICETEL) && housingType.contains(SearchReqDto.HousingType.HOUSE)){
             return jpaQuery;
         }
-        else if(housingType.contains(SearchReqDto.HousingType.APART) && housingType.contains(SearchReqDto.HousingType.OPISTEL)){
-            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.APART.name()).or(building.type.eq(SearchReqDto.HousingType.OPISTEL.name())));
+        else if(housingType.contains(SearchReqDto.HousingType.APART) && housingType.contains(SearchReqDto.HousingType.OPPICETEL)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.APART.name()).or(building.type.eq(SearchReqDto.HousingType.OPPICETEL.name())));
         }
-        else if(housingType.contains(SearchReqDto.HousingType.OPISTEL) && housingType.contains(SearchReqDto.HousingType.HOUSE)){
-            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.OPISTEL.name()).or(building.type.eq(SearchReqDto.HousingType.HOUSE.name())));
+        else if(housingType.contains(SearchReqDto.HousingType.OPPICETEL) && housingType.contains(SearchReqDto.HousingType.HOUSE)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.OPPICETEL.name()).or(building.type.eq(SearchReqDto.HousingType.HOUSE.name())));
         }
         else if(housingType.contains(SearchReqDto.HousingType.APART) && housingType.contains(SearchReqDto.HousingType.HOUSE)){
             jpaQuery.where(building.type.eq(SearchReqDto.HousingType.APART.name()).or(building.type.eq(SearchReqDto.HousingType.HOUSE.name())));
@@ -86,8 +86,8 @@ public class BuildingRepositoryImpl extends QuerydslRepositorySupport implements
         else if(housingType.contains(SearchReqDto.HousingType.APART)){
             jpaQuery.where(building.type.eq(SearchReqDto.HousingType.APART.name()));
         }
-        else if(housingType.contains(SearchReqDto.HousingType.OPISTEL)){
-            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.OPISTEL.name()));
+        else if(housingType.contains(SearchReqDto.HousingType.OPPICETEL)){
+            jpaQuery.where(building.type.eq(SearchReqDto.HousingType.OPPICETEL.name()));
         }
         else if(housingType.contains(SearchReqDto.HousingType.HOUSE)){
             jpaQuery.where(building.type.eq(SearchReqDto.HousingType.HOUSE.name()));

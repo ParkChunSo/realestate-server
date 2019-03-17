@@ -1,19 +1,21 @@
 package kr.ac.skuniv.realestate.domain.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Getter @Setter
+@Getter @Setter @ToString @AllArgsConstructor
 public class SearchTmpDto {
     private Long buildingNo;
 
-    private String city;
+    private int city;
 
-    private String groop;
+    private int groop;
 
     private String dong;
 
@@ -31,7 +33,7 @@ public class SearchTmpDto {
 
     private String constructYear;
 
-    private Double price;
+    private String price;
 
     private Double monthly;
 
@@ -42,7 +44,7 @@ public class SearchTmpDto {
     private BigDecimal longitude;
 
     @QueryProjection
-    public SearchTmpDto(Long buildingNo, String city, String groop, String dong, String name, Double area, int floor, String housingType, String buildingNum, String constructYear, Double price,  Date date, BigDecimal latitude, BigDecimal longitude){
+    public SearchTmpDto(Long buildingNo, int city, int groop, String dong, String name, Double area, int floor, String housingType, String buildingNum, String constructYear, String price,  Date date, BigDecimal latitude, BigDecimal longitude){
         this.buildingNo = buildingNo;
         this.city = city;
         this.groop = groop;

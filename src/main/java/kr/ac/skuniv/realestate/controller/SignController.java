@@ -5,6 +5,7 @@ import kr.ac.skuniv.realestate.domain.MemberRole;
 import kr.ac.skuniv.realestate.domain.dto.SignInDto;
 import kr.ac.skuniv.realestate.domain.dto.SignupDto;
 import kr.ac.skuniv.realestate.service.SignService;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,20 +30,26 @@ public class SignController {
     }
 
     @ApiOperation("로그인")
-    @PostMapping
+    @PostMapping()
     public String signIn(@RequestBody SignInDto signInDto) {
         return signService.signInMember(signInDto);
     }
 
     @ApiOperation("사용자 정보 수정")
-    @PutMapping
+    @PutMapping()
     public void updateMember(@RequestBody SignupDto signupDto) {
         signService.updateMember(signupDto);
     }
 
     @ApiOperation("사용자 정보 삭제")
-    @DeleteMapping
+    @DeleteMapping()
     public void deleteMember(@RequestBody SignInDto signInDto) {
         signService.deleteMember(signInDto);
+    }
+
+    @Secured("USER")
+    @GetMapping("/test")
+    public String test(){
+        return "Success login";
     }
 }

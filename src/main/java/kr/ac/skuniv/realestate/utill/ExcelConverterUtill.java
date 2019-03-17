@@ -20,8 +20,8 @@ import java.util.Set;
 @Component
 @Slf4j
 public class ExcelConverterUtill {
-    private final String EXCEL_PATH_FOR_WINDOW = "C:\\realestatetest\\RegionCode.xlsx";
-    private final String EXCEL_PATH_FOR_LINUX = "home/realEstate/RegionCode.xlsx";
+    private final String EXCEL_PATH_FOR_WINDOW = "C:\\Users\\Kimyunsang\\Desktop\\spring\\RegionCode.xlsx";
+    private final String EXCEL_PATH_FOR_LINUX = "/home/ec2-user/realestate/RegionCode.xlsx";
     HashMap<String, String> regionCodeMap;
 
     public HashMap<String, String> getRegionCodeMap() {
@@ -34,9 +34,13 @@ public class ExcelConverterUtill {
         XSSFSheet sheet;
         XSSFRow row;
         XSSFCell cell;
-
-        FileInputStream fis = new FileInputStream(EXCEL_PATH_FOR_WINDOW);
-        //FileInputStream fis = new FileInputStream(EXCEL_PATH_FOR_LINUX);
+        FileInputStream fis;
+        //FileInputStream fis = new FileInputStream(EXCEL_PATH_FOR_WINDOW);
+        try {
+            fis = new FileInputStream(EXCEL_PATH_FOR_LINUX);
+        } catch (Exception e){
+            fis = new FileInputStream(EXCEL_PATH_FOR_WINDOW);
+        }
         workbook = new XSSFWorkbook(fis);
         int rowIndex = 0;
         int columnIndex = 0;
@@ -53,6 +57,8 @@ public class ExcelConverterUtill {
             }
             regionCodeMap.put(regionName, regionCode);
         }
+        System.out.println("===================" + mySet.size());
+
 
 //        int rows = sheet.getPhysicalNumberOfRows();
 //        for(rowIndex = 0; rowIndex< rows; rowIndex++){

@@ -1,6 +1,7 @@
 package kr.ac.skuniv.realestate.aop;
 
 import kr.ac.skuniv.realestate.exception.UserDefineException;
+import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -98,9 +99,9 @@ public class AspectException {
             region = paramValues[0].toString() + paramValues[1].toString() + paramValues[2].toString();
         }
 
-        if (!regionCodeHashmap.containsKey(region)) {
-            throw new UserDefineException("찾을 수 없는 URL 파라미터");
-        }
+//        if (!regionCodeHashmap.containsKey(region)) {
+//            throw new UserDefineException("찾을 수 없는 URL 파라미터");
+//        }
 
         try {
             result = proceedingJoinPoint.proceed();
@@ -108,18 +109,6 @@ public class AspectException {
             throw new UserDefineException("찾을수 없는 URL 파라미터", e.toString(), e.getStackTrace()[0].getMethodName());
         }
 
-        return result;
-    }
-
-    @Around("@annotation(AspectExceptionAnnotation)")
-    private Object aroundQueryDslException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Object result;
-        try {
-            result = proceedingJoinPoint.proceed();
-        } catch (Exception e) {
-            String exceptionMethod = e.getStackTrace()[0].getMethodName();
-            throw new UserDefineException("QueryDsl 쿼리 오류 ", e.toString(), exceptionMethod);
-        }
         return result;
     }
 }
