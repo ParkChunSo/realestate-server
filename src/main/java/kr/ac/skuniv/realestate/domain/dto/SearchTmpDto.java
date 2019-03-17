@@ -33,7 +33,7 @@ public class SearchTmpDto {
 
     private String constructYear;
 
-    private String price;
+    private Double price;
 
     private Double monthly;
 
@@ -44,7 +44,7 @@ public class SearchTmpDto {
     private BigDecimal longitude;
 
     @QueryProjection
-    public SearchTmpDto(Long buildingNo, int city, int groop, String dong, String name, Double area, int floor, String housingType, String buildingNum, String constructYear, String price,  Date date, BigDecimal latitude, BigDecimal longitude){
+    public SearchTmpDto(Long buildingNo, int city, int groop, String dong, String name, Double area, int floor, String housingType, String buildingNum, String constructYear, Double price,  Date date, BigDecimal latitude, BigDecimal longitude){
         this.buildingNo = buildingNo;
         this.city = city;
         this.groop = groop;

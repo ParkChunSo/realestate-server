@@ -22,7 +22,7 @@ public class RentDate {
     private Date date;
 
     @Column(name = "guarantee_price")
-    private String guaranteePrice;
+    private Double guaranteePrice;
 
     @Column(name = "monthly_price")
     private Double monthlyPrice;
