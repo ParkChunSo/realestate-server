@@ -75,6 +75,9 @@ public class SignService implements UserDetailsService {
     public void updateMember(SignupDto signupDto){
         Member member = signRepository.findByEmail(signupDto.getEmail())
                 .orElseThrow(() -> new UserDefineException("아이디가 존재하지 않습니다."));
+        member.setName(signupDto.getName());
+        member.setEmail(signupDto.getEmail());
+        member.setEmail(passwordEncoder.encode(signupDto.getPassword()));
         signRepository.save(member);
     }
 
