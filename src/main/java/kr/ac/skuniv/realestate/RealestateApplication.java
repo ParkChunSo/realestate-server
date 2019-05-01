@@ -14,7 +14,5 @@ public class RealestateApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RealestateApplication.class, args);
-
-
     }
 }
