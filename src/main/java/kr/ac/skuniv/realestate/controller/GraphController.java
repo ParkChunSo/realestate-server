@@ -36,7 +36,7 @@ public class GraphController {
     public List<GraphDto> onlyCity(@PathVariable String city) {
         logger.info(city);
         logger.info(regionCodeRepository.findById(city).get().getValue());
-        logger.info("날짜없이 대코드 조회");
+        logger.info("날짜없이 대코드 조회==");
 //        RegionDto regionDto = RegionDto.builder()
 //                .cityCode(regionCodeRepository.findById(city).get().getValue().substring(0, 2))
 //                .regionType(RegionDto.RegionType.CITY)
