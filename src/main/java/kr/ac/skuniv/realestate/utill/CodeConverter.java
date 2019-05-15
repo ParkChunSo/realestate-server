@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CodeConverter {
 
-    private static RegionCodeRepository regionCodeRepository;
+    public static RegionCodeRepository regionCodeRepository;
 
     public static RegionDto getCityCode(String city) {
         RegionCode regionCode = regionCodeRepository.findById(city).get();
