@@ -6,6 +6,7 @@ import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.service.GraphService;
+import kr.ac.skuniv.realestate.utill.CodeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,10 @@ public class GraphController {
         logger.info(city);
         logger.info(regionCodeRepository.findById(city).get().getValue());
         logger.info("날짜없이 대코드 조회==");
-//        RegionDto regionDto = RegionDto.builder()
-//                .cityCode(regionCodeRepository.findById(city).get().getValue().substring(0, 2))
-//                .regionType(RegionDto.RegionType.CITY)
-//                .build();
-        RegionDto regionDto = graphService.convertRegionToDto(city);
-        logger.info("city===============" + regionDto.getCityCode());
+
+        //RegionDto regionDto = graphService.convertRegionToDto(city);
+        RegionDto regionDto = CodeConverter.getCityCode(city);
+
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();

@@ -103,9 +103,9 @@ public class GraphService {
     }
 
     public List<GraphDto> getGraphDtoByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto) {
-        List<GraphTmpDto> bargainDateGraphTmpDtos = new ArrayList<>();
-        List<GraphTmpDto> charterDateGraphTmpDtos = new ArrayList<>();
-        List<GraphTmpDto> rentDateGraphTmpDtos = new ArrayList<>();
+        List<GraphTmpDto> bargainDateGraphTmpDtos;
+        List<GraphTmpDto> charterDateGraphTmpDtos;
+        List<GraphTmpDto> rentDateGraphTmpDtos;
 
         bargainDateGraphTmpDtos = bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
         charterDateGraphTmpDtos = charterDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
