@@ -8,6 +8,7 @@ import kr.ac.skuniv.realestate.repository.BargainDateRepository;
 import kr.ac.skuniv.realestate.repository.CharterDateRepository;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.repository.RentDateRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class GraphService {
     private Logger logger = LoggerFactory.getLogger(GraphService.class);
     private final BargainDateRepository bargainDateRepository;
@@ -26,13 +28,13 @@ public class GraphService {
     private final RegionCodeRepository regionCodeRepository;
     //private HashMap<String, String> regionCodeHashmap;
 
-    public GraphService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository
-            ,RegionCodeRepository regionCodeRepository) {
-        this.bargainDateRepository = bargainDateRepository;
-        this.charterDateRepository = charterDateRepository;
-        this.rentDateRepository = rentDateRepository;
-        this.regionCodeRepository= regionCodeRepository;
-    }
+//    public GraphService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository
+//            ,RegionCodeRepository regionCodeRepository) {
+//        this.bargainDateRepository = bargainDateRepository;
+//        this.charterDateRepository = charterDateRepository;
+//        this.rentDateRepository = rentDateRepository;
+//        this.regionCodeRepository= regionCodeRepository;
+//    }
 
 //    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
 //        this.regionCodeHashmap = regionCodeHashmap;
@@ -42,53 +44,53 @@ public class GraphService {
         return getGraphDtoByRegionDtoAndDateDto(regionDto, dateDto);
     }
 
-    public RegionDto convertRegionToDto(String city) {
-        /*return RegionDto.builder()
-                .cityCode(regionCodeHashmap.get(city).substring(0, 2))
-                .regionType(RegionDto.RegionType.CITY)
-                .build();*/
-
-        logger.info("convert region to dto");
-        return  RegionDto.builder()
-                .cityCode(Integer.valueOf(regionCodeRepository.findById(city).get().getValue().substring(0, 2)))
-                .regionType(RegionDto.RegionType.CITY)
-                .build();
-
-        //return regionDto;
-    }
-
-    public RegionDto convertRegionToDto(String city, String district) {
-        /*return RegionDto.builder()
-                .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
-                .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
-                .regionType(RegionDto.RegionType.DISTRICT)
-                .build();*/
-        String code = regionCodeRepository.findById(city + district).get().getValue();
-        RegionDto regionDto = RegionDto.builder()
-                .cityCode(Integer.valueOf(code.substring(0, 2)))
-                .groopCode(Integer.valueOf(code.substring(2, 5)))
-                .regionType(RegionDto.RegionType.DISTRICT)
-                .build();
-        return regionDto;
-    }
-
-    public RegionDto convertRegionToDto(String city, String district, String neighborhood) {
-        /*return RegionDto.builder()
-                .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
-                .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
-                .dongName(neighborhood)
-                .regionType(RegionDto.RegionType.NEIGHBORHOOD)
-                .build();*/
-
-        String code = regionCodeRepository.findById(city + district).get().getValue();
-        RegionDto regionDto = RegionDto.builder()
-                .cityCode(Integer.valueOf(code.substring(0, 2)))
-                .groopCode(Integer.valueOf(code.substring(2, 5)))
-                .dongName(neighborhood)
-                .regionType(RegionDto.RegionType.NEIGHBORHOOD)
-                .build();
-        return regionDto;
-    }
+//    public RegionDto convertRegionToDto(String city) {
+//        /*return RegionDto.builder()
+//                .cityCode(regionCodeHashmap.get(city).substring(0, 2))
+//                .regionType(RegionDto.RegionType.CITY)
+//                .build();*/
+//
+//        logger.info("convert region to dto");
+//        return  RegionDto.builder()
+//                .cityCode(Integer.valueOf(regionCodeRepository.findById(city).get().getValue().substring(0, 2)))
+//                .regionType(RegionDto.RegionType.CITY)
+//                .build();
+//
+//        //return regionDto;
+//    }
+//
+//    public RegionDto convertRegionToDto(String city, String district) {
+//        /*return RegionDto.builder()
+//                .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
+//                .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
+//                .regionType(RegionDto.RegionType.DISTRICT)
+//                .build();*/
+//        String code = regionCodeRepository.findById(city + district).get().getValue();
+//        RegionDto regionDto = RegionDto.builder()
+//                .cityCode(Integer.valueOf(code.substring(0, 2)))
+//                .groopCode(Integer.valueOf(code.substring(2, 5)))
+//                .regionType(RegionDto.RegionType.DISTRICT)
+//                .build();
+//        return regionDto;
+//    }
+//
+//    public RegionDto convertRegionToDto(String city, String district, String neighborhood) {
+//        /*return RegionDto.builder()
+//                .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
+//                .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
+//                .dongName(neighborhood)
+//                .regionType(RegionDto.RegionType.NEIGHBORHOOD)
+//                .build();*/
+//
+//        String code = regionCodeRepository.findById(city + district).get().getValue();
+//        RegionDto regionDto = RegionDto.builder()
+//                .cityCode(Integer.valueOf(code.substring(0, 2)))
+//                .groopCode(Integer.valueOf(code.substring(2, 5)))
+//                .dongName(neighborhood)
+//                .regionType(RegionDto.RegionType.NEIGHBORHOOD)
+//                .build();
+//        return regionDto;
+//    }
 
     public DateDto convertDateToDto(String date) {
         String[] splitDate = date.split("-");
@@ -103,13 +105,9 @@ public class GraphService {
     }
 
     public List<GraphDto> getGraphDtoByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto) {
-        List<GraphTmpDto> bargainDateGraphTmpDtos;
-        List<GraphTmpDto> charterDateGraphTmpDtos;
-        List<GraphTmpDto> rentDateGraphTmpDtos;
-
-        bargainDateGraphTmpDtos = bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
-        charterDateGraphTmpDtos = charterDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
-        rentDateGraphTmpDtos = rentDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
+        List<GraphTmpDto> bargainDateGraphTmpDtos = bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
+        List<GraphTmpDto> charterDateGraphTmpDtos = charterDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
+        List<GraphTmpDto> rentDateGraphTmpDtos = rentDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
 
         return mergeGraphTmpDtosToGraphDtos(bargainDateGraphTmpDtos, charterDateGraphTmpDtos, rentDateGraphTmpDtos);
     }
@@ -118,7 +116,7 @@ public class GraphService {
         List<GraphDto> bargainDateGraphDtos = new ArrayList<>();
         List<GraphDto> charterDateGraphDtos = new ArrayList<>();
         List<GraphDto> rentDateGraphDtos = new ArrayList<>();
-        List<GraphDto> graphDtos = new ArrayList<>();
+        List<GraphDto> graphDtos;
 
         bargainDateGraphDtos = bargainDateGraphTmpDtos.size() > 0 ? setDealTypeOnGraphTmpDtos(bargainDateGraphTmpDtos, "매매") : bargainDateGraphDtos;
         charterDateGraphDtos = charterDateGraphTmpDtos.size() > 0 ? setDealTypeOnGraphTmpDtos(charterDateGraphTmpDtos, "전세") : charterDateGraphDtos;
