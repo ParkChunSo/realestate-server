@@ -35,10 +35,11 @@ public class GraphTmpDto {
 
     @Override
     public String toString() {
-        return "GraphTmpDto{" +
-                "housingType='" + housingType + '\'' +
-                ", date=" + date +
-                ", average=" + average +
-                '}';
+        return "\nGraphTmpDto{" +
+                "\n housingType = '" + housingType + '\'' +
+                ", \ndate = " + date +
+                ", \ndealType = " + dealType +
+                ", \naverage = " + average +
+                "}\n";
     }
 }

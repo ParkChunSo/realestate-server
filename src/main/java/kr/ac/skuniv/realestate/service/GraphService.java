@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,73 +24,20 @@ public class GraphService {
     private final BargainDateRepository bargainDateRepository;
     private final CharterDateRepository charterDateRepository;
     private final RentDateRepository rentDateRepository;
-    private final RegionCodeRepository regionCodeRepository;
-    //private HashMap<String, String> regionCodeHashmap;
 
-//    public GraphService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository
-//            ,RegionCodeRepository regionCodeRepository) {
-//        this.bargainDateRepository = bargainDateRepository;
-//        this.charterDateRepository = charterDateRepository;
-//        this.rentDateRepository = rentDateRepository;
-//        this.regionCodeRepository= regionCodeRepository;
-//    }
-
-//    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
-//        this.regionCodeHashmap = regionCodeHashmap;
-//    }
-
+    /*  그래프 디티오 조회 */
     public List<GraphDto> getGraphDtos(RegionDto regionDto, DateDto dateDto) {
-        return getGraphDtoByRegionDtoAndDateDto(regionDto, dateDto);
+
+        Map<String, List<GraphTmpDto>> graphTmpDtoMap = getGraphTmpDtoMap(regionDto, dateDto); // 디비 조회 후 맵 형식 변환
+
+        graphTmpDtoMap = setDealTypeOnGraphTmpDtoList(graphTmpDtoMap);  // 그래프 템프 디티오에 딜타입 지정
+
+        List<GraphDto> graphDtoList = mergeGraphTmpDtoListToGraphDtoList(graphTmpDtoMap);  // 실제 반환 할 디티오로 변환
+
+        return graphDtoList;
     }
 
-//    public RegionDto convertRegionToDto(String city) {
-//        /*return RegionDto.builder()
-//                .cityCode(regionCodeHashmap.get(city).substring(0, 2))
-//                .regionType(RegionDto.RegionType.CITY)
-//                .build();*/
-//
-//        logger.info("convert region to dto");
-//        return  RegionDto.builder()
-//                .cityCode(Integer.valueOf(regionCodeRepository.findById(city).get().getValue().substring(0, 2)))
-//                .regionType(RegionDto.RegionType.CITY)
-//                .build();
-//
-//        //return regionDto;
-//    }
-//
-//    public RegionDto convertRegionToDto(String city, String district) {
-//        /*return RegionDto.builder()
-//                .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
-//                .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
-//                .regionType(RegionDto.RegionType.DISTRICT)
-//                .build();*/
-//        String code = regionCodeRepository.findById(city + district).get().getValue();
-//        RegionDto regionDto = RegionDto.builder()
-//                .cityCode(Integer.valueOf(code.substring(0, 2)))
-//                .groopCode(Integer.valueOf(code.substring(2, 5)))
-//                .regionType(RegionDto.RegionType.DISTRICT)
-//                .build();
-//        return regionDto;
-//    }
-//
-//    public RegionDto convertRegionToDto(String city, String district, String neighborhood) {
-//        /*return RegionDto.builder()
-//                .cityCode(regionCodeHashmap.get(city + distict).substring(0, 2))
-//                .groopCode(regionCodeHashmap.get(city + distict).substring(2, 5))
-//                .dongName(neighborhood)
-//                .regionType(RegionDto.RegionType.NEIGHBORHOOD)
-//                .build();*/
-//
-//        String code = regionCodeRepository.findById(city + district).get().getValue();
-//        RegionDto regionDto = RegionDto.builder()
-//                .cityCode(Integer.valueOf(code.substring(0, 2)))
-//                .groopCode(Integer.valueOf(code.substring(2, 5)))
-//                .dongName(neighborhood)
-//                .regionType(RegionDto.RegionType.NEIGHBORHOOD)
-//                .build();
-//        return regionDto;
-//    }
-
+    /* 날짜를 날짜 디티오로 변경 */
     public DateDto convertDateToDto(String date) {
         String[] splitDate = date.split("-");
         DateDto dateDto = null;
@@ -102,112 +48,95 @@ public class GraphService {
             dateDto = new DateDto(LocalDate.of(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]), 1), DateDto.DateType.DAY);
         }
         return dateDto;
+
     }
 
-    public List<GraphDto> getGraphDtoByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto) {
-        List<GraphTmpDto> bargainDateGraphTmpDtos = bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
-        List<GraphTmpDto> charterDateGraphTmpDtos = charterDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
-        List<GraphTmpDto> rentDateGraphTmpDtos = rentDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
+    /* 디비 조회 후 그래프 템프 디티오 맵 가져오기 */
+    public Map<String, List<GraphTmpDto>> getGraphTmpDtoMap(RegionDto regionDto, DateDto dateDto) {
+        Map<String, List<GraphTmpDto>> graphTmpDtoMap = new HashMap<>();
 
-        return mergeGraphTmpDtosToGraphDtos(bargainDateGraphTmpDtos, charterDateGraphTmpDtos, rentDateGraphTmpDtos);
+        graphTmpDtoMap.put("bargain", bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto));
+        graphTmpDtoMap.put("charter", charterDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto));
+        graphTmpDtoMap.put("rent", rentDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto));
+
+        return graphTmpDtoMap;
     }
 
-    public List<GraphDto> mergeGraphTmpDtosToGraphDtos(List<GraphTmpDto> bargainDateGraphTmpDtos, List<GraphTmpDto> charterDateGraphTmpDtos, List<GraphTmpDto> rentDateGraphTmpDtos) {
-        List<GraphDto> bargainDateGraphDtos = new ArrayList<>();
-        List<GraphDto> charterDateGraphDtos = new ArrayList<>();
-        List<GraphDto> rentDateGraphDtos = new ArrayList<>();
-        List<GraphDto> graphDtos;
+    /* 그래프 템프 디티오 맵에 딜타입 지정 */
+    public Map<String, List<GraphTmpDto>> setDealTypeOnGraphTmpDtoList(Map<String, List<GraphTmpDto>> graphTmpDtoListMap) {
 
-        bargainDateGraphDtos = bargainDateGraphTmpDtos.size() > 0 ? setDealTypeOnGraphTmpDtos(bargainDateGraphTmpDtos, "매매") : bargainDateGraphDtos;
-        charterDateGraphDtos = charterDateGraphTmpDtos.size() > 0 ? setDealTypeOnGraphTmpDtos(charterDateGraphTmpDtos, "전세") : charterDateGraphDtos;
-        rentDateGraphDtos = rentDateGraphTmpDtos.size() > 0 ? setDealTypeOnGraphTmpDtos(rentDateGraphTmpDtos, "월세") : rentDateGraphDtos;
+        Set<String> keySet = graphTmpDtoListMap.keySet();
 
-        graphDtos = ListUtils.union(bargainDateGraphDtos, charterDateGraphDtos);
-        graphDtos = ListUtils.union(graphDtos, rentDateGraphDtos);
-        return graphDtos;
+        keySet.forEach(key -> {
+            graphTmpDtoListMap.put(key, setDealType(graphTmpDtoListMap.get(key), key));
+        });
+
+        return graphTmpDtoListMap;
     }
 
-    public List<GraphDto> setDealTypeOnGraphTmpDtos(List<GraphTmpDto> graphTmpDtos, String dealType) {
+    /* 그래프 템프 디티오에 딜타입 지정 */
+    public List<GraphTmpDto> setDealType(List<GraphTmpDto> graphTmpDtoList, String key) {
 
-        for (GraphTmpDto graphTmpDto : graphTmpDtos) {
+        String dealType = "";
+
+        switch (key){
+            case "bargain" :
+                dealType =  "매매";
+                break;
+            case "charter" :
+                dealType =  "전세";
+                break;
+            case "rent" :
+                dealType = "월세";
+                break;
+        }
+
+        for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
             graphTmpDto.setDealType(dealType);
         }
 
-        return convertGraphTmpDtosToGraphDtos(graphTmpDtos);
+        return graphTmpDtoList;
     }
 
-    public List<GraphDto> convertGraphTmpDtosToGraphDtos(List<GraphTmpDto> graphTmpDtos) {
-        List<GraphDto> graphDtos = new ArrayList<>();
-        String dealType = graphTmpDtos.get(0).getDealType();
-        String housingType = graphTmpDtos.get(0).getHousingType();
-        ArrayList<Double> arrayList = new ArrayList<>();
+    /* 그래프 템프 디티오를 그래프 디티오로 변경 후 하나의 리스트로 합침 */
+    public List<GraphDto> mergeGraphTmpDtoListToGraphDtoList(Map<String, List<GraphTmpDto>> graphTmpDtoMap) {
 
-        for (GraphTmpDto graphTmpDto : graphTmpDtos) {
+        List<GraphDto> graphDtoList = new ArrayList<>();
+
+        Set<String> keySet = graphTmpDtoMap.keySet();
+
+        for (String s : keySet) {
+            graphDtoList.addAll(convertGraphTmpDtoListToGraphDtoList(graphTmpDtoMap.get(s)));
+        }
+
+        return graphDtoList;
+    }
+
+    /* 그래프 템프 디티오를 그래프 디티오로 변경 */
+    public List<GraphDto> convertGraphTmpDtoListToGraphDtoList(List<GraphTmpDto> graphTmpDtoList) {
+
+        if(graphTmpDtoList.size() <= 0){
+            return new ArrayList<>();
+        }
+
+        List<GraphDto> graphDtoList = new ArrayList<>();
+        String dealType = graphTmpDtoList.get(0).getDealType();
+        String housingType = graphTmpDtoList.get(0).getHousingType();
+        ArrayList<Double> averageList = new ArrayList<>();
+
+        for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
             if (dealType.equals(graphTmpDto.getDealType()) && housingType.equals(graphTmpDto.getHousingType())) {
-                arrayList.add(graphTmpDto.getAverage());
+                averageList.add(graphTmpDto.getAverage());
             } else {
-                graphDtos.add(GraphDto.builder().dealType(dealType).housingType(housingType).average(arrayList).build());
-                arrayList = new ArrayList<>();
+                graphDtoList.add(GraphDto.builder().dealType(dealType).housingType(housingType).average(averageList).build());
+                averageList = new ArrayList<>();
                 dealType = graphTmpDto.getDealType();
                 housingType = graphTmpDto.getHousingType();
-                arrayList.add(graphTmpDto.getAverage());
+                averageList.add(graphTmpDto.getAverage());
             }
         }
 
-        graphDtos.add(GraphDto.builder().dealType(dealType).housingType(housingType).average(arrayList).build());
-        return graphDtos;
+        graphDtoList.add(GraphDto.builder().dealType(dealType).housingType(housingType).average(averageList).build());
+        return graphDtoList;
     }
-    /*public List<MapDto> getMapDtoByRegion(String regionName, String regionUnit) {
-        List<MapDto> mapDtos;
-
-        try {
-            String regionCode = convertRegionCodeToDbCode(regionName, regionUnit);
-            List<Object[]> objects = forsaleRepository.getMapDtoByRegion(regionCode);
-            mapDtos = convertObjectToMapDto(objects);
-        } catch (Exception e) {
-            throw new UserDefineException("MapDto DB오류입니다", e.getCause());
-        }
-        return mapDtos.size() > 0 ? mapDtos : null;
-    }
-
-    public List<MapDto> getMapDtoByRegionCity(String regionName, String regionUnit) {
-        List<MapDto> mapDtos;
-
-        try {
-            String regionCode = convertRegionCodeToDbCode(regionName, regionUnit);
-            List<Object[]> objects = forsaleRepository.getMapDtoByRegionCity(regionCode);
-            mapDtos = convertObjectToMapDto(objects);
-        } catch (Exception e) {
-            throw new UserDefineException("MapDto DB오류입니다", e.getCause());
-        }
-        return mapDtos.size() > 0 ? mapDtos : null;
-    }
-
-    private String convertRegionCodeToDbCode(String regionCode, String regionUnit) {
-        switch (regionUnit) {
-            case "city":
-                regionCode = regionCode.substring(2);
-                break;
-            case "district":
-                regionCode = regionCode.substring(0, 2);
-                break;
-            case "dongName":
-                regionCode = regionCode.substring(0, 5);
-                break;
-        }
-        return regionCode;
-    }
-
-    private List<MapDto> convertObjectToMapDto(List<Object[]> resultList) {
-        List<MapDto> mapDtos;
-
-        try {
-            mapDtos = resultList.stream().map(mapDto -> new MapDto((String) mapDto[0], (int) mapDto[1], (long) mapDto[2])).collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new UserDefineException("MapDto 변환 오류입니다", e.getCause());
-        }
-        return mapDtos;
-    }
-*/
-
 }

@@ -35,10 +35,6 @@ public class GraphController {
     @ApiOperation("날짜없이 대코드 조회")
     @GetMapping("/city/{city}")
     public List<GraphDto> onlyCity(@PathVariable String city) {
-        logger.info(city);
-        logger.info(regionCodeRepository.findById(city).get().getValue());
-        logger.info("날짜없이 대코드 조회==");
-
         //RegionDto regionDto = graphService.convertRegionToDto(city);
         RegionDto regionDto = RegionCodeConverter.getCityCode(city);
 
