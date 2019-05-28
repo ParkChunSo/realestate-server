@@ -53,6 +53,7 @@ public class GraphController {
         DateDto dateDto = graphService.convertDateToDto(date);
 
         return graphService.getGraphDtos(regionDto, dateDto);
+
     }
 
     @ApiOperation("날짜없이 대코드 중코드 조회")
