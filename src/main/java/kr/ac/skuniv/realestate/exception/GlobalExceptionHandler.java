@@ -37,6 +37,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.info("Cause : " + e.getCause());
         logger.info("======================================");
 
+        e.printStackTrace();
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Explanation", "RealEstate Service");
 
@@ -61,6 +63,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.info("Cause : " + e.getCause());
         logger.info("======================================");
 
+        e.printStackTrace();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Explanation", "RealEstate Service");
 
