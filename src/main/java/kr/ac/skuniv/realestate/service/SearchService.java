@@ -66,7 +66,6 @@ public class SearchService {
         List<SearchTmpDto> searchTmpDtos = new ArrayList<>(currentMap.values());
 
         return searchTmpDtos;
-
     }
 
     public List<SearchTmpDto> optionFiltering(List<SearchTmpDto> searchTmpDtos, List<LocationDto> options){

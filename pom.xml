@@ -20,6 +20,7 @@
 
     <properties>
         <start-class>kr.ac.skuniv.realestate.RealestateApplication</start-class>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>

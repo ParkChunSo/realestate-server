@@ -6,6 +6,7 @@ import kr.ac.skuniv.realestate.domain.dto.GraphDto;
 import kr.ac.skuniv.realestate.domain.dto.RegionDto;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.service.GraphService;
+import kr.ac.skuniv.realestate.utill.RegionCodeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,9 @@ public class GraphController {
     @ApiOperation("날짜없이 대코드 조회")
     @GetMapping("/city/{city}")
     public List<GraphDto> onlyCity(@PathVariable String city) {
-        logger.info(city);
-        logger.info(regionCodeRepository.findById(city).get().getValue());
-//        RegionDto regionDto = RegionDto.builder()
-//                .cityCode(regionCodeRepository.findById(city).get().getValue().substring(0, 2))
-//                .regionType(RegionDto.RegionType.CITY)
-//                .build();
-        RegionDto regionDto = graphService.convertRegionToDto(city);
-        logger.info("city===============" + regionDto.getCityCode());
+        //RegionDto regionDto = graphService.convertRegionToDto(city);
+        RegionDto regionDto = RegionCodeConverter.getCityCode(city);
+
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();
@@ -52,7 +48,8 @@ public class GraphController {
     @ApiOperation("날짜와 대코드 조회")
     @GetMapping("/city/{city}/date/{date}")
     public List<GraphDto> cityAndDate(@PathVariable String city, @PathVariable String date) {
-        RegionDto regionDto = graphService.convertRegionToDto(city);
+//        RegionDto regionDto = graphService.convertRegionToDto(city);
+        RegionDto regionDto = RegionCodeConverter.getCityCode(city);
         DateDto dateDto = graphService.convertDateToDto(date);
 
         return graphService.getGraphDtos(regionDto, dateDto);
@@ -61,7 +58,8 @@ public class GraphController {
     @ApiOperation("날짜없이 대코드 중코드 조회")
     @GetMapping("/city/{city}/district/{district}")
     public List<GraphDto> cityAndDistrict(@PathVariable String city, @PathVariable String district) {
-        RegionDto regionDto = graphService.convertRegionToDto(city, district);
+//        RegionDto regionDto = graphService.convertRegionToDto(city, district);
+        RegionDto regionDto = RegionCodeConverter.getCityAndGroopCode(city, district);
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();
@@ -72,7 +70,8 @@ public class GraphController {
     @ApiOperation("날짜와 대코드 중코드 조회")
     @GetMapping("/city/{city}/district/{district}/date/{date}")
     public List<GraphDto> cityAndDistrictAndDate(@PathVariable String city, @PathVariable String district, @PathVariable String date) {
-        RegionDto regionDto = graphService.convertRegionToDto(city, district);
+//        RegionDto regionDto = graphService.convertRegionToDto(city, district);
+        RegionDto regionDto = RegionCodeConverter.getCityAndGroopCode(city, district);
         DateDto dateDto = graphService.convertDateToDto(date);
 
         return graphService.getGraphDtos(regionDto, dateDto);
@@ -81,7 +80,8 @@ public class GraphController {
     @ApiOperation("날짜없이 대코드 중코드 소코드 조회")
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}")
     public List<GraphDto> cityAndDistrictAndNeighborhood(@PathVariable String city, @PathVariable String district, @PathVariable String neighborhood) {
-        RegionDto regionDto = graphService.convertRegionToDto(city, district, neighborhood);
+//        RegionDto regionDto = graphService.convertRegionToDto(city, district, neighborhood);
+        RegionDto regionDto = RegionCodeConverter.getAllCode(city, district, neighborhood);
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();
@@ -92,7 +92,8 @@ public class GraphController {
     @ApiOperation("날짜와 대코드 중코드 소코드 조회")
     @GetMapping("/city/{city}/district/{district}/neighborhood/{neighborhood}/date/{date}")
     public List<GraphDto> cityAndDistrictAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String district, @PathVariable String neighborhood, @PathVariable String date) {
-        RegionDto regionDto = graphService.convertRegionToDto(city, district, neighborhood);
+//        RegionDto regionDto = graphService.convertRegionToDto(city, district, neighborhood);
+        RegionDto regionDto = RegionCodeConverter.getAllCode(city, district, neighborhood);
         DateDto dateDto = graphService.convertDateToDto(date);
 
         return graphService.getGraphDtos(regionDto, dateDto);
@@ -101,7 +102,8 @@ public class GraphController {
     @ApiOperation("날짜없이 대코드 소코드 조회(세종 특별시 경우)")
     @GetMapping("/city/{city}/neighborhood/{neighborhood}")
     public List<GraphDto> cityAndNeighborhood(@PathVariable String city, @PathVariable String neighborhood) {
-        RegionDto regionDto = graphService.convertRegionToDto(city, "", neighborhood);
+//        RegionDto regionDto = graphService.convertRegionToDto(city, "", neighborhood);
+        RegionDto regionDto = RegionCodeConverter.getAllCode(city, "", neighborhood);
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();
@@ -112,7 +114,8 @@ public class GraphController {
     @ApiOperation("날짜와 대코드 소코드 조회(세종 특별시 경우)")
     @GetMapping("/city/{city}/neighborhood/{neighborhood}/date/{date}")
     public List<GraphDto> cityAndNeighborhoodAndDate(@PathVariable String city, @PathVariable String neighborhood, @PathVariable String date) {
-        RegionDto regionDto = graphService.convertRegionToDto(city, "", neighborhood);
+//        RegionDto regionDto = graphService.convertRegionToDto(city, "", neighborhood);
+        RegionDto regionDto = RegionCodeConverter.getAllCode(city, "", neighborhood);
         DateDto dateDto = graphService.convertDateToDto(date);
 
         return graphService.getGraphDtos(regionDto, dateDto);

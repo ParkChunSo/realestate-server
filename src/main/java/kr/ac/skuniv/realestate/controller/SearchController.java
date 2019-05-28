@@ -24,7 +24,6 @@ public class SearchController {
         this.searchService = searchService;
     }
 
-
     @ApiOperation("매매 정보 검색")
     @PostMapping()
     public List<SearchTmpDto> searchBuilding(@RequestBody SearchReqDto searchReqDto){
