@@ -14,20 +14,20 @@ public class GraphTmpDto {
 
     private String dealType;
     private String housingType;
-    private LocalDate date;
+    private Date date;
     private Double average;
 
     public GraphTmpDto() {
     }
 
     @QueryProjection
-    public GraphTmpDto(String housingType, LocalDate date, Double average) {
+    public GraphTmpDto(String housingType, Date date, Double average) {
         this.housingType = housingType;
         this.date = date;
         this.average = average;
     }
 
-    public GraphTmpDto(String dealType, String housingType, LocalDate date, Double average) {
+    public GraphTmpDto(String dealType, String housingType, Date date, Double average) {
         this.dealType = dealType;
         this.housingType = housingType;
         this.date = date;

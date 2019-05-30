@@ -7,6 +7,7 @@ import kr.ac.skuniv.realestate.domain.dto.RegionDto;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.service.GraphService;
 import kr.ac.skuniv.realestate.utill.RegionCodeConverter;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/realestate/graph")
+
 public class GraphController {
 
-    private final GraphService graphService;
+    private GraphService graphService;
 
     public GraphController(GraphService graphService) {
         this.graphService = graphService;
@@ -38,10 +40,12 @@ public class GraphController {
         //RegionDto regionDto = graphService.convertRegionToDto(city);
         RegionDto regionDto = RegionCodeConverter.getCityCode(city);
 
+        logger.info("----region Dto " + regionDto);
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();
-
+        logger.info("----dateDto  " + dateDto);
+        logger.info("----graphService  " + graphService);
         return graphService.getGraphDtos(regionDto, dateDto);
     }
 
