@@ -7,6 +7,7 @@ import kr.ac.skuniv.realestate.domain.dto.*;
 import kr.ac.skuniv.realestate.domain.entity.QBuilding;
 import kr.ac.skuniv.realestate.domain.entity.RentDate;
 import kr.ac.skuniv.realestate.repository.custom.RentDateRepositoryCustom;
+import lombok.extern.java.Log;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import static kr.ac.skuniv.realestate.domain.entity.QRentDate.rentDate;
 
 @SuppressWarnings("Duplicates")
 @Component
+@Log
 public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements RentDateRepositoryCustom {
 
     @PersistenceContext
