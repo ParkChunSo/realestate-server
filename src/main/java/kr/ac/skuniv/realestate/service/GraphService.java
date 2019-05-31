@@ -7,14 +7,11 @@ import kr.ac.skuniv.realestate.domain.dto.RegionDto;
 import kr.ac.skuniv.realestate.repository.BargainDateRepository;
 import kr.ac.skuniv.realestate.repository.CharterDateRepository;
 import kr.ac.skuniv.realestate.repository.RentDateRepository;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -24,6 +21,7 @@ public class GraphService {
     private final BargainDateRepository bargainDateRepository;
     private final CharterDateRepository charterDateRepository;
     private final RentDateRepository rentDateRepository;
+    private static final List<String> HOUSING_TYPE = Arrays.asList("apart", "officetel", "house");
 
     public GraphService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository) {
         this.bargainDateRepository = bargainDateRepository;
@@ -35,11 +33,11 @@ public class GraphService {
     public List<GraphDto> getGraphDtos(RegionDto regionDto, DateDto dateDto) {
 
         Map<String, List<GraphTmpDto>> graphTmpDtoMap = getGraphTmpDtoMap(regionDto, dateDto); // 디비 조회 후 맵 형식 변환
-        logger.info("---------------------------1");
+
         graphTmpDtoMap = setDealTypeOnGraphTmpDtoList(graphTmpDtoMap);  // 그래프 템프 디티오에 딜타입 지정
-        logger.info("---------------------------2");
+
         List<GraphDto> graphDtoList = mergeGraphTmpDtoListToGraphDtoList(graphTmpDtoMap, dateDto);  // 실제 반환 할 디티오로 변환
-        logger.info("---------------------------3");
+
         return graphDtoList;
     }
 
@@ -58,7 +56,7 @@ public class GraphService {
     }
 
     /* 디비 조회 후 그래프 템프 디티오 맵 가져오기 */
-    public Map<String, List<GraphTmpDto>> getGraphTmpDtoMap(RegionDto regionDto, DateDto dateDto) {
+    private Map<String, List<GraphTmpDto>> getGraphTmpDtoMap(RegionDto regionDto, DateDto dateDto) {
         Map<String, List<GraphTmpDto>> graphTmpDtoMap = new HashMap<>();
 
         List<GraphTmpDto> bargainDateGraphTmpDtos = bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
@@ -72,40 +70,39 @@ public class GraphService {
         return graphTmpDtoMap;
     }
 
-    /* 그래프 템프 디티오 맵에 딜타입 지정 */
-    public Map<String, List<GraphTmpDto>> setDealTypeOnGraphTmpDtoList(Map<String, List<GraphTmpDto>> graphTmpDtoListMap) {
+    /* 그래프 템프 디티오 맵에 거래 타입 지정 */
+    private Map<String, List<GraphTmpDto>> setDealTypeOnGraphTmpDtoList(Map<String, List<GraphTmpDto>> graphTmpDtoListMap) {
 
         Set<String> keySet = graphTmpDtoListMap.keySet();
 
         keySet.forEach(key -> {
-            graphTmpDtoListMap.put(key, setDealType(graphTmpDtoListMap.get(key), key));
+            graphTmpDtoListMap.put(key, setDealType(graphTmpDtoListMap.get(key), key)); // 거래 타입 지정 후 저장
         });
 
-        return graphTmpDtoListMap;
+        return graphTmpDtoListMap; // 거래 타입 지정 된 맵 반환
     }
 
-    /* 그래프 템프 디티오에 딜타입 지정 */
-    public List<GraphTmpDto> setDealType(List<GraphTmpDto> graphTmpDtoList, String key) {
+    /* 그래프 템프 디티오에 거래 타입 지정 */
+    private List<GraphTmpDto> setDealType(List<GraphTmpDto> graphTmpDtoList, String key) {
 
         String dealType = key;
 
         for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
-            graphTmpDto.setDealType(dealType);
+            graphTmpDto.setDealType(dealType);  // 그래프 템프 디티오에 거래 타입 지정
         }
 
         return graphTmpDtoList;
     }
 
     /* 그래프 템프 디티오를 그래프 디티오로 변경 후 하나의 리스트로 합침 */
-    public List<GraphDto> mergeGraphTmpDtoListToGraphDtoList(Map<String, List<GraphTmpDto>> graphTmpDtoMap, DateDto dateDto) {
+    private List<GraphDto> mergeGraphTmpDtoListToGraphDtoList(Map<String, List<GraphTmpDto>> graphTmpDtoMap, DateDto dateDto) {
 
         List<GraphDto> graphDtoList = new ArrayList<>();
 
         Set<String> keySet = graphTmpDtoMap.keySet();
 
         for (String s : keySet) {
-            logger.info(s);
-            graphDtoList.addAll(convertGraphTmpDtoListToGraphDtoList(graphTmpDtoMap.get(s), s, dateDto));
+            graphDtoList.addAll(convertGraphTmpDtoListToGraphDtoList(graphTmpDtoMap.get(s), s, dateDto)); // 그래프 템프 -> 그래프 디티오로 변환 후 저장
         }
 
         return graphDtoList;
@@ -118,59 +115,36 @@ public class GraphService {
             return emptyGraphDtoList(deal);
         }
 
-        Map<String, List<GraphTmpDto>> separateHousingTypeMap = separateHousingType(graphTmpDtoList);
+        Map<String, List<GraphTmpDto>> separateHousingTypeMap = separateHousingType(graphTmpDtoList); // 하우징 타입 별로 구분
 
         Set<String> keySet = separateHousingTypeMap.keySet();
 
         List<GraphDto> graphDtoList = new ArrayList<>();
+
         for (String s : keySet) {
-            logger.info("convertGraphTmpDtoListToGraphDtoList in for ");
-            GraphDto graphDto = null;
-            if(separateHousingTypeMap.get(s).size() <= 0 ){
-                graphDtoList.add(GraphDto.builder().dealType(deal).housingType(s).average(null).build());
-                continue;
-            }
-            switch (dateDto.getDateType()) {
-                case YEAR:
-                    graphDto = setAverageListYear(separateHousingTypeMap.get(s));
-                    break;
-                case MONTH:
-                    graphDto = setAverageListMonth(separateHousingTypeMap.get(s));
-                    break;
-                case DAY:
-                    graphDto = setAverageListDay(separateHousingTypeMap.get(s));
-                    break;
-            }
-            graphDtoList.add(graphDto);
+            graphDtoList.add(addGraphDto(separateHousingTypeMap.get(s), deal, s, dateDto)); // 하우징 타입 별로 구분 후 날짜 형식에 따라 디티오 변환 후 추가
         }
 
         return graphDtoList;
     }
 
+    /* 빈 그래프 디티오 가져오기 */
     public List<GraphDto> emptyGraphDtoList(String dealType){
-
-        logger.info("emptyGraphDtoList-------");
-
         List<GraphDto> emptyGraphDtoList = new ArrayList<>();
 
-        List<String> housingTypes = Arrays.asList("apart", "officetel", "house");
-
-        for (String housingType : housingTypes) {
+        for (String housingType : HOUSING_TYPE) {
             emptyGraphDtoList.add(GraphDto.builder().dealType(dealType).housingType(housingType).average(null).build());
         }
 
         return emptyGraphDtoList;
     }
 
+    /* 하우징 타입 별로 구분 후 맵 으로 반환 */
     public Map<String, List<GraphTmpDto>> separateHousingType(List<GraphTmpDto> graphTmpDtoList){
-
-        logger.info("separateHousingType-------");
 
         Map<String, List<GraphTmpDto>> separateHousingTypeMap = new HashMap<>();
 
-        List<String> housingTypes = Arrays.asList("apart", "officetel", "house");
-
-        for (String housingType : housingTypes) {
+        for (String housingType : HOUSING_TYPE) {
             separateHousingTypeMap.put(housingType, new ArrayList<>());
         }
 
@@ -179,88 +153,47 @@ public class GraphService {
             arr.add(graphTmpDto);
             separateHousingTypeMap.put(graphTmpDto.getHousingType(), arr);
         }
-
         return separateHousingTypeMap;
     }
 
+    /* 연도 별 일 경우에 평균 값 리스트 반환 */
     public GraphDto setAverageListYear(List<GraphTmpDto> graphTmpDtoList) {
-
-        logger.info("setAverageListYear-------");
-
-        if(graphTmpDtoList.size() <= 0){
-            return GraphDto.builder().housingType(graphTmpDtoList.get(0).getHousingType()).dealType(graphTmpDtoList.get(0).getDealType()).
-                    average(null).build();
-        }
-
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(graphTmpDtoList.get(0).getDate());
-
-        int firstYear = calendar.get(Calendar.YEAR);
+        int prevYear = getDate(graphTmpDtoList.get(0), Calendar.YEAR);
         List<Double> averageList = new ArrayList<>();
 
         for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
-            Calendar calendar2 = new GregorianCalendar();
-            calendar2.setTime(graphTmpDto.getDate());
-
-             int currentYear = calendar.get(Calendar.YEAR);
-             if(currentYear == firstYear) {
-                 averageList.add(graphTmpDto.getAverage());
-             } else {
-                 averageList.add(null);
-             }
-             firstYear++;
+            int currentYear = getDate(graphTmpDto, Calendar.YEAR);
+            if(currentYear == prevYear) {
+                averageList.add(graphTmpDto.getAverage());
+            } else {
+                averageList.add(null);
+            }
+            prevYear++;
         }
 
         return GraphDto.builder().housingType(graphTmpDtoList.get(0).getHousingType()).dealType(graphTmpDtoList.get(0).getDealType()).
                 average(averageList).build();
     }
 
+    /* 월 별 일 경우에 평균 값 리스트 반환 */
     public GraphDto setAverageListMonth(List<GraphTmpDto> graphTmpDtoList) {
-
-        if(graphTmpDtoList.size() <= 0){
-            return GraphDto.builder().housingType(graphTmpDtoList.get(0).getHousingType()).dealType(graphTmpDtoList.get(0).getDealType()).
-                    average(null).build();
-        }
-
-        List<Double> averageList = new ArrayList<>();
-
-        for ( int i = 0 ; i <= 12 ; i++){
-            averageList.add(null);
-        }
+        List<Double> averageList = initAverageList(12);
 
         for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
-            logger.info("setAverageListMonth in for");
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(graphTmpDto.getDate());
-
-            int currentMonth = calendar.get(Calendar.MONTH);
-            logger.info("currentMonth ---- " + currentMonth);
+            int currentMonth = getDate(graphTmpDto, Calendar.MONTH);
             averageList.add(currentMonth, graphTmpDto.getAverage());
-            logger.info("averageList ---- " + averageList.get(currentMonth));
         }
 
         return GraphDto.builder().housingType(graphTmpDtoList.get(0).getHousingType()).dealType(graphTmpDtoList.get(0).getDealType()).
                 average(averageList).build();
     }
 
+    /* 일 별 일 경우에 평균 값 리스트 반환 */
     public GraphDto setAverageListDay(List<GraphTmpDto> graphTmpDtoList) {
-
-        if(graphTmpDtoList.size() <= 0){
-            return GraphDto.builder().housingType(graphTmpDtoList.get(0).getHousingType()).dealType(graphTmpDtoList.get(0).getDealType()).
-                    average(null).build();
-        }
-
-        List<Double> averageList = new ArrayList<>();
-
-        for ( int i = 0 ; i <= 31 ; i++){
-            averageList.add(null);
-        }
+        List<Double> averageList = initAverageList(31);
 
         for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(graphTmpDto.getDate());
-
-            int currentMonth = calendar.get(Calendar.DATE);
+            int currentMonth = getDate(graphTmpDto, Calendar.DATE);
             averageList.add(currentMonth, graphTmpDto.getAverage());
         }
 
@@ -268,4 +201,43 @@ public class GraphService {
                 average(averageList).build();
     }
 
+    /* 날짜 가져오기 */
+    private int getDate(GraphTmpDto graphTmpDto, int type) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(graphTmpDto.getDate());
+
+        return calendar.get(type);
+    }
+
+    /* 평균 리스트 초기화 */
+    private List<Double> initAverageList(int size) {
+        List<Double> averageList = new ArrayList<>();
+
+        for ( int i = 0 ; i <= size ; i++){
+            averageList.add(null);
+        }
+
+        return averageList;
+    }
+
+    /* 그래프 디티오 변환 후 반환 */
+    private GraphDto addGraphDto(List<GraphTmpDto> graphTmpDtoList, String deal, String housing,DateDto dateDto) {
+        GraphDto graphDto = null;
+        if(graphTmpDtoList.size() <= 0 ){
+            //graphDtoList.add(GraphDto.builder().dealType(deal).housingType(s).average(null).build());
+            return GraphDto.builder().dealType(deal).housingType(housing).average(null).build();
+        }
+        switch (dateDto.getDateType()) {
+            case YEAR:
+                graphDto = setAverageListYear(graphTmpDtoList);
+                break;
+            case MONTH:
+                graphDto = setAverageListMonth(graphTmpDtoList);
+                break;
+            case DAY:
+                graphDto = setAverageListDay(graphTmpDtoList);
+                break;
+        }
+        return graphDto;
+    }
 }
