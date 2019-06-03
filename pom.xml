@@ -166,13 +166,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.2</version>
-        </dependency>
+    </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-spatial -->
         <dependency>
@@ -187,7 +187,6 @@
             <artifactId>jts</artifactId>
             <version>1.13</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -244,6 +243,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

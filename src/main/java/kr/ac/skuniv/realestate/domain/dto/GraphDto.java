@@ -17,6 +17,7 @@ public class GraphDto {
     private List<Double> average;
 
     public GraphDto() {
+
     }
 
     @Builder
