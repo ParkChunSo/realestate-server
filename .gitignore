@@ -28,8 +28,6 @@
 *.log
 *.out
 *.jar
-application.yml
-
 
 *#
 *.iml
