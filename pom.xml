@@ -197,7 +197,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.3.9</version>
                 <configuration>
-                    <imageName>qwdbstkd123/realestate</imageName>
+                    <imageName>realestate</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
@@ -225,6 +225,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
