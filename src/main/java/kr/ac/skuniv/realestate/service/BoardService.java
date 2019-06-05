@@ -106,7 +106,4 @@ public class BoardService {
         answerRepository.deleteById(answerNo);
     }
 
-
-
-
 }
