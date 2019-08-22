@@ -52,7 +52,6 @@ public class GraphService {
             dateDto = new DateDto(LocalDate.of(Integer.parseInt(splitDate[0]), Integer.parseInt(splitDate[1]), 1), DateDto.DateType.DAY);
         }
         return dateDto;
-
     }
 
     /* 디비 조회 후 그래프 템프 디티오 맵 가져오기 */
