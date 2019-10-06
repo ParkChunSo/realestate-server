@@ -24,11 +24,10 @@ public class RentDate {
     @Column(name = "guarantee_price")
     private Double guaranteePrice;
 
-    @Column(name = "monthly_price")
-    private Double monthlyPrice;
+@Column(name = "monthly_price")
+private Double monthlyPrice;
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "buildingNo")
-    private Building building;
-
-}
+@ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+@JoinColumn(name = "building_entity_id", insertable = false, updatable = false)
+private Building building;
+        }

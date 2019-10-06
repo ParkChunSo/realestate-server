@@ -17,7 +17,7 @@ import java.util.List;
 public class Building {
 
     @Id
-    @Column(name = "no")
+    @Column(name = "id")
     private Long buildingNo;
 
     private Double area;

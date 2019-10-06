@@ -20,7 +20,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/realestate/graph")
-
 public class GraphController {
 
     private GraphService graphService;
@@ -40,12 +39,13 @@ public class GraphController {
         //RegionDto regionDto = graphService.convertRegionToDto(city);
         RegionDto regionDto = RegionCodeConverter.getCityCode(city);
 
-        logger.info("----region Dto " + regionDto);
+        logger.warn("-----------city == " + city);
+        logger.warn("----region Dto " + regionDto.toString());
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();
-        logger.info("----dateDto  " + dateDto);
-        logger.info("----graphService  " + graphService);
+        logger.warn("----dateDto  " + dateDto.toString());
+        logger.warn("----graphService  " + graphService);
         return graphService.getGraphDtos(regionDto, dateDto);
     }
 

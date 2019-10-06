@@ -2,8 +2,8 @@ package kr.ac.skuniv.realestate.domain.entity;
 
 import kr.ac.skuniv.realestate.domain.MemberRole;
 import lombok.*;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -25,9 +25,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Set<MemberRole> roles;
 
-    public User toUser(){
-        return new User(email, password, roles.stream()
-                                        .map(r -> new SimpleGrantedAuthority("ROLE" + r.name()))
-                                        .collect(Collectors.toSet()));
-    }
+//    public User toUser(){
+//        return new User(email, password, roles.stream()
+//                                        .map(r -> new SimpleGrantedAuthority("ROLE" + r.name()))
+//                                        .collect(Collectors.toSet()));
+//    }
 }

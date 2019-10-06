@@ -10,6 +10,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@ToString
 public class GraphTmpDto {
 
     private String dealType;
