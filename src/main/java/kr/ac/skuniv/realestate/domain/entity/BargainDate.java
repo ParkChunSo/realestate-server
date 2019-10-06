@@ -26,7 +26,6 @@ public class BargainDate {
     private Double price;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "building_entity_id", insertable = false, updatable = false)
+    @JoinColumn(name = "building_id", insertable = false, updatable = false)
     private Building building;
-
 }

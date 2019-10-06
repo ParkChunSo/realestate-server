@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "building")
+@Table(name = "building_entity")
 @NoArgsConstructor
 public class Building {
 
