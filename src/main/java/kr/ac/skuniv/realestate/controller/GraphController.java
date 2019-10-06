@@ -39,13 +39,9 @@ public class GraphController {
         //RegionDto regionDto = graphService.convertRegionToDto(city);
         RegionDto regionDto = RegionCodeConverter.getCityCode(city);
 
-        logger.warn("-----------city == " + city);
-        logger.warn("----region Dto " + regionDto.toString());
         DateDto dateDto = DateDto.builder()
                 .dateType(DateDto.DateType.YEAR)
                 .build();
-        logger.warn("----dateDto  " + dateDto.toString());
-        logger.warn("----graphService  " + graphService);
         return graphService.getGraphDtos(regionDto, dateDto);
     }
 
@@ -56,7 +52,11 @@ public class GraphController {
         RegionDto regionDto = RegionCodeConverter.getCityCode(city);
         DateDto dateDto = graphService.convertDateToDto(date);
 
-        return graphService.getGraphDtos(regionDto, dateDto);
+        List<GraphDto> graphDtos = graphService.getGraphDtos(regionDto, dateDto);
+        for (GraphDto graphDto : graphDtos) {
+            logger.warn(graphDto.toString());
+        }
+        return graphDtos;
     }
 
     @ApiOperation("날짜없이 대코드 중코드 조회")
