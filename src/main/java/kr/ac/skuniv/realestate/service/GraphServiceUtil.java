@@ -74,19 +74,13 @@ public class GraphServiceUtil {
 
     /* 데이터가 없으면 평균값으로 채우기*/
     public Map<String, Double> setNullValue(Map<String, Double> averageMap, Double averageValue) {
-        log.warn("setNullValue");
-
         Set<String> keySet = averageMap.keySet();
-
         List<String> keyList = new ArrayList<>();
 
         keyList.addAll(keySet);
 
-        log.warn("length ======" + keySet.toArray().length);
-
         for (String key : keyList){
             if(averageMap.get(key).equals(new Double(0.0))){
-                log.warn("get key == 0  -----" + averageMap.get(key));
                 averageMap.remove(key);
                 averageMap.put(key, Math.round(averageValue * 10) / 10.0);
             }
