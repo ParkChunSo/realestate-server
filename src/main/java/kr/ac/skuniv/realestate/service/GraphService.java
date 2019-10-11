@@ -7,8 +7,10 @@ import kr.ac.skuniv.realestate.domain.dto.RegionDto;
 import kr.ac.skuniv.realestate.repository.BargainDateRepository;
 import kr.ac.skuniv.realestate.repository.CharterDateRepository;
 import kr.ac.skuniv.realestate.repository.RentDateRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,6 +24,8 @@ public class GraphService {
     private final CharterDateRepository charterDateRepository;
     private final RentDateRepository rentDateRepository;
     private static final List<String> HOUSING_TYPE = Arrays.asList("apart", "officetel", "house");
+    @Autowired
+    private GraphServiceUtil graphServiceUtil;
 
     public GraphService(BargainDateRepository bargainDateRepository, CharterDateRepository charterDateRepository, RentDateRepository rentDateRepository) {
         this.bargainDateRepository = bargainDateRepository;
@@ -115,7 +119,7 @@ public class GraphService {
     public List<GraphDto> convertGraphTmpDtoListToGraphDtoList(List<GraphTmpDto> graphTmpDtoList, String deal, DateDto dateDto) {
         logger.warn("convertGraphTmpDtoListToGraphDtoList");
         if(graphTmpDtoList.size() <= 0){
-            return emptyGraphDtoList(deal);
+            return graphServiceUtil.emptyGraphDtoList(deal);
         }
 
         Map<String, List<GraphTmpDto>> separateHousingTypeMap = separateHousingType(graphTmpDtoList); // 하우징 타입 별로 구분
@@ -129,18 +133,6 @@ public class GraphService {
         }
 
         return graphDtoList;
-    }
-
-    /* 빈 그래프 디티오 가져오기 */
-    public List<GraphDto> emptyGraphDtoList(String dealType){
-        logger.warn("emptyGraphDtoList");
-        List<GraphDto> emptyGraphDtoList = new ArrayList<>();
-
-        for (String housingType : HOUSING_TYPE) {
-            emptyGraphDtoList.add(GraphDto.builder().dealType(dealType).housingType(housingType).average(null).build());
-        }
-
-        return emptyGraphDtoList;
     }
 
     /* 하우징 타입 별로 구분 후 맵 으로 반환 */
@@ -163,46 +155,28 @@ public class GraphService {
     /* 연도 별 일 경우에 평균 값 리스트 반환 */
     public GraphDto setAverageListYear(List<GraphTmpDto> graphTmpDtoList) {
         logger.warn("setAverageListYear");
-        int firstYear = getDate(graphTmpDtoList.get(0), Calendar.YEAR);
+        int firstYear = graphServiceUtil.getDate(graphTmpDtoList.get(0), Calendar.YEAR);
         int prevYear = firstYear;
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        Map<String, Double> averageMap = initAverageMap(prevYear, year);
-/*
-        // 맵 초기화
-        while(prevYear <= year){
-            averageList.put(String.valueOf(prevYear), new Double(0) );
-            prevYear++;
-        }*/
+        Map<String, Double> averageMap = graphServiceUtil.initAverageMap(prevYear, year);
 
         prevYear = firstYear;
 
-        double firstValue = 0;
+
+
         // 값 넣기
         for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
-            int currentYear = getDate(graphTmpDto, Calendar.YEAR);
+            int currentYear = graphServiceUtil.getDate(graphTmpDto, Calendar.YEAR);
             if(currentYear == prevYear) {
                 averageMap.remove(String.valueOf(currentYear));
                 averageMap.put(String.valueOf(currentYear), Math.round(graphTmpDto.getAverage() * 10) / 10.0);
             }
-            if(firstValue == 0){
-                firstValue = Math.round(graphTmpDto.getAverage() * 10) / 10.0;
-            }
             prevYear++;
         }
 
-        prevYear = firstYear;
-
-        // 값이 없을 경우 전 데이터로 채우기
-//        while(prevYear <= year){
-//            if(averageMap.get(prevYear) == 0){
-//                averageMap.remove(String.valueOf(prevYear));
-//                averageMap.put(String.valueOf(prevYear), firstValue);
-//            } else {
-//                firstValue = averageMap.get(prevYear);
-//            }
-//            prevYear++;
-//        }
+        double averageValue = graphServiceUtil.getMapAverage(averageMap);
+        averageMap = graphServiceUtil.setNullValue(averageMap, averageValue);
 
         return GraphDto.builder().housingType(graphTmpDtoList.get(0).getHousingType()).dealType(graphTmpDtoList.get(0).getDealType()).
                 average(averageMap).build();
@@ -210,19 +184,17 @@ public class GraphService {
 
     /* 월 별 일 경우에 평균 값 리스트 반환 */
     public GraphDto setAverageListMonth(List<GraphTmpDto> graphTmpDtoList) {
-        Map<String, Double> averageMap = initAverageMap(1, 12);
-
-        /*// 초기화
-        for (int i = 1; i <= 12; i++){
-            averageList.put(String.valueOf(i), new Double(0) );
-        }*/
+        Map<String, Double> averageMap = graphServiceUtil.initAverageMap(1, 12);
 
         // 값 넣기
         for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
-            int currentMonth = getDate(graphTmpDto, Calendar.MONTH);
+            int currentMonth = graphServiceUtil.getDate(graphTmpDto, Calendar.MONTH);
             averageMap.remove(String.valueOf(currentMonth + 1));
-            averageMap.put(String.valueOf(currentMonth + 1), graphTmpDto.getAverage());
+            averageMap.put(String.valueOf(currentMonth + 1), Math.round(graphTmpDto.getAverage() * 10) / 10.0);
         }
+
+        double averageValue = graphServiceUtil.getMapAverage(averageMap);
+        averageMap = graphServiceUtil.setNullValue(averageMap, averageValue);
 
         return GraphDto.builder().housingType(graphTmpDtoList.get(0).getHousingType()).dealType(graphTmpDtoList.get(0).getDealType()).
                 average(averageMap).build();
@@ -230,41 +202,20 @@ public class GraphService {
 
     /* 일 별 일 경우에 평균 값 리스트 반환 */
     public GraphDto setAverageListDay(List<GraphTmpDto> graphTmpDtoList) {
-        Map<String, Double> averageMap = initAverageMap(1, 31);
-
-        /*// 초기화
-        for (int i = 1; i <= 31; i++){
-            averageList.put(String.valueOf(i), new Double(0) );
-        }*/
+        Map<String, Double> averageMap = graphServiceUtil.initAverageMap(1, 31);
 
         // 값 넣기
         for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
-            int currentDay = getDate(graphTmpDto, Calendar.DATE);
+            int currentDay = graphServiceUtil.getDate(graphTmpDto, Calendar.DATE);
             averageMap.remove(String.valueOf(currentDay));
-            averageMap.put(String.valueOf(currentDay), graphTmpDto.getAverage());
+            averageMap.put(String.valueOf(currentDay), Math.round(graphTmpDto.getAverage() * 10) / 10.0);
         }
+
+        double averageValue = graphServiceUtil.getMapAverage(averageMap);
+        averageMap = graphServiceUtil.setNullValue(averageMap, averageValue);
 
         return GraphDto.builder().housingType(graphTmpDtoList.get(0).getHousingType()).dealType(graphTmpDtoList.get(0).getDealType()).
                 average(averageMap).build();
-    }
-
-    /* 날짜 가져오기 */
-    private int getDate(GraphTmpDto graphTmpDto, int type) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(graphTmpDto.getDate());
-
-        return calendar.get(type);
-    }
-
-    /* 평균 리스트 초기화 */
-    private List<Double> initAverageList(int size) {
-        List<Double> averageList = new ArrayList<>();
-
-        for ( int i = 0 ; i <= size ; i++){
-            averageList.add(null);
-        }
-
-        return averageList;
     }
 
     /* 그래프 디티오 변환 후 반환 */
@@ -286,16 +237,5 @@ public class GraphService {
                 break;
         }
         return graphDto;
-    }
-
-    private Map<String, Double> initAverageMap(int first, int end) {
-        Map<String, Double> averageMap = new HashMap<>();
-
-        while(first <= end){
-            averageMap.put(String.valueOf(first), new Double(0));
-            first++;
-        }
-
-        return averageMap;
     }
 }
