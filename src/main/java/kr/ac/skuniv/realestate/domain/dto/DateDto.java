@@ -3,6 +3,7 @@ package kr.ac.skuniv.realestate.domain.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@ToString
 public class DateDto {
 
     private LocalDate localDate;

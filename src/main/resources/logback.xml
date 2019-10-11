@@ -18,10 +18,10 @@
             <fileNamePattern>${LOGS_ABSOLUTE_PATH}/logback.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- or whenever the file size reaches 100MB -->
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+    <maxFileSize>100MB</maxFileSize>
+</timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
-    </appender>
+        </appender>
 
     <logger name="src.main"  level="debug" additivity="false">
         <appender-ref ref="ROLLING" />

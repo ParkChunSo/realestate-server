@@ -25,12 +25,9 @@
 /nbdist/
 /.nb-gradle/
 
-Dockerfile
 *.log
 *.out
 *.jar
-application.yml
-
 
 *#
 *.iml

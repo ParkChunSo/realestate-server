@@ -28,7 +28,6 @@ public class RentDate {
     private Double monthlyPrice;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "buildingNo")
+    @JoinColumn(name = "building_id", insertable = false, updatable = false)
     private Building building;
-
 }
