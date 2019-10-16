@@ -33,10 +33,10 @@ public class SearchResDto {
     private double deposit;
     // 전세 or 월세 or 매매
     private String dealType;
-    // 위도
-    private BigDecimal latitude;
-    // 경도
-    private BigDecimal longitude;
+//    // 위도
+//    private BigDecimal latitude;
+//    // 경도
+//    private BigDecimal longitude;
 
     private Date date;
 
@@ -96,7 +96,7 @@ public class SearchResDto {
     }*/
 
     @QueryProjection
-    public SearchResDto(String city, String groop, String dong, String name, double area, int floor, String type, String buildingNum, String constructorYear, double price, BigDecimal latitude, BigDecimal longitude) {
+    public SearchResDto(String city, String groop, String dong, String name, double area, int floor, String type, String buildingNum, String constructorYear, double price) {
         this.city = city;
         this.groop = groop;
         this.dong = dong;
@@ -107,7 +107,7 @@ public class SearchResDto {
         this.buildingNum = buildingNum;
         this.constructorYear = constructorYear;
         this.price = price;
-        this.latitude = latitude;
-        this.longitude = longitude;
+//        this.latitude = latitude;
+//        this.longitude = longitude;
     }
 }

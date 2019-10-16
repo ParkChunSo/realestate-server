@@ -30,4 +30,12 @@ public class SearchController {
         List<SearchTmpDto> searchTmpDtos = searchService.buildingFiltering(searchReqDto);
         return searchService.optionFiltering(searchTmpDtos, searchReqDto.getOptions());
     }
+
+    @ApiOperation("매매 정보 검색 test")
+    @PostMapping("/test")
+    private List<SearchTmpDto> searchBuilding2(@RequestBody SearchReqDto searchReqDto){
+        List<SearchTmpDto> searchTmpDtos = searchService.buildingFiltering(searchReqDto);
+
+        return searchTmpDtos;
+    }
 }

@@ -28,46 +28,46 @@ public class BuildingRepositoryImpl extends QuerydslRepositorySupport implements
         super(Building.class);
     }
 
-    @Override
+
     public List<SearchTmpDto> getDealBuildingsByMapXYAndHousingType(SearchReqDto searchReqDto){
         JPAQuery<SearchTmpDto> jpaQuery = new JPAQuery<>(entityManager);
-        jpaQuery.select(Projections.constructor(SearchTmpDto.class, building.buildingNo, building.city, building.groop, building.dong, building.name, building.area, building.floor, building.type, building.buildingNum,building.constructYear, bargainDate.price, bargainDate.date, building.latitude, building.longitude));
-        jpaQuery = setQuery(jpaQuery, searchReqDto);
-        jpaQuery.leftJoin(building.bargainDates, bargainDate);
-        jpaQuery = setQueryHousingType(jpaQuery, searchReqDto.getHousingType());
+//        jpaQuery.select(Projections.constructor(SearchTmpDto.class, building.buildingNo, building.city, building.groop, building.dong, building.name, building.area, building.floor, building.type, building.buildingNum,building.constructYear, bargainDate.price, bargainDate.date, building.latitude, building.longitude));
+//        jpaQuery = setQuery(jpaQuery, searchReqDto);
+//        jpaQuery.leftJoin(building.bargainDates, bargainDate);
+//        jpaQuery = setQueryHousingType(jpaQuery, searchReqDto.getHousingType());
 
         return jpaQuery.fetch();
     }
 
-    @Override
+
     public List<SearchTmpDto> getLeaseBuildingsByMapXYAndHousingType(SearchReqDto searchReqDto) {
         JPAQuery<SearchTmpDto> jpaQuery = new JPAQuery<>(entityManager);
-        jpaQuery.select(Projections.constructor(SearchTmpDto.class, building.buildingNo, building.city, building.groop, building.dong, building.name, building.area, building.floor, building.type, building.buildingNum,building.constructYear, charterDate.price, charterDate.date, building.latitude, building.longitude));
-        jpaQuery = setQuery(jpaQuery, searchReqDto);
-        jpaQuery.leftJoin(building.charterDates, charterDate);
-        jpaQuery = setQueryHousingType(jpaQuery, searchReqDto.getHousingType());
+//        jpaQuery.select(Projections.constructor(SearchTmpDto.class, building.buildingNo, building.city, building.groop, building.dong, building.name, building.area, building.floor, building.type, building.buildingNum,building.constructYear, charterDate.price, charterDate.date, building.latitude, building.longitude));
+//        jpaQuery = setQuery(jpaQuery, searchReqDto);
+//        jpaQuery.leftJoin(building.charterDates, charterDate);
+//        jpaQuery = setQueryHousingType(jpaQuery, searchReqDto.getHousingType());
 
         return jpaQuery.fetch();
     }
 
-    @Override
+
     public List<SearchTmpDto> getRentBuildingsByMapXYAndHousingType(SearchReqDto searchReqDto) {
         JPAQuery<SearchTmpDto> jpaQuery = new JPAQuery<>(entityManager);
-        jpaQuery.select(Projections.bean(SearchTmpDto.class, building.buildingNo, building.city, building.groop, building.dong, building.name, building.area, building.floor, building.type, building.buildingNum,building.constructYear, rentDate.guaranteePrice, rentDate.monthlyPrice, rentDate.date, building.latitude, building.longitude));
-        jpaQuery = setQuery(jpaQuery, searchReqDto);
-        jpaQuery.leftJoin(building.rentDates, rentDate);
-        jpaQuery = setQueryHousingType(jpaQuery, searchReqDto.getHousingType());
+//        jpaQuery.select(Projections.bean(SearchTmpDto.class, building.buildingNo, building.city, building.groop, building.dong, building.name, building.area, building.floor, building.type, building.buildingNum,building.constructYear, rentDate.guaranteePrice, rentDate.monthlyPrice, rentDate.date, building.latitude, building.longitude));
+//        jpaQuery = setQuery(jpaQuery, searchReqDto);
+//        jpaQuery.leftJoin(building.rentDates, rentDate);
+//        jpaQuery = setQueryHousingType(jpaQuery, searchReqDto.getHousingType());
 
         return jpaQuery.fetch();
     }
 
-    private JPAQuery<SearchTmpDto> setQuery(JPAQuery<SearchTmpDto> jpaQuery, SearchReqDto searchReqDto){
-        jpaQuery
-                .from(building)
-                .where(building.latitude.between(searchReqDto.getMapLocation().getLeftBottom().getLatitude(), searchReqDto.getMapLocation().getRightTop().getLatitude()))
-                .where(building.longitude.between(searchReqDto.getMapLocation().getLeftBottom().getLongitude(), searchReqDto.getMapLocation().getRightTop().getLongitude()));
-        return jpaQuery;
-    }
+//    private JPAQuery<SearchTmpDto> setQuery(JPAQuery<SearchTmpDto> jpaQuery, SearchReqDto searchReqDto){
+//        jpaQuery
+//                .from(building)
+//                .where(building.latitude.between(searchReqDto.getMapLocation().getLeftBottom().getLatitude(), searchReqDto.getMapLocation().getRightTop().getLatitude()))
+//                .where(building.longitude.between(searchReqDto.getMapLocation().getLeftBottom().getLongitude(), searchReqDto.getMapLocation().getRightTop().getLongitude()));
+//        return jpaQuery;
+//    }
 
     private JPAQuery<SearchTmpDto> setQueryHousingType(JPAQuery<SearchTmpDto> jpaQuery, List<SearchReqDto.HousingType> housingType) {
         // 모든 housing타입을 원함.

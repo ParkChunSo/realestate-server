@@ -7,13 +7,20 @@ import java.util.List;
 
 @Getter @Setter
 public class SearchReqDto {
-    private List<DealType> dealType;
+//    private List<DealType> dealType;
+//
+//    private List<HousingType> housingType;
+//
+//    private MapLocationDto mapLocation;
+//
+//    private List<LocationDto> options;
+//
 
-    private List<HousingType> housingType;
+    private DealType deal;
 
-    private MapLocationDto mapLocation;
+    private HousingType housingType;
 
-    private List<LocationDto> options;
+    private String address;
 
     public enum DealType {
         LEASE, DEAL, MONTH
@@ -22,4 +29,6 @@ public class SearchReqDto {
     public enum HousingType{
         APART, OPPICETEL, HOUSE
     }
+
+
 }
