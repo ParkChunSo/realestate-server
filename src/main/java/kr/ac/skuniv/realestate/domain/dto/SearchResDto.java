@@ -8,13 +8,13 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Getter @Setter
+@Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
 public class SearchResDto {
 
     // 시
-    private String city;
+//    private String city;
     // 군/구
-    private String groop;
+    private String address;
     // 동
     private String dong;
     // 건물 이름
@@ -41,9 +41,9 @@ public class SearchResDto {
     private Date date;
 
     @QueryProjection
-    public SearchResDto(String city, String groop, String dong, String name, double area, int floor, String type, String buildingNum, String constructorYear, String price, String dealType, Date date) {
-        this.city = city;
-        this.groop = groop;
+    public SearchResDto(String dong, String name, double area, int floor, String type, String buildingNum, String constructorYear, String price, String dealType, Date date) {
+//        this.city = city;
+//        this.groop = groop;
         this.dong = dong;
         this.name = name;
         this.area = area;

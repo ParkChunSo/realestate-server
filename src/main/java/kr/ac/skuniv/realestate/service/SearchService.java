@@ -9,6 +9,7 @@ import kr.ac.skuniv.realestate.domain.entity.Building;
 import kr.ac.skuniv.realestate.domain.entity.CharterDate;
 import kr.ac.skuniv.realestate.domain.entity.RentDate;
 import kr.ac.skuniv.realestate.repository.BuildingRepository;
+import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.repository.impl.BargainDateRepositoryImpl;
 import kr.ac.skuniv.realestate.repository.impl.BuildingRepositoryImpl;
 import kr.ac.skuniv.realestate.repository.impl.CharterDateRepositoryImpl;
@@ -35,23 +36,26 @@ public class SearchService {
     private final BargainDateRepositoryImpl bargainDateRepository;
     private final CharterDateRepositoryImpl charterDateRepository;
     private final RentDateRepositoryImpl rentDateRepository;
+    private final RegionCodeRepository regionCodeRepository;
 
     public List<SearchResDto> getBuildingList(SearchReqDto searchReqDto) {
 
         List<SearchResDto> searchResDtoList = new ArrayList<>();
 
-        switch (searchReqDto.getHousingType()){
+        switch (searchReqDto.getDeal()){
             case "bargain":
                 List<BargainDate> bargainList = getBargainList(searchReqDto);
+                searchResDtoList = buildSearchResDtoByBargainDto(bargainList);
                 break;
             case "charter":
                 List<CharterDate> charterList = getCharterList(searchReqDto);
+                searchResDtoList = buildSearchResDtoByCharterDto(charterList);
                 break;
             case "rent":
                 List<RentDate> rentList = getRentList(searchReqDto);
+                searchResDtoList = buildSearchResDtoByRentDto(rentList);
                 break;
         }
-
         return searchResDtoList;
     }
 
@@ -72,6 +76,57 @@ public class SearchService {
 
         return buildingByAddressAndHousingType;
     }
+
+    private List<SearchResDto> buildSearchResDtoByBargainDto(List<BargainDate> bargainDates){
+        List<SearchResDto> searchResDtos = new ArrayList<>();
+        bargainDates.forEach(bargainDate -> {
+            String city = String.valueOf(bargainDate.getBuilding().getCity());
+            String groop = String.valueOf(bargainDate.getBuilding().getGroop());
+            SearchResDto searchResDto = SearchResDto.builder()
+                    .address(regionCodeRepository.findById(city + groop).get().getValue() + " dong")
+                    .name(bargainDate.getBuilding().getName()).area(bargainDate.getBuilding().getArea())
+                    .floor(bargainDate.getBuilding().getFloor()).constructorYear(bargainDate.getBuilding().getConstructYear())
+                    .price(bargainDate.getPrice()).date(bargainDate.getDate()).type(bargainDate.getBuilding().getType()).build();
+
+            searchResDtos.add(searchResDto);
+        });
+
+        return searchResDtos;
+    }
+
+    private List<SearchResDto> buildSearchResDtoByCharterDto(List<CharterDate> charterDates){
+        List<SearchResDto> searchResDtos = new ArrayList<>();
+        charterDates.forEach(charterDate -> {
+            String city = String.valueOf(charterDate.getBuilding().getCity());
+            String groop = String.valueOf(charterDate.getBuilding().getGroop());
+            SearchResDto searchResDto = SearchResDto.builder()
+                    .address(regionCodeRepository.findById(city + groop + "00").get().getValue() + " dong")
+                    .name(charterDate.getBuilding().getName()).area(charterDate.getBuilding().getArea())
+                    .floor(charterDate.getBuilding().getFloor()).constructorYear(charterDate.getBuilding().getConstructYear())
+                    .price(String.valueOf(charterDate.getPrice())).date(charterDate.getDate()).type(charterDate.getBuilding().getType()).build();
+
+            searchResDtos.add(searchResDto);
+        });
+
+        return searchResDtos;
+    }
+
+    private List<SearchResDto> buildSearchResDtoByRentDto(List<RentDate> rentDates){
+        List<SearchResDto> searchResDtos = new ArrayList<>();
+        rentDates.forEach(rentDate -> {
+            String city = String.valueOf(rentDate.getBuilding().getCity());
+            String groop = String.valueOf(rentDate.getBuilding().getGroop());
+            SearchResDto searchResDto = SearchResDto.builder()
+                    .address(regionCodeRepository.findById(city + groop + "00").get().getValue() + " dong")
+                    .name(rentDate.getBuilding().getName()).area(rentDate.getBuilding().getArea())
+                    .floor(rentDate.getBuilding().getFloor()).constructorYear(rentDate.getBuilding().getConstructYear())
+                    .price(String.valueOf(rentDate.getMonthlyPrice())).deposit(String.valueOf(rentDate.getGuaranteePrice())).date(rentDate.getDate()).type(rentDate.getBuilding().getType()).build();
+
+            searchResDtos.add(searchResDto);
+        });
+
+        return searchResDtos;
+    }
 }
 
 //    public List<SearchResDto> getBuildingList(SearchReqDto searchReqDto){
@@ -82,7 +137,6 @@ public class SearchService {
 //        return buildings;
 //    }
 //
-
 
 //    public List<SearchTmpDto> buildingFiltering(SearchReqDto searchReqDtoList){
 //        List<SearchTmpDto> overlapList = new ArrayList<>();
