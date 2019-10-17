@@ -4,7 +4,15 @@ import kr.ac.skuniv.realestate.domain.dto.LocationDto;
 import kr.ac.skuniv.realestate.domain.dto.SearchReqDto;
 import kr.ac.skuniv.realestate.domain.dto.SearchResDto;
 import kr.ac.skuniv.realestate.domain.dto.SearchTmpDto;
+import kr.ac.skuniv.realestate.domain.entity.BargainDate;
+import kr.ac.skuniv.realestate.domain.entity.Building;
+import kr.ac.skuniv.realestate.domain.entity.CharterDate;
+import kr.ac.skuniv.realestate.domain.entity.RentDate;
+import kr.ac.skuniv.realestate.repository.BuildingRepository;
+import kr.ac.skuniv.realestate.repository.impl.BargainDateRepositoryImpl;
 import kr.ac.skuniv.realestate.repository.impl.BuildingRepositoryImpl;
+import kr.ac.skuniv.realestate.repository.impl.CharterDateRepositoryImpl;
+import kr.ac.skuniv.realestate.repository.impl.RentDateRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -23,16 +31,57 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchService {
 
-    private final BuildingRepositoryImpl buildingRepository;
+    private final BuildingRepository buildingRepository;
+    private final BargainDateRepositoryImpl bargainDateRepository;
+    private final CharterDateRepositoryImpl charterDateRepository;
+    private final RentDateRepositoryImpl rentDateRepository;
 
-    public List<SearchResDto> buildingFilteringTest(SearchReqDto searchReqDtoList){
+    public List<SearchResDto> getBuildingList(SearchReqDto searchReqDto) {
 
         List<SearchResDto> searchResDtoList = new ArrayList<>();
 
-
+        switch (searchReqDto.getHousingType()){
+            case "bargain":
+                List<BargainDate> bargainList = getBargainList(searchReqDto);
+                break;
+            case "charter":
+                List<CharterDate> charterList = getCharterList(searchReqDto);
+                break;
+            case "rent":
+                List<RentDate> rentList = getRentList(searchReqDto);
+                break;
+        }
 
         return searchResDtoList;
     }
+
+    private List<BargainDate> getBargainList(SearchReqDto searchReqDto) {
+        List<BargainDate> buildingByAddressAndHousingType = bargainDateRepository.getBuildingByAddressAndHousingType(searchReqDto);
+
+        return buildingByAddressAndHousingType;
+    }
+
+    private List<CharterDate> getCharterList(SearchReqDto searchReqDto) {
+        List<CharterDate> buildingByAddressAndHousingType = charterDateRepository.getBuildingByAddressAndHousingType(searchReqDto);
+
+        return buildingByAddressAndHousingType;
+    }
+
+    private List<RentDate> getRentList(SearchReqDto searchReqDto) {
+        List<RentDate> buildingByAddressAndHousingType = rentDateRepository.getBuildingByAddressAndHousingType(searchReqDto);
+
+        return buildingByAddressAndHousingType;
+    }
+}
+
+//    public List<SearchResDto> getBuildingList(SearchReqDto searchReqDto){
+//
+//        List<Building> buildings = buildingRepository.searchBuildingTest(searchReqDto);
+//
+//
+//        return buildings;
+//    }
+//
 
 
 //    public List<SearchTmpDto> buildingFiltering(SearchReqDto searchReqDtoList){
@@ -101,4 +150,4 @@ public class SearchService {
 //        return searchTmpDtoList;
 //    }
 
-}
+//}

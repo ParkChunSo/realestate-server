@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
 import kr.ac.skuniv.realestate.domain.dto.*;
+import kr.ac.skuniv.realestate.domain.entity.BargainDate;
 import kr.ac.skuniv.realestate.domain.entity.CharterDate;
 import kr.ac.skuniv.realestate.domain.entity.QBuilding;
 import kr.ac.skuniv.realestate.repository.custom.CharterDateRepositoryCustom;
@@ -76,5 +77,29 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
         }
 
         return query;
+    }
+
+    @Override
+    @AspectExceptionAnnotation
+    public List<CharterDate> getBuildingByAddressAndHousingType(SearchReqDto searchReqDto) {
+        JPAQuery<CharterDate> jpaQuery = new JPAQuery<>(entityManager);
+        jpaQuery = setSearchQuery(jpaQuery, searchReqDto);
+        return jpaQuery.fetch();
+    }
+
+    private JPAQuery<CharterDate> setSearchQuery(JPAQuery<CharterDate> query, SearchReqDto searchReqDto) {
+        //return query.select(Projections.constructor(SearchResDto.class, building, bargainDate.price, "bargain"))
+//        return query.select(Projections.constructor(SearchResDto.class, building.city, building.groop, building.dong, building.name,
+//                            building.area, building.floor, building.type, building.buildingNum, building.constructYear, bargainDate.price,
+//                            "bargain", bargainDate.date))
+        return query
+                .from(charterDate)
+                .join(charterDate.building, building)
+                .where(building.dong.contains(searchReqDto.getAddress())
+                        .and(building.type.eq(String.valueOf(searchReqDto.getHousingType()).toLowerCase()))).orderBy(charterDate.price.desc())
+                .offset((searchReqDto.getPaging() - 1) * 10)
+                .limit(10);
+        //
+        // .where()
     }
 }

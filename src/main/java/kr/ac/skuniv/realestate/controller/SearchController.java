@@ -23,19 +23,20 @@ public class SearchController {
     public SearchController(SearchService searchService) {
         this.searchService = searchService;
     }
+//
+//    @ApiOperation("매매 정보 검색")
+//    @PostMapping()
+//    public List<SearchTmpDto> searchBuilding(@RequestBody SearchReqDto searchReqDto){
+//        List<SearchTmpDto> searchTmpDtos = searchService.buildingFiltering(searchReqDto);
+//
+//        return searchService.optionFiltering(searchTmpDtos, searchReqDto.getOptions());
+//    }
 
-    @ApiOperation("매매 정보 검색")
-    @PostMapping()
-    public List<SearchTmpDto> searchBuilding(@RequestBody SearchReqDto searchReqDto){
-        List<SearchTmpDto> searchTmpDtos = searchService.buildingFiltering(searchReqDto);
-        return searchService.optionFiltering(searchTmpDtos, searchReqDto.getOptions());
-    }
-
-    @ApiOperation("매매 정보 검색 test")
-    @PostMapping("/test")
-    private List<SearchTmpDto> searchBuilding2(@RequestBody SearchReqDto searchReqDto){
-        List<SearchTmpDto> searchTmpDtos = searchService.buildingFiltering(searchReqDto);
-
-        return searchTmpDtos;
-    }
+//    @ApiOperation("매매 정보 검색 test")
+//    @PostMapping("/test")
+//    private List<SearchResDto> searchBuilding2(@RequestBody SearchReqDto searchReqDto){
+//        List<SearchResDto> searchResDtos = searchService.getBuildingList(searchReqDto);
+//
+//        return searchResDtos;
+//    }
 }

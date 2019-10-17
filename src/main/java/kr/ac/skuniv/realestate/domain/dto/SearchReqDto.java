@@ -1,11 +1,10 @@
 package kr.ac.skuniv.realestate.domain.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
-@Getter @Setter
+@Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
 public class SearchReqDto {
 //    private List<DealType> dealType;
 //
@@ -16,16 +15,20 @@ public class SearchReqDto {
 //    private List<LocationDto> options;
 //
 
-    private DealType deal;
+    private String deal;
 
-    private HousingType housingType;
+    private String housingType;
 
     private String address;
 
+    private int paging;
+
+    @ToString
     public enum DealType {
         LEASE, DEAL, MONTH
     }
 
+    @ToString
     public enum HousingType{
         APART, OPPICETEL, HOUSE
     }
