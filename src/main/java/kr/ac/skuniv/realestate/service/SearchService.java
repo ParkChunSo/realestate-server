@@ -42,7 +42,7 @@ public class SearchService {
 
         List<SearchResDto> searchResDtoList = new ArrayList<>();
 
-        switch (searchReqDto.getDeal()){
+        switch (searchReqDto.getDealType()){
             case "bargain":
                 List<BargainDate> bargainList = getBargainList(searchReqDto);
                 searchResDtoList = buildSearchResDtoByBargainDto(bargainList);
@@ -83,8 +83,10 @@ public class SearchService {
             String city = String.valueOf(bargainDate.getBuilding().getCity());
             String groop = String.valueOf(bargainDate.getBuilding().getGroop());
             SearchResDto searchResDto = SearchResDto.builder()
-                    .address(regionCodeRepository.findById(city + groop).get().getValue() + " dong")
-                    .name(bargainDate.getBuilding().getName()).area(bargainDate.getBuilding().getArea())
+                    .address(regionCodeRepository.findById(city + groop+ "00000").get().getValue())
+                    .dong(bargainDate.getBuilding().getDong().trim())
+                    .buildingNum(bargainDate.getBuilding().getBuildingNum())
+                    .name(bargainDate.getBuilding().getName().trim()).area(bargainDate.getBuilding().getArea())
                     .floor(bargainDate.getBuilding().getFloor()).constructorYear(bargainDate.getBuilding().getConstructYear())
                     .price(bargainDate.getPrice()).date(bargainDate.getDate()).type(bargainDate.getBuilding().getType()).build();
 
@@ -100,8 +102,10 @@ public class SearchService {
             String city = String.valueOf(charterDate.getBuilding().getCity());
             String groop = String.valueOf(charterDate.getBuilding().getGroop());
             SearchResDto searchResDto = SearchResDto.builder()
-                    .address(regionCodeRepository.findById(city + groop + "00").get().getValue() + " dong")
-                    .name(charterDate.getBuilding().getName()).area(charterDate.getBuilding().getArea())
+                    .address(regionCodeRepository.findById(city + groop + "00000").get().getValue())
+                    .dong(charterDate.getBuilding().getDong().trim())
+                    .buildingNum(charterDate.getBuilding().getBuildingNum())
+                    .name(charterDate.getBuilding().getName().trim()).area(charterDate.getBuilding().getArea())
                     .floor(charterDate.getBuilding().getFloor()).constructorYear(charterDate.getBuilding().getConstructYear())
                     .price(String.valueOf(charterDate.getPrice())).date(charterDate.getDate()).type(charterDate.getBuilding().getType()).build();
 
@@ -117,8 +121,10 @@ public class SearchService {
             String city = String.valueOf(rentDate.getBuilding().getCity());
             String groop = String.valueOf(rentDate.getBuilding().getGroop());
             SearchResDto searchResDto = SearchResDto.builder()
-                    .address(regionCodeRepository.findById(city + groop + "00").get().getValue() + " dong")
-                    .name(rentDate.getBuilding().getName()).area(rentDate.getBuilding().getArea())
+                    .address(regionCodeRepository.findById(city + groop + "00000").get().getValue())
+                    .dong(rentDate.getBuilding().getDong().trim())
+                    .buildingNum(rentDate.getBuilding().getBuildingNum())
+                    .name(rentDate.getBuilding().getName().trim()).area(rentDate.getBuilding().getArea())
                     .floor(rentDate.getBuilding().getFloor()).constructorYear(rentDate.getBuilding().getConstructYear())
                     .price(String.valueOf(rentDate.getMonthlyPrice())).deposit(String.valueOf(rentDate.getGuaranteePrice())).date(rentDate.getDate()).type(rentDate.getBuilding().getType()).build();
 

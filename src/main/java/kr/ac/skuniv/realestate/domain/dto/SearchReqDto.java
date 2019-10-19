@@ -15,7 +15,7 @@ public class SearchReqDto {
 //    private List<LocationDto> options;
 //
 
-    private String deal;
+    private String dealType;
 
     private String housingType;
 

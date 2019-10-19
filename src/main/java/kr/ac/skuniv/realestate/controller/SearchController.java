@@ -30,7 +30,7 @@ public class SearchController {
     public List<SearchResDto> searchBuilding(@RequestBody SearchReqDto searchReqDto){
         List<SearchResDto> searchResDtos = searchService.getBuildingList(searchReqDto);
 
-        log.warn(searchReqDto.getAddress() + "  " + searchReqDto.getDeal() + "  " + searchReqDto.getHousingType() );
+        log.warn(searchReqDto.getAddress() + "  " + searchReqDto.getDealType() + "  " + searchReqDto.getHousingType() );
         return searchResDtos;
     }
 

@@ -52,4 +52,11 @@ public class RegionCodeConverter {
                 .regionType(RegionDto.RegionType.NEIGHBORHOOD)
                 .build();
     }
+
+    public static String getAddress(int code) {
+//        RegionCode regionCode = regionCodeRepository.findById(city + groop + dong).get();
+        String address = regionCodeRepository.findById(String.valueOf(code)).get().getValue();
+        return address;
+    }
+
 }
