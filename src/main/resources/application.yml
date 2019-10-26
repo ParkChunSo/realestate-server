@@ -81,7 +81,13 @@ spring:
     redis:
       repositories:
         enabled: true
+  security:
+    oauth2:
+      resourceserver:
 
+
+jwt:
+  secret: kim111
 
 #server:
 #  port: 8090
