@@ -107,7 +107,7 @@ public class SearchService {
                     .buildingNum(charterDate.getBuilding().getBuildingNum())
                     .name(charterDate.getBuilding().getName().trim()).area(charterDate.getBuilding().getArea())
                     .floor(charterDate.getBuilding().getFloor()).constructorYear(charterDate.getBuilding().getConstructYear())
-                    .price(String.valueOf(charterDate.getPrice())).date(charterDate.getDate()).type(charterDate.getBuilding().getType()).build();
+                    .price(charterDate.getPrice()).date(charterDate.getDate()).type(charterDate.getBuilding().getType()).build();
 
             searchResDtos.add(searchResDto);
         });
@@ -126,7 +126,7 @@ public class SearchService {
                     .buildingNum(rentDate.getBuilding().getBuildingNum())
                     .name(rentDate.getBuilding().getName().trim()).area(rentDate.getBuilding().getArea())
                     .floor(rentDate.getBuilding().getFloor()).constructorYear(rentDate.getBuilding().getConstructYear())
-                    .price(String.valueOf(rentDate.getMonthlyPrice())).deposit(String.valueOf(rentDate.getGuaranteePrice())).date(rentDate.getDate()).type(rentDate.getBuilding().getType()).build();
+                    .price(rentDate.getMonthlyPrice()).deposit(rentDate.getGuaranteePrice()).date(rentDate.getDate()).type(rentDate.getBuilding().getType()).build();
 
             searchResDtos.add(searchResDto);
         });
