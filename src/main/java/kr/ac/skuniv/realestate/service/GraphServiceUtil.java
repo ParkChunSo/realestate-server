@@ -1,8 +1,8 @@
 package kr.ac.skuniv.realestate.service;
 
 
-import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphTmpDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 

@@ -1,13 +1,12 @@
 package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.dto.DateDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
-import kr.ac.skuniv.realestate.domain.dto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.RegionDto;
 import kr.ac.skuniv.realestate.repository.BargainDateRepository;
 import kr.ac.skuniv.realestate.repository.CharterDateRepository;
 import kr.ac.skuniv.realestate.repository.RentDateRepository;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

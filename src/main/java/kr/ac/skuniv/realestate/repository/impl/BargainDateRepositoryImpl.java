@@ -1,13 +1,13 @@
 package kr.ac.skuniv.realestate.repository.impl;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.SubQueryExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.LiteralExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
 import kr.ac.skuniv.realestate.domain.dto.*;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchResDto;
 import kr.ac.skuniv.realestate.domain.entity.BargainDate;
 import kr.ac.skuniv.realestate.domain.entity.QBuilding;
 import kr.ac.skuniv.realestate.repository.custom.BargainDateRepositoryCustom;
@@ -20,8 +20,6 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static kr.ac.skuniv.realestate.domain.entity.QBargainDate.bargainDate;
-import static kr.ac.skuniv.realestate.domain.entity.QCharterDate.charterDate;
-import static kr.ac.skuniv.realestate.domain.entity.QRentDate.rentDate;
 
 /**
  * Created by youngman on 2019-01-16.
@@ -65,7 +63,7 @@ public class BargainDateRepositoryImpl extends QuerydslRepositorySupport impleme
         } else if (regionDto.getRegionType() == RegionDto.RegionType.DISTRICT) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()));
         } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD) {
-            query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()), building.dong.eq(regionDto.getDongName()));
+            query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()), building.dong.contains(regionDto.getDongName()));
         }
 
         return query;

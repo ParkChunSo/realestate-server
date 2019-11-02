@@ -1,12 +1,8 @@
 package kr.ac.skuniv.realestate.repository.impl;
 
-import kr.ac.skuniv.realestate.domain.dto.LocationDto;
-import kr.ac.skuniv.realestate.domain.dto.MapLocationDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchReqDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchResDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
 import kr.ac.skuniv.realestate.domain.entity.BargainDate;
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.validator.constraints.EAN;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.*;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

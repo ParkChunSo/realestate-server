@@ -1,4 +1,4 @@
-package kr.ac.skuniv.realestate.domain.dto;
+package kr.ac.skuniv.realestate.domain.dto.loginDto;
 
 import lombok.Getter;
 import lombok.Setter;

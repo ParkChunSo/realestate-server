@@ -2,15 +2,13 @@ package kr.ac.skuniv.realestate.controller;
 
 import io.swagger.annotations.ApiOperation;
 import kr.ac.skuniv.realestate.domain.MemberRole;
-import kr.ac.skuniv.realestate.domain.dto.JwtRequest;
-import kr.ac.skuniv.realestate.domain.dto.JwtResponse;
-import kr.ac.skuniv.realestate.domain.dto.SignInDto;
-import kr.ac.skuniv.realestate.domain.dto.SignupDto;
+import kr.ac.skuniv.realestate.domain.dto.loginDto.JwtRequest;
+import kr.ac.skuniv.realestate.domain.dto.loginDto.JwtResponse;
+import kr.ac.skuniv.realestate.domain.dto.loginDto.SignupDto;
 import kr.ac.skuniv.realestate.jwtConfig.JwtTokenUtil;
 import kr.ac.skuniv.realestate.service.SignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;

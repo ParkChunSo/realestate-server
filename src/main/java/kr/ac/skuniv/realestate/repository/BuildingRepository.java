@@ -1,6 +1,6 @@
 package kr.ac.skuniv.realestate.repository;
 
-import kr.ac.skuniv.realestate.domain.dto.SearchReqDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
 import kr.ac.skuniv.realestate.domain.entity.Building;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

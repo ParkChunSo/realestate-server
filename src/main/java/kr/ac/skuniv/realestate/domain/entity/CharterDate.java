@@ -22,7 +22,7 @@ public class CharterDate {
     private Date date;
 
     @Column(name = "price")
-    private String price;
+    private Integer price;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id", insertable = false, updatable = false)

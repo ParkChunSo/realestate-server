@@ -1,4 +1,4 @@
-package kr.ac.skuniv.realestate.domain.dto;
+package kr.ac.skuniv.realestate.domain.dto.searchDto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;

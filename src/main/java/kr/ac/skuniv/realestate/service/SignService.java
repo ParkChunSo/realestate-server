@@ -1,15 +1,11 @@
 package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.MemberRole;
-import kr.ac.skuniv.realestate.domain.dto.SignInDto;
-import kr.ac.skuniv.realestate.domain.dto.SignupDto;
+import kr.ac.skuniv.realestate.domain.dto.loginDto.SignupDto;
 import kr.ac.skuniv.realestate.domain.entity.Member;
 import kr.ac.skuniv.realestate.exception.UserDefineException;
 import kr.ac.skuniv.realestate.repository.SignRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

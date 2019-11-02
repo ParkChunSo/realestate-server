@@ -1,10 +1,8 @@
 package kr.ac.skuniv.realestate.repository.impl;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
-import kr.ac.skuniv.realestate.domain.dto.SearchReqDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchResDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchTmpDto;
 import kr.ac.skuniv.realestate.domain.entity.*;
 import kr.ac.skuniv.realestate.repository.custom.BuildingRepositoryCustom;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;

@@ -1,14 +1,12 @@
 package kr.ac.skuniv.realestate.controller;
 
 import io.swagger.annotations.ApiOperation;
-import kr.ac.skuniv.realestate.domain.dto.SearchReqDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchResDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchResDto;
 import kr.ac.skuniv.realestate.service.SearchService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

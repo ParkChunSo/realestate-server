@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: test
+    active: dev
 ---
 
 spring:
@@ -16,7 +16,7 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: jdbc:log4jdbc:mysql://117.17.142.207:3306/realestate_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:log4jdbc:mysql://13.125.253.140:3306/realestate_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: cs616
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy

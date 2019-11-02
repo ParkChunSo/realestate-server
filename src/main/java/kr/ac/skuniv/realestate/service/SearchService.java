@@ -1,27 +1,20 @@
 package kr.ac.skuniv.realestate.service;
 
-import kr.ac.skuniv.realestate.domain.dto.LocationDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchReqDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchResDto;
-import kr.ac.skuniv.realestate.domain.dto.SearchTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchResDto;
 import kr.ac.skuniv.realestate.domain.entity.BargainDate;
-import kr.ac.skuniv.realestate.domain.entity.Building;
 import kr.ac.skuniv.realestate.domain.entity.CharterDate;
 import kr.ac.skuniv.realestate.domain.entity.RentDate;
 import kr.ac.skuniv.realestate.repository.BuildingRepository;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.repository.impl.BargainDateRepositoryImpl;
-import kr.ac.skuniv.realestate.repository.impl.BuildingRepositoryImpl;
 import kr.ac.skuniv.realestate.repository.impl.CharterDateRepositoryImpl;
 import kr.ac.skuniv.realestate.repository.impl.RentDateRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 /**

@@ -1,4 +1,4 @@
-package kr.ac.skuniv.realestate.domain.dto;
+package kr.ac.skuniv.realestate.domain.dto.searchDto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.querydsl.core.types.dsl.StringPath;
@@ -32,16 +32,16 @@ public class SearchResDto {
     private String constructorYear;
 
     // 최신 거래 가격
-    private String price;
+    private Integer price;
     // 보증금
-    private String deposit;
+    private Integer deposit;
     // 전세 or 월세 or 매매
-    private String dealType;
+    private Integer dealType;
 
     private Date date;
 
     @QueryProjection
-    public SearchResDto(String dong, String name, double area, int floor, String type, String buildingNum, String constructorYear, String price, String dealType, Date date) {
+    public SearchResDto(String dong, String name, double area, int floor, String type, String buildingNum, String constructorYear, Integer price, Integer dealType, Date date) {
 //        this.city = city;
 //        this.groop = groop;
         this.dong = dong;

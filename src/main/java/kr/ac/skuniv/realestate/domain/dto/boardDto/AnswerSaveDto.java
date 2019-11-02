@@ -1,4 +1,4 @@
-package kr.ac.skuniv.realestate.domain.dto;
+package kr.ac.skuniv.realestate.domain.dto.boardDto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,19 +10,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AnswerUpdateDto {
+public class AnswerSaveDto {
 
-    private Long no;
     private String content;
     private String author;
     private Long boardNo;
 
-    public AnswerUpdateDto() {
+    public AnswerSaveDto() {
     }
 
     @Builder
-    public AnswerUpdateDto(Long no, String content, String author, Long boardNo) {
-        this.no = no;
+    public AnswerSaveDto(String content, String author, Long boardNo) {
         this.content = content;
         this.author = author;
         this.boardNo = boardNo;

@@ -2,12 +2,11 @@ package kr.ac.skuniv.realestate.controller;
 
 import io.swagger.annotations.ApiOperation;
 import kr.ac.skuniv.realestate.domain.dto.DateDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-import kr.ac.skuniv.realestate.domain.dto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.RegionDto;
 import kr.ac.skuniv.realestate.repository.RegionCodeRepository;
 import kr.ac.skuniv.realestate.service.GraphService;
 import kr.ac.skuniv.realestate.utill.RegionCodeConverter;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
