@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: test
 ---
 
 spring:
@@ -18,7 +18,7 @@ spring:
   datasource:
     url: jdbc:log4jdbc:mysql://13.125.253.140:3306/realestate_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
     username: root
-    password: cs616
+    password: kim111
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
 
     hikari:
@@ -40,6 +40,8 @@ spring:
     redis:
       repositories:
         enabled: true
+jwt:
+  secret: kim111
 
 ---
 

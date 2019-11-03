@@ -23,6 +23,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Board {
 
     @Id
@@ -52,7 +53,6 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Answer> answers = new ArrayList<>();
-
 
     @Override
     public String toString() {

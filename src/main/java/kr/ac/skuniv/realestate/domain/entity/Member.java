@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Entity @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
+@Table(name = "member_table")
 public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -8,6 +8,7 @@ import kr.ac.skuniv.realestate.domain.dto.loginDto.SignupDto;
 import kr.ac.skuniv.realestate.jwtConfig.JwtTokenUtil;
 import kr.ac.skuniv.realestate.service.SignService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,11 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/realestate/sign")
 @CrossOrigin
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class SignController {
-    private final SignService signService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private SignService signService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @ApiOperation("로그인")
     @PostMapping

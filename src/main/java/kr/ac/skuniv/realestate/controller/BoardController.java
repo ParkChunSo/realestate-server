@@ -8,6 +8,7 @@ import kr.ac.skuniv.realestate.domain.dto.boardDto.BoardUpdateDto;
 import kr.ac.skuniv.realestate.domain.entity.Answer;
 import kr.ac.skuniv.realestate.domain.entity.Board;
 import kr.ac.skuniv.realestate.service.BoardService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/realestate/board")
+@Log4j2
+@CrossOrigin
 public class BoardController {
 
     private final BoardService boardService;
@@ -43,13 +46,18 @@ public class BoardController {
 //    public List<Board> getBoardsByTitle(@PathVariable String title) {
 //        return boardService.getBoardsByTitle(title);
 //    }
-//
+
     @ApiOperation("게시판 저장")
     @PostMapping
-    public Board saveBoard(@RequestBody BoardSaveDto boardSaveDto) {
-        return boardService.saveBoard(boardSaveDto);
+    public List<Board> saveBoard(@RequestBody BoardSaveDto boardSaveDto) {
+        boardService.saveBoard(boardSaveDto);
+        List<Board> boardsByPage = boardService.getBoardsByPage(boardSaveDto.getCity(), boardSaveDto.getDistrict(), 1);
+
+        log.warn(boardsByPage.size());
+
+        return boardsByPage;
     }
-//
+
 //    @ApiOperation("게시판 수정")
 //    @PutMapping
 //    public Board updateBoard(@RequestBody BoardUpdateDto boardUpdateDto) {
@@ -62,11 +70,12 @@ public class BoardController {
 //        boardService.deleteBoard(boardNo);
 //    }
 //
-//    @ApiOperation("댓글 저장")
-//    @PostMapping("/answer")
-//    public Answer saveAnswer(@RequestBody AnswerSaveDto answerSaveDto) {
-//        return boardService.saveAnswer(answerSaveDto);
-//    }
+    @ApiOperation("댓글 저장")
+    @PostMapping("/answer")
+    public Board saveAnswer(@RequestBody AnswerSaveDto answerSaveDto) {
+        log.warn(answerSaveDto.toString());
+        return boardService.saveAnswer(answerSaveDto);
+    }
 //
 //    @ApiOperation("댓글 수정")
 //    @PutMapping("/answer")

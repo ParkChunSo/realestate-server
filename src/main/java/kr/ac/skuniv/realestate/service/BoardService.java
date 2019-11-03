@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by YoungMan on 2019-02-16.
@@ -43,9 +44,31 @@ public class BoardService {
     }
 
     public Board saveBoard(BoardSaveDto boardSaveDto) {
-
         return boardRepository.save(convertDtoToSaveBoard(boardSaveDto));
+    }
 
+    public Board saveAnswer(AnswerSaveDto answerSaveDto) {
+
+        Answer answer = buildAnswer(answerSaveDto);
+
+        Board board = boardRepository.findById(answerSaveDto.getBoardNo()).get();
+
+        answer.setBoard(board);
+
+        answerRepository.save(answer);
+
+        board.getAnswers().add(answer);
+        //board.getAnswers().add(answer);
+
+//        Board board1 = boardRepository.findById(answerSaveDto.getBoardNo()).get();
+
+//        log.warn(board1.toString());
+
+        return board;
+    }
+
+    private Answer buildAnswer(AnswerSaveDto answerSaveDto) {
+        return Answer.builder().author(answerSaveDto.getAuthor()).content(answerSaveDto.getContent()).build();
     }
 
 //    public List<Board> getBoardsByTitle(String title) {

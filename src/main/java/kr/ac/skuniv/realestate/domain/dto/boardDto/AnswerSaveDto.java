@@ -3,6 +3,7 @@ package kr.ac.skuniv.realestate.domain.dto.boardDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Created by YoungMan on 2019-02-19.
@@ -10,6 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@ToString
 public class AnswerSaveDto {
 
     private String content;
