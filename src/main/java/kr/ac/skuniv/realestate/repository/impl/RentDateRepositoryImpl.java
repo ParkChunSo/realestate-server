@@ -61,7 +61,9 @@ public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements
         } else if (regionDto.getRegionType() == RegionDto.RegionType.DISTRICT) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()));
         } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD) {
-            query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()), building.dong.eq(regionDto.getDongName()));
+            query.where(building.city.eq(regionDto.getCityCode()),
+                    building.groop.eq(regionDto.getGroopCode()));
+                    //building.dong.contains(regionDto.getDongName()));
         }
 
         return query;
@@ -75,7 +77,8 @@ public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements
             query.where(rentDate.date.year().eq(dateDto.getLocalDate().getYear()))
                     .groupBy(building.type, rentDate.date.month());
         } else if (dateDto.getDateType() == DateDto.DateType.DAY) {
-            query.where(rentDate.date.year().eq(dateDto.getLocalDate().getYear()), rentDate.date.month().eq(dateDto.getLocalDate().getMonthValue()))
+            query.where(rentDate.date.year().eq(dateDto.getLocalDate().getYear()),
+                    rentDate.date.month().eq(dateDto.getLocalDate().getMonthValue()))
                     .groupBy(building.type, rentDate.date);
         }
 
@@ -91,10 +94,6 @@ public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements
     }
 
     private JPAQuery<RentDate> setSearchQuery(JPAQuery<RentDate> query, SearchReqDto searchReqDto) {
-        //return query.select(Projections.constructor(SearchResDto.class, building, bargainDate.price, "bargain"))
-//        return query.select(Projections.constructor(SearchResDto.class, building.city, building.groop, building.dong, building.name,
-//                            building.area, building.floor, building.type, building.buildingNum, building.constructYear, bargainDate.price,
-//                            "bargain", bargainDate.date))
         return query
                 .from(rentDate)
                 .join(rentDate.building, building)
@@ -102,7 +101,5 @@ public class RentDateRepositoryImpl extends QuerydslRepositorySupport implements
                         .and(building.type.eq(String.valueOf(searchReqDto.getHousingType()).toLowerCase()))).orderBy(rentDate.monthlyPrice.desc())
                 .offset((searchReqDto.getPaging() - 1) * 10)
                 .limit(10);
-        //
-        // .where()
     }
 }

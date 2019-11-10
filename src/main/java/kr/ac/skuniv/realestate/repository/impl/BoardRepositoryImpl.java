@@ -39,19 +39,4 @@ public class BoardRepositoryImpl  extends QuerydslRepositorySupport implements B
                 .limit(10);
         return jpaQuery.fetch();
     }
-
-//    @Override
-//    public Board saveAnswer(Answer answer, Long no) {
-//        JPAQuery<Board> jpaQuery = new JPAQuery<>(entityManager);
-//
-//        Board selectedBoard = jpaQuery.from(board).where(board.no.eq(no)).fetchFirst();
-//
-//        selectedBoard.getAnswers().add(answer);
-//
-//
-//
-//        return null;
-//    }
-
-
 }

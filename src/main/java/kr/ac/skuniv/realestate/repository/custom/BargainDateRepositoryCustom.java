@@ -17,7 +17,5 @@ public interface BargainDateRepositoryCustom {
 
     List<GraphTmpDto> getByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto);
 
-    List<SearchResDto> getDealBuildingsByMapXYAndHousingType(SearchReqDto searchReqDto);
-
     List<BargainDate> getBuildingByAddressAndHousingType(SearchReqDto searchReqDto);
 }

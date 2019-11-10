@@ -42,8 +42,6 @@ public class SearchResDto {
 
     @QueryProjection
     public SearchResDto(String dong, String name, double area, int floor, String type, String buildingNum, String constructorYear, Integer price, Integer dealType, Date date) {
-//        this.city = city;
-//        this.groop = groop;
         this.dong = dong;
         this.name = name;
         this.area = area;
@@ -52,35 +50,7 @@ public class SearchResDto {
         this.buildingNum = buildingNum;
         this.constructorYear = constructorYear;
         this.price = price;
-//        this.deposit = deposit;
         this.dealType = dealType;
         this.date = date;
     }
-
-    //    @QueryProjection
-//    public SearchResDto(Building building, Double price) {
-//
-//        this.building = building;
-//        this.price = price;
-//
-//    }
-//
-//    @QueryProjection
-//    public SearchResDto(Building building, Double price, String dealType) {
-//        this.building = building;
-//        this.price = price;
-//        this.dealType = dealType;
-////        this.latitude = latitude;
-////        this.longitude = longitude;
-//    }
-//
-//    @QueryProjection
-//    public SearchResDto(Building building, Double price, Double deposit, String dealType) {
-//        this.building = building;
-//        this.price = price;
-//        this.deposit = deposit;
-//        this.dealType = dealType;
-////        this.latitude = latitude;
-////        this.longitude = longitude;
-//    }
 }

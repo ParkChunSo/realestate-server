@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: test
+    active: dev
 ---
 
 spring:
@@ -16,7 +16,7 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   datasource:
-    url: jdbc:log4jdbc:mysql://13.125.253.140:3306/realestate_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:log4jdbc:mysql://13.125.196.188:3306/realestate_data?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: kim111
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
@@ -59,7 +59,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     generate-ddl: true
   datasource:
-    url: jdbc:log4jdbc:mysql://localhost:3306/spring_batch?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:log4jdbc:mysql://localhost:3306/realestate_data?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: kim111
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy

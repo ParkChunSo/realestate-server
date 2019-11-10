@@ -6,15 +6,6 @@ import java.util.List;
 
 @Getter @Setter @Builder @AllArgsConstructor @NoArgsConstructor
 public class SearchReqDto {
-//    private List<DealType> dealType;
-//
-//    private List<HousingType> housingType;
-//
-//    private MapLocationDto mapLocation;
-//
-//    private List<LocationDto> options;
-//
-
     private String dealType;
 
     private String housingType;

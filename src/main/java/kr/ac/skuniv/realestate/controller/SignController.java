@@ -5,9 +5,9 @@ import kr.ac.skuniv.realestate.domain.MemberRole;
 import kr.ac.skuniv.realestate.domain.dto.loginDto.JwtRequest;
 import kr.ac.skuniv.realestate.domain.dto.loginDto.JwtResponse;
 import kr.ac.skuniv.realestate.domain.dto.loginDto.SignupDto;
+import kr.ac.skuniv.realestate.domain.entity.Member;
 import kr.ac.skuniv.realestate.jwtConfig.JwtTokenUtil;
 import kr.ac.skuniv.realestate.service.SignService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,39 +44,9 @@ public class SignController {
 
     @ApiOperation("일반 사용자 회원가입")
     @PostMapping("/client")
-    public void clientSignUp(@RequestBody SignupDto signUpDto) {
-        signService.saveMember(signUpDto, MemberRole.USER.name());
+    public Member clientSignUp(@RequestBody SignupDto signUpDto) {
+        return signService.saveMember(signUpDto, MemberRole.USER.name());
     }
-
-//    @ApiOperation("관리자 회원가입")
-//    @PostMapping("/admin")
-//    public void adminSignUp(@RequestBody SignupDto signUpDto) {
-//        signService.saveMember(signUpDto, MemberRole.ADMIN.name());
-//    }
-//
-//    @ApiOperation("로그인")
-//    @PostMapping()
-//    public String signIn(@RequestBody SignInDto signInDto) {
-//        return signService.signInMember(signInDto);
-//    }
-//
-//    @ApiOperation("사용자 정보 수정")
-//    @PutMapping()
-//    public void updateMember(@RequestBody SignupDto signupDto) {
-//        signService.updateMember(signupDto);
-//    }
-//
-//    @ApiOperation("사용자 정보 삭제")
-//    @DeleteMapping()
-//    public void deleteMember(@RequestBody SignInDto signInDto) {
-//        signService.deleteMember(signInDto);
-//    }
-//
-//    @Secured("USER")
-//    @GetMapping("/test")
-//    public String test(){
-//        return "Success login";
-//    }
 
     private void authenticate(String username, String password) throws Exception {
         try {

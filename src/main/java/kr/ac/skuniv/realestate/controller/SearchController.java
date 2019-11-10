@@ -31,12 +31,4 @@ public class SearchController {
         log.warn(searchReqDto.getAddress() + "  " + searchReqDto.getDealType() + "  " + searchReqDto.getHousingType() );
         return searchResDtos;
     }
-
-//    @ApiOperation("매매 정보 검색 test")
-//    @PostMapping("/test")
-//    private List<SearchResDto> searchBuilding2(@RequestBody SearchReqDto searchReqDto){
-//        List<SearchResDto> searchResDtos = searchService.getBuildingList(searchReqDto);
-//
-//        return searchResDtos;
-//    }
 }

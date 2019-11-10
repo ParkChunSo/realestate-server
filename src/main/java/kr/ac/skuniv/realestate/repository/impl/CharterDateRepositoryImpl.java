@@ -59,7 +59,10 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
         } else if (regionDto.getRegionType() == RegionDto.RegionType.DISTRICT) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()));
         } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD) {
-            query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()), building.dong.eq(regionDto.getDongName()));
+            query.where(
+                    building.city.eq(regionDto.getCityCode()),
+                    building.groop.eq(regionDto.getGroopCode()));
+//                    building.dong.contains(regionDto.getDongName()));
         }
 
         return query;
@@ -73,7 +76,8 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
             query.where(charterDate.date.year().eq(dateDto.getLocalDate().getYear()))
                     .groupBy(building.type, charterDate.date.month());
         } else if (dateDto.getDateType() == DateDto.DateType.DAY) {
-            query.where(charterDate.date.year().eq(dateDto.getLocalDate().getYear()), charterDate.date.month().eq(dateDto.getLocalDate().getMonthValue()))
+            query.where(charterDate.date.year().eq(dateDto.getLocalDate().getYear()),
+                    charterDate.date.month().eq(dateDto.getLocalDate().getMonthValue()))
                     .groupBy(building.type, charterDate.date);
         }
 
@@ -89,10 +93,6 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     private JPAQuery<CharterDate> setSearchQuery(JPAQuery<CharterDate> query, SearchReqDto searchReqDto) {
-        //return query.select(Projections.constructor(SearchResDto.class, building, bargainDate.price, "bargain"))
-//        return query.select(Projections.constructor(SearchResDto.class, building.city, building.groop, building.dong, building.name,
-//                            building.area, building.floor, building.type, building.buildingNum, building.constructYear, bargainDate.price,
-//                            "bargain", bargainDate.date))
         return query
                 .from(charterDate)
                 .join(charterDate.building, building)
@@ -100,7 +100,5 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
                         .and(building.type.eq(String.valueOf(searchReqDto.getHousingType()).toLowerCase()))).orderBy(charterDate.price.desc())
                 .offset((searchReqDto.getPaging() - 1) * 10)
                 .limit(10);
-        //
-        // .where()
     }
 }
