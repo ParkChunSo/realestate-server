@@ -26,9 +26,9 @@
 
 #### spring boot (REST API)
 1. JPA를 사용하여 영속성 관리와 DB 테이블 객체화
-2. QueryDSL로 쿼리를 메소드화 하고 런타임에 발생할수 있는 에러 컴파일시 처리
-3. 주소를 지역코드로 변경하기 위해 In memory 방식의 Redis를 사용하여 속도 향상
-4. AOP 기능을 사용하여 custom exception 사용
+2. QueryDSL로 쿼리를 메소드화 하고 런타임에 발생 할 수 있는 에러 컴파일시 처리
+3. 주소를 지역코드로 변경하기 위해 In-memory 방식의 Redis를 사용하여 속도 향상
+4. AOP 기능을 사용하여 custom exception 구현
 5. Spring security + jwt로 로그인시 토큰을 발행하고 리퀘스트 요청 시 토큰 확인하여 사용자 인증 -> 보안 강화
 6. Swagger를 사용하여 API 문서 자동화
 7. github : <https://github.com/KimYunsang-v/realestate-server>
