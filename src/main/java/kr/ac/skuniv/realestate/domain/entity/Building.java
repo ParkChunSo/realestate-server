@@ -3,6 +3,7 @@ package kr.ac.skuniv.realestate.domain.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -46,10 +47,6 @@ public class Building {
 
     @OneToMany(mappedBy = "building")
     private List<RentDate> rentDates = new ArrayList<>();
-
-    private BigDecimal latitude;
-
-    private BigDecimal longitude;
 
 }
 

@@ -2,9 +2,8 @@ package kr.ac.skuniv.realestate.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import kr.ac.skuniv.realestate.domain.entity.Answer;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,6 +20,10 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "board")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Board {
 
     @Id
@@ -32,6 +35,10 @@ public class Board {
     private String content;
 
     private String author;
+
+    private String city;
+
+    private String district;
 
     @CreationTimestamp
     @Temporal(value = TemporalType.DATE)
@@ -46,16 +53,6 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Answer> answers = new ArrayList<>();
-
-    public Board() {
-    }
-
-    @Builder
-    public Board(String title, String content, String author) {
-        this.title = title;
-        this.content = content;
-        this.author = author;
-    }
 
     @Override
     public String toString() {

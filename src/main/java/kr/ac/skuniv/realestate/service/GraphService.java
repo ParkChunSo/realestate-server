@@ -1,13 +1,12 @@
 package kr.ac.skuniv.realestate.service;
 
 import kr.ac.skuniv.realestate.domain.dto.DateDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphDto;
-import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
-import kr.ac.skuniv.realestate.domain.dto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.RegionDto;
 import kr.ac.skuniv.realestate.repository.BargainDateRepository;
 import kr.ac.skuniv.realestate.repository.CharterDateRepository;
 import kr.ac.skuniv.realestate.repository.RentDateRepository;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,9 +65,12 @@ public class GraphService {
         logger.warn("getGraphTmpDtoMap");
         Map<String, List<GraphTmpDto>> graphTmpDtoMap = new HashMap<>();
 
-        List<GraphTmpDto> bargainDateGraphTmpDtos = bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
         List<GraphTmpDto> charterDateGraphTmpDtos = charterDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
+        List<GraphTmpDto> bargainDateGraphTmpDtos = bargainDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
         List<GraphTmpDto> rentDateGraphTmpDtos = rentDateRepository.getByRegionDtoAndDateDto(regionDto, dateDto);
+
+        logger.warn("charter data size = " + charterDateGraphTmpDtos.size());
+        logger.warn("rent data size = " + rentDateGraphTmpDtos.size());
 
         graphTmpDtoMap.put("bargain", bargainDateGraphTmpDtos);
         graphTmpDtoMap.put("charter", charterDateGraphTmpDtos);
@@ -97,7 +99,6 @@ public class GraphService {
         for (GraphTmpDto graphTmpDto : graphTmpDtoList) {
             graphTmpDto.setDealType(dealType);  // 그래프 템프 디티오에 거래 타입 지정
         }
-
         return graphTmpDtoList;
     }
 

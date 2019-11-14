@@ -1,11 +1,12 @@
 package kr.ac.skuniv.realestate.repository.custom;
 
 import kr.ac.skuniv.realestate.domain.dto.*;
-import kr.ac.skuniv.realestate.domain.entity.Building;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchResDto;
+import kr.ac.skuniv.realestate.domain.entity.BargainDate;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -16,5 +17,5 @@ public interface BargainDateRepositoryCustom {
 
     List<GraphTmpDto> getByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto);
 
-    List<SearchResDto> getDealBuildingsByMapXYAndHousingType(SearchReqDto searchReqDto);
+    List<BargainDate> getBuildingByAddressAndHousingType(SearchReqDto searchReqDto);
 }

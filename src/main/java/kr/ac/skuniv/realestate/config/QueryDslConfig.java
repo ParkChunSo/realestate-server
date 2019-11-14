@@ -2,7 +2,7 @@ package kr.ac.skuniv.realestate.config;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.ac.skuniv.realestate.domain.dto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphTmpDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

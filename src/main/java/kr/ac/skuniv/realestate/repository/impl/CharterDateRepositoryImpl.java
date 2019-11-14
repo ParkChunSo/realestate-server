@@ -4,6 +4,9 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import kr.ac.skuniv.realestate.aop.AspectExceptionAnnotation;
 import kr.ac.skuniv.realestate.domain.dto.*;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
 import kr.ac.skuniv.realestate.domain.entity.CharterDate;
 import kr.ac.skuniv.realestate.domain.entity.QBuilding;
 import kr.ac.skuniv.realestate.repository.custom.CharterDateRepositoryCustom;
@@ -14,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-import static kr.ac.skuniv.realestate.domain.entity.QBargainDate.bargainDate;
 import static kr.ac.skuniv.realestate.domain.entity.QCharterDate.charterDate;
 
 /**
@@ -57,7 +59,10 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
         } else if (regionDto.getRegionType() == RegionDto.RegionType.DISTRICT) {
             query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()));
         } else if (regionDto.getRegionType() == RegionDto.RegionType.NEIGHBORHOOD) {
-            query.where(building.city.eq(regionDto.getCityCode()), building.groop.eq(regionDto.getGroopCode()), building.dong.eq(regionDto.getDongName()));
+            query.where(
+                    building.city.eq(regionDto.getCityCode()),
+                    building.groop.eq(regionDto.getGroopCode()));
+//                    building.dong.contains(regionDto.getDongName()));
         }
 
         return query;
@@ -71,10 +76,29 @@ public class CharterDateRepositoryImpl extends QuerydslRepositorySupport impleme
             query.where(charterDate.date.year().eq(dateDto.getLocalDate().getYear()))
                     .groupBy(building.type, charterDate.date.month());
         } else if (dateDto.getDateType() == DateDto.DateType.DAY) {
-            query.where(charterDate.date.year().eq(dateDto.getLocalDate().getYear()), charterDate.date.month().eq(dateDto.getLocalDate().getMonthValue()))
+            query.where(charterDate.date.year().eq(dateDto.getLocalDate().getYear()),
+                    charterDate.date.month().eq(dateDto.getLocalDate().getMonthValue()))
                     .groupBy(building.type, charterDate.date);
         }
 
         return query;
+    }
+
+    @Override
+    @AspectExceptionAnnotation
+    public List<CharterDate> getBuildingByAddressAndHousingType(SearchReqDto searchReqDto) {
+        JPAQuery<CharterDate> jpaQuery = new JPAQuery<>(entityManager);
+        jpaQuery = setSearchQuery(jpaQuery, searchReqDto);
+        return jpaQuery.fetch();
+    }
+
+    private JPAQuery<CharterDate> setSearchQuery(JPAQuery<CharterDate> query, SearchReqDto searchReqDto) {
+        return query
+                .from(charterDate)
+                .join(charterDate.building, building)
+                .where(building.dong.contains(searchReqDto.getAddress())
+                        .and(building.type.eq(String.valueOf(searchReqDto.getHousingType()).toLowerCase()))).orderBy(charterDate.price.desc())
+                .offset((searchReqDto.getPaging() - 1) * 10)
+                .limit(10);
     }
 }

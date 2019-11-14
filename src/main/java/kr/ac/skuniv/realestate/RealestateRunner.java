@@ -43,55 +43,5 @@ public class RealestateRunner implements ApplicationRunner {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-
-//        try {
-//            excelConverterUtill.ReadRegionCode();
-//            graphService.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
-//            aspectException.setRegionCodeHashmap(excelConverterUtill.getRegionCodeMap());
-//            logger.info("RegionCodeMap Size : " + excelConverterUtill.getRegionCodeMap().size());
-//        } catch (Exception e) {
-//            logger.error(e.getMessage());
-//        }
-
-//        RegionCode regionCode = new RegionCode();
-//        regionCode.setValue("서울특별시");
-//        regionCode.setId("11");
-//        regionCodeRepository.save(regionCode);
-//
-//        regionCode = regionCodeRepository.findById("11").get();
-//        logger.info(regionCode.getValue());
-//        HashMap<String, String> codes = excelConverterUtill.getRegionCodeMap();
-//        RegionCode regionCode1 = new RegionCode();
-//        RegionCode regionCode2 = new RegionCode();
-//
-//        logger.info(codes.keySet().size());
-//        int count = 0;
-//        for (Map.Entry<String, String> entry : codes.entrySet()) {
-//            String key = entry.getKey();
-//            String value = entry.getValue();
-//
-//            regionCode1.setId(key);
-//            regionCode1.setValue(value);
-//            count++;
-//            regionCodeRepository.save(regionCode1);
-//        }
-//
-//        List<RegionCode> regionCodes = (List<RegionCode>) regionCodeRepository.findAll();
-//        logger.info(String.format("total select size => %s", regionCodes.size()));
-//        List<String> selectCodeList = new ArrayList<>();
-//        for (RegionCode regionCode : regionCodes) {
-//            selectCodeList.add(regionCode.getId());
-//        }
-//        for (String code : codes.values()) {
-//            if (!selectCodeList.contains(code)) {
-//                logger.info(String.format("not enter data => %s", code));
-//            }
-//        }
-
-//          regionCode1 = regionCodeRepository.findById("서울특별시").get();
-//        regionCode1 = regionCodeRepository.findByCode("1100000000");
-//        logger.info(regionCode2.getRegion());
-//        logger.info(regionCode2.getCode());
-//          logger.info(regionCode1.getId());
     }
 }

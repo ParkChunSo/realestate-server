@@ -1,10 +1,11 @@
 package kr.ac.skuniv.realestate.repository.custom;
 
 import kr.ac.skuniv.realestate.domain.dto.*;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.GraphTmpDto;
+import kr.ac.skuniv.realestate.domain.dto.graphDto.RegionDto;
+import kr.ac.skuniv.realestate.domain.dto.searchDto.SearchReqDto;
+import kr.ac.skuniv.realestate.domain.entity.CharterDate;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -14,5 +15,7 @@ import java.util.List;
 public interface CharterDateRepositoryCustom {
 
     List<GraphTmpDto> getByRegionDtoAndDateDto(RegionDto regionDto, DateDto dateDto);
+
+    List<CharterDate> getBuildingByAddressAndHousingType(SearchReqDto searchReqDto);
 
 }

@@ -3,6 +3,7 @@ package kr.ac.skuniv.realestate.domain.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.annotation.Nullable;
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class BargainDate {
     private Date date;
 
     @Column(name = "price")
-    private Double price;
+    private Integer price;
 
     @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id", insertable = false, updatable = false)
