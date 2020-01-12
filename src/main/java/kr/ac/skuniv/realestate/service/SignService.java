@@ -1,51 +1,55 @@
 package kr.ac.skuniv.realestate.service;
 
-import kr.ac.skuniv.realestate.domain.MemberRole;
 import kr.ac.skuniv.realestate.domain.dto.loginDto.SignupDto;
 import kr.ac.skuniv.realestate.domain.entity.Member;
+import kr.ac.skuniv.realestate.domain.enums.MemberRole;
 import kr.ac.skuniv.realestate.exception.UserDefineException;
+import kr.ac.skuniv.realestate.jwtConfig.JwtProvider;
 import kr.ac.skuniv.realestate.repository.SignRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class SignService implements UserDetailsService {
+public class SignService{
 
-    @Autowired
-    private SignRepository signRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final SignRepository signRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = signRepository.findByEmail(username)
-                .orElseThrow(() -> new UserDefineException("아이디를 잘못 입력하셨습니다."));
-        return new User(member.getEmail(), member.getPassword(), authorities(member.getRoles()));
+    public SignService(SignRepository signRepository, PasswordEncoder passwordEncoder) {
+        this.signRepository = signRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    private Collection<? extends GrantedAuthority> authorities(Set<MemberRole> roles) {
-        return roles.stream()
-                .map(r -> new SimpleGrantedAuthority("ROLE" + r.name()))
-                .collect(Collectors.toSet());
+    /**
+     * 로그인
+     *
+     * @param username: 사용자 아이디
+     * @param userPassword: 사용자 패스워드
+     * @return JWT 발급
+     */
+    public String signInMember(String username, String userPassword) throws UserDefineException{
+        Member member = signRepository.findByEmail(username).orElseThrow(() -> new UserDefineException("User not found"));
+        if(passwordEncoder.matches(userPassword, member.getPassword()))
+            return JwtProvider.createToken(member.getEmail(), member.getRoles());
+        else
+            throw new UserDefineException("Password not correct");
     }
+
+    /**
+     * 회원가입
+     *
+     * @param signupDto: 사용자의 아이디, 패스워드, 이름
+     * @param who: 권한
+     * @return 사용자 정보
+     */
     public Member saveMember(SignupDto signupDto, String who){
         signupDto.setPassword(passwordEncoder.encode(signupDto.getPassword()));
         if(signRepository.findByEmail(signupDto.getEmail()).isPresent())
             throw new UserDefineException("이미 존재하는 회원입니다.");
 
-//        Member member;
         if(who.equals(MemberRole.ADMIN.name()))
             return signRepository.save(
                     signupDto.toEntity(

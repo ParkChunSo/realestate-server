@@ -2,6 +2,7 @@ package kr.ac.skuniv.realestate.aop;
 
 import kr.ac.skuniv.realestate.exception.UserDefineException;
 import kr.ac.skuniv.realestate.utill.ExcelConverterUtill;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,16 +18,10 @@ import java.util.HashMap;
  * 어디에 적용할 것인가 : 포인트컷
  */
 
+@Slf4j
 @Aspect
 @Component
 public class AspectException {
-
-    private Logger logger = LoggerFactory.getLogger(AspectException.class);
-    private HashMap<String, String> regionCodeHashmap;
-
-    public void setRegionCodeHashmap(HashMap<String, String> regionCodeHashmap) {
-        this.regionCodeHashmap = regionCodeHashmap;
-    }
 
     @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.getGraphDtos(..))")
     public void getGraphDtos() {
@@ -54,6 +49,22 @@ public class AspectException {
 
     @Pointcut("execution(* kr.ac.skuniv.realestate.service.GraphService.convertGraphTmpDtosToGraphDtos(..))")
     public void convertGraphTmpDtosToGraphDtos() {
+    }
+
+    @Around("execution(* kr.ac.skuniv.realestate.service.SignService.*(..))")
+    public Object signException(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+        Object result = new Object();
+
+        try{
+            log.info("");
+            result = proceedingJoinPoint.proceed();
+        }catch (UserDefineException e){
+            log.error("");
+        }catch (Exception e){
+            log.error("예상하지 못한 오류 발생");
+        }
+
+        return result;
     }
 
     //  @Around("execution(* kr.ac.skuniv.realestate.service.ConditionService.*(..))")

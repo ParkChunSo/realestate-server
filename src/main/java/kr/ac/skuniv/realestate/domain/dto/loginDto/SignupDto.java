@@ -1,6 +1,6 @@
 package kr.ac.skuniv.realestate.domain.dto.loginDto;
 
-import kr.ac.skuniv.realestate.domain.MemberRole;
+import kr.ac.skuniv.realestate.domain.enums.MemberRole;
 import kr.ac.skuniv.realestate.domain.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
