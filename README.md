@@ -22,7 +22,6 @@
 2. 비지니스 로직을 통해 데이터 가공
 3. JPA를 사용하여 Database에 저장
 4. 월별 데이터를 가져오기 위해 스케쥴링 기능 구현
-5. github : <https://github.com/KimYunsang-v/realestate_batch>
 
 #### spring boot (REST API)
 1. JPA를 사용하여 영속성 관리와 DB 테이블 객체화
@@ -31,7 +30,6 @@
 4. AOP 기능을 사용하여 custom exception 구현
 5. Spring security + jwt로 로그인시 토큰을 발행하고 리퀘스트 요청 시 토큰 확인하여 사용자 인증 -> 보안 강화
 6. Swagger를 사용하여 API 문서 자동화
-7. github : <https://github.com/KimYunsang-v/realestate-server>
 
 #### AWS & Docker
 1. AWS EC2서버에 Docker를 사용하여 API server, MySQL, redis 컨테이너 운영
